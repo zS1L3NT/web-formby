@@ -1,0 +1,5 @@
+{
+	"scripts": {
+		"migrate": "cd backend && php artisan migrate:fresh --seed"
+	}
+}
