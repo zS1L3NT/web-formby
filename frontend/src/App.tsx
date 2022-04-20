@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react"
 
 const _App = (props: PropsWithChildren<{}>) => {
-	return <></>;
-};
+	return <></>
+}
 
-export default _App;
+export default _App
