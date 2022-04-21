@@ -18,9 +18,9 @@ class FormFactory extends Factory
 	public function definition()
 	{
 		return [
-			"user_id" => User::query()->first()->id,
+			"user_id" => User::query()->where("name", "Zechariah Tan")->first()->id,
 			"name" => $this->faker->sentence(),
-			"description" => $this->faker->paragraph(),
+			"description" => $this->faker->sentence(3),
 			"requires_auth" => $this->faker->boolean()
 		];
 	}
