@@ -5,7 +5,7 @@ namespace App\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CustomValidator
+class ApiValidator
 {
 
 	public function __construct(Request $request, array $rules)
@@ -34,13 +34,9 @@ class CustomValidator
 	 */
 	public function errors()
 	{
-		return [
-			"errors" => [
-				[
-					"type" => "Validation",
-					"fields" => $this->validator->errors()->messages()
-				]
-			]
-		];
+		return errors([
+			"type" => "Validation",
+			"fields" => $this->validator->errors()->messages()
+		]);
 	}
 }

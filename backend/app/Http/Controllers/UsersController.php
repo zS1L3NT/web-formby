@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\CustomValidator;
+use App\Http\ApiValidator;
 
 class UsersController extends Controller
 {
@@ -17,7 +17,7 @@ class UsersController extends Controller
 
 	public function login(Request $request)
 	{
-		$validator = new CustomValidator($request, [
+		$validator = new ApiValidator($request, [
 			"email" => ["required", "email"],
 			"password" => ["required"]
 		]);
@@ -31,23 +31,16 @@ class UsersController extends Controller
 				"token" => $token
 			];
 		} else {
-			return response(
-				[
-					"errors" => [
-						[
-							"type" => "Login Error",
-							"message" => "Invalid credentials"
-						]
-					]
-				],
-				400
-			);
+			return errors([
+				"type" => "Login Error",
+				"message" => "Invalid credentials"
+			]);
 		}
 	}
 
 	public function register(Request $request)
 	{
-		$validator = new CustomValidator($request, [
+		$validator = new ApiValidator($request, [
 			"name" => ["required", "max:255", "string"],
 			"photo" => ["required", "max:255", "url"],
 			"email" => ["required", "max:255", "unique:users", "email"],
@@ -73,7 +66,7 @@ class UsersController extends Controller
 
 	public function update(Request $request)
 	{
-		$validator = new CustomValidator($request, [
+		$validator = new ApiValidator($request, [
 			"name" => ["max:255", "string"],
 			"photo" => ["max:255", "url"],
 			"email" => ["max:255", "unique:users", "email"],
