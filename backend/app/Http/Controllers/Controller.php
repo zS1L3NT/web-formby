@@ -19,11 +19,19 @@ class Controller extends BaseController
 		$middleware = function (Request $request, Closure $next) use ($rules) {
 			$validator = Validator::make($request->only(array_keys($rules)), $rules);
 
-			if ($validator->fails()) {
+			$extra_keys = array_keys(array_diff_key($request->all(), $rules));
+			if (count($extra_keys) > 0 || $validator->fails()) {
 				return response(
 					["errors" => [[
 						"type" => "Request Body",
-						"fields" => $validator->errors()->messages()
+						"fields" => array_merge(
+							array_reduce(
+								$extra_keys,
+								fn ($arr, $key) => [...$arr, $key => ["The $key field is not allowed."]],
+								[]
+							),
+							$validator->errors()->messages()
+						)
 					]]],
 					400
 				);
