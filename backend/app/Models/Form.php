@@ -15,5 +15,6 @@ class Form extends Model
 		"name",
 		"description",
 		"requires_auth",
+		"live"
 	];
 }

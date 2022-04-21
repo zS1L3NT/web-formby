@@ -19,6 +19,7 @@ return new class extends Migration
 			$table->string('name');
 			$table->string('description');
 			$table->boolean('requires_auth')->default(false);
+			$table->boolean('live')->default(false);
 
 			$table->foreign('user_id')->references('id')->on('users');
 
