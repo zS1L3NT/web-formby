@@ -1,5 +1,6 @@
 {
 	"scripts": {
-		"migrate": "cd backend && php artisan migrate:fresh --seed"
+		"migrate": "cd backend && php artisan migrate:fresh --seed",
+		"backend": "cd backend && php artisan serve"
 	}
 }
