@@ -2,14 +2,15 @@
 
 namespace App\Http;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CustomValidator
 {
 
-	public function __construct(array $data, array $rules)
+	public function __construct(Request $request, array $rules)
 	{
-		$this->validator = Validator::make($data, $rules);
+		$this->validator = Validator::make($request->only(array_keys($rules)), $rules);
 	}
 
 	/**
@@ -23,7 +24,8 @@ class CustomValidator
 	/**
 	 * @return array
 	 */
-	public function data() {
+	public function data()
+	{
 		return $this->validator->validated();
 	}
 
