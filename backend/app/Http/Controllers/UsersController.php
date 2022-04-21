@@ -12,50 +12,49 @@ class UsersController extends Controller
 	public function __construct()
 	{
 		$this->middleware("auth.jwt")->only(["show, update"]);
+
+		$this->validate("login", [
+			"email" => ["required", "email"],
+			"password" => ["required"]
+		]);
+
+		$this->validate("register", [
+			"name" => ["required", "max:255", "string"],
+			"photo" => ["required", "max:255", "url"],
+			"email" => ["required", "max:255", "unique:users", "email"],
+			"password" => ["required", "max:255", "regex:$this->password_regex"]
+		]);
+
+		$this->validate("update", [
+			"name" => ["max:255", "string"],
+			"photo" => ["max:255", "url"],
+			"email" => ["max:255", "unique:users", "email"],
+			"password" => ["max:255", "regex:$this->password_regex"]
+		]);
 	}
 
 	public function login(Request $request)
 	{
-		return validate(
-			$request,
-			[
-				"email" => ["required", "email"],
-				"password" => ["required"]
-			],
-			function ($data) {
-				if ($token = auth()->attempt($data)) {
-					return [
-						"token" => $token
-					];
-				} else {
-					return errors([
-						"type" => "Login Error",
-						"message" => "Invalid credentials"
-					]);
-				}
-			}
-		);
+		if ($token = auth()->attempt($request->data)) {
+			return [
+				"token" => $token
+			];
+		} else {
+			return errors([
+				"type" => "Login Error",
+				"message" => "Invalid credentials"
+			]);
+		}
 	}
 
 	public function register(Request $request)
 	{
-		return validate(
-			$request,
-			[
-				"name" => ["required", "max:255", "string"],
-				"photo" => ["required", "max:255", "url"],
-				"email" => ["required", "max:255", "unique:users", "email"],
-				"password" => ["required", "max:255", "regex:$this->password_regex"]
-			],
-			function (array $data) {
-				$user = User::create($data());
-				$user->save();
+		$user = User::create($request->data);
+		$user->save();
 
-				return [
-					"message" => "Registration successful!"
-				];
-			}
-		);
+		return [
+			"message" => "Registration successful!"
+		];
 	}
 
 	public function show(Request $request)
@@ -65,24 +64,13 @@ class UsersController extends Controller
 
 	public function update(Request $request)
 	{
-		return validate(
-			$request,
-			[
-				"name" => ["max:255", "string"],
-				"photo" => ["max:255", "url"],
-				"email" => ["max:255", "unique:users", "email"],
-				"password" => ["max:255", "regex:$this->password_regex"]
-			],
-			function (array $data) {
-				$user = User::find(auth()->user()->id);
-				$user->update($data);
-				$user->save();
+		$user = User::find(auth()->user()->id);
+		$user->update($request->data);
+		$user->save();
 
-				$fields = count($data);
-				return [
-					"message" => $fields . " field" . ($fields > 1 ? "s" : "") . " updated",
-				];
-			}
-		);
+		$fields = count($request->data);
+		return [
+			"message" => $fields . " field" . ($fields > 1 ? "s" : "") . " updated",
+		];
 	}
 }
