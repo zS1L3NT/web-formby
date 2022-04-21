@@ -10,6 +10,11 @@ class UsersController extends Controller
 {
 	private $password_regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\-__+.]).{8,}$/";
 
+	public function __construct()
+	{
+		$this->middleware("auth.jwt")->except(["store"]);
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *
