@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Uuids;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
-	use HasApiTokens, HasFactory, Notifiable;
+	use HasApiTokens, HasFactory, Notifiable, Uuids;
 
 	/**
 	 * The attributes that are mass assignable.
