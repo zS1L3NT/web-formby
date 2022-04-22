@@ -27,4 +27,34 @@ class Question extends Model
 		"table_rows",
 		"table_type"
 	];
+
+	public function getChoicesAttribute($choices)
+	{
+		return json_decode($choices);
+	}
+
+	public function setChoicesAttribute(array $choices)
+	{
+		$this->attributes['choices'] = json_encode($choices);
+	}
+
+	public function getTableColumnsAttribute($table)
+	{
+		return json_decode($table);
+	}
+
+	public function setTableColumnsAttribute(array $table)
+	{
+		$this->attributes['table_columns'] = json_encode($table);
+	}
+
+	public function getTableRowsAttribute($table)
+	{
+		return json_decode($table);
+	}
+
+	public function setTableRowsAttribute(array $table)
+	{
+		$this->attributes['table_rows'] = json_encode($table);
+	}
 }

@@ -24,4 +24,24 @@ class Answer extends Model
 		"time",
 		"table"
 	];
+
+	public function getChoicesAttribute($choices)
+	{
+		return json_decode($choices);
+	}
+
+	public function setChoicesAttribute(array $choices)
+	{
+		$this->attributes['choices'] = json_encode($choices);
+	}
+
+	public function getTableAttribute($table)
+	{
+		return json_decode($table);
+	}
+
+	public function setTableAttribute(array $table)
+	{
+		$this->attributes['table'] = json_encode($table);
+	}
 }

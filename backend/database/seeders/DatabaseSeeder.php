@@ -82,7 +82,7 @@ class DatabaseSeeder extends Seeder
 					...$question_data($prev_qn),
 					"required" => true,
 					"type" => "choice",
-					"choices" => json_encode($faker->words(3)),
+					"choices" => $faker->words(3),
 					"choice_type" => "radio"
 				]);
 
@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
 					...$question_data($prev_qn),
 					"required" => true,
 					"type" => "choice",
-					"choices" => json_encode($faker->words(3)),
+					"choices" => $faker->words(3),
 					"choice_type" => "checkbox"
 				]);
 
@@ -98,7 +98,7 @@ class DatabaseSeeder extends Seeder
 					...$question_data($prev_qn),
 					"required" => true,
 					"type" => "choice",
-					"choices" => json_encode($faker->words(3)),
+					"choices" => $faker->words(3),
 					"choice_type" => "dropdown"
 				]);
 
@@ -134,8 +134,8 @@ class DatabaseSeeder extends Seeder
 					...$question_data($prev_qn),
 					"required" => true,
 					"type" => "table",
-					"table_columns" => json_encode($faker->words(3)),
-					"table_rows" => json_encode($faker->words(3)),
+					"table_columns" => $faker->words(3),
+					"table_rows" => $faker->words(3),
 					"table_type" => "radio"
 				]);
 
@@ -143,8 +143,8 @@ class DatabaseSeeder extends Seeder
 					...$question_data($prev_qn),
 					"required" => true,
 					"type" => "table",
-					"table_columns" => json_encode($faker->words(3)),
-					"table_rows" => json_encode($faker->words(3)),
+					"table_columns" => $faker->words(3),
+					"table_rows" => $faker->words(3),
 					"table_type" => "checkbox"
 				]);
 			}
@@ -178,11 +178,9 @@ class DatabaseSeeder extends Seeder
 					$answer_data["color"] =  $faker->randomDigit() >= 5 ? $faker->hexcolor() : NULL;
 					break;
 				case "choice":
-					$answer_data["choices"] = json_encode(
-						$faker->randomElements(
-							json_decode($question->choices),
-							$question->choice_type == "checkbox" ? 2 : 1
-						)
+					$answer_data["choices"] = $faker->randomElements(
+						$question->choices,
+						$question->choice_type == "checkbox" ? 2 : 1
 					);
 					break;
 				case "switch":
@@ -199,13 +197,10 @@ class DatabaseSeeder extends Seeder
 					$answer_data["time"] = $faker->time();
 					break;
 				case "table":
-					$answer_data["table"] = json_encode(array_map(
-						fn ($row) => [
-							$row,
-							$faker->randomElement(json_decode($question->table_columns))
-						],
-						json_decode($question->table_rows)
-					));
+					$answer_data["table"] = array_map(
+						fn ($row) => [$row, $faker->randomElement($question->table_columns)],
+						$question->table_rows
+					);
 					break;
 			}
 
