@@ -15,7 +15,7 @@ return new class extends Migration
 	{
 		Schema::create('responses', function (Blueprint $table) {
 			$table->uuid('id')->primary();
-			$table->uuid('user_id');
+			$table->uuid('user_id')->nullable();
 			$table->uuid('form_id');
 
 			$table->foreign('user_id')->references('id')->on('users');

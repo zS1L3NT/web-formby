@@ -15,7 +15,7 @@ return new class extends Migration
 	{
 		Schema::create('answers', function (Blueprint $table) {
 			$table->uuid('id')->primary();
-			$table->uuid('user_id');
+			$table->uuid('user_id')->nullable();
 			$table->uuid('form_id');
 			$table->uuid('response_id');
 			$table->uuid('question_id');
