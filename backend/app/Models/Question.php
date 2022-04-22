@@ -4,11 +4,10 @@ namespace App\Models;
 
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Question extends Model
 {
-	use HasFactory, Uuids;
+	use Uuids;
 
 	protected $fillable = [
 		"form_id",

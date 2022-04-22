@@ -4,7 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Form;
 use App\Models\User;
+use App\Models\Answer;
+use App\Models\Question;
+use App\Models\Response;
 use Illuminate\Database\Seeder;
+use Faker\Factory as FakerFactory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,13 +19,197 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run()
 	{
-		User::create([
+		$faker = FakerFactory::create();
+
+		$main_user = User::create([
 			"name" => "Zechariah Tan",
-			"photo" => "https://i.scdn.co/image/ab6761610000e5eb006ff3c0136a71bfb9928d34",
+			"photo" => "https://media-exp1.licdn.com/dms/image/C5603AQH44a3q4YZIzQ/profile-displayphoto-shrink_800_800/0/1634632712439?e=1655942400&v=beta&t=9CXewWyIS3g93mFEYOZ1fIcOJqqDB0z8g2qKTzPJ1fY",
 			"email" => "zechariahtan144@gmail.com",
 			"password" => '$2y$10$l8NKnLh7AHrVpYWKksP.7OCuKK9q2143zy.0IY1/Sgs8tvdpvHSju' // P@ssw0rd
 		]);
-		User::factory(3)->create();
-		Form::factory(3)->create();
+		$other_user = User::create([
+			"name" => "Joey Lim",
+			"photo" => "https://media-exp1.licdn.com/dms/image/C5603AQGfItIgsZeC-g/profile-displayphoto-shrink_800_800/0/1648962418190?e=1655942400&v=beta&t=M_RgY0en6pxsjzKwz1_qfIo8qCPPNI9okYJlZPhVLRI",
+			"email" => "jyorien@gmail.com",
+			"password" => '$2y$10$l8NKnLh7AHrVpYWKksP.7OCuKK9q2143zy.0IY1/Sgs8tvdpvHSju' // P@ssw0rd
+		]);
+
+		$auth_form = Form::create([
+			"user_id" => $main_user->id,
+			"name" => $faker->sentence(),
+			"description" => $faker->sentences(3, true),
+			"requires_auth" => true,
+			"live" => true,
+		]);
+		$noauth_form = Form::create([
+			"user_id" => $other_user->id,
+			"name" => $faker->sentence(),
+			"description" => $faker->sentences(3, true),
+			"requires_auth" => false,
+			"live" => true,
+		]);
+
+		foreach ([$auth_form->id, $noauth_form->id] as $form_id) {
+			$prev_qn = NULL;
+			$question_data = fn ($prev_qn) => [
+				"form_id" => $form_id,
+				"previous_question_id" => $prev_qn ? $prev_qn->id : NULL,
+				"title" => $faker->sentence(),
+				"description" => $faker->randomDigit() >= 5 ? $faker->sentences(3, true) : NULL,
+				"photo" => $faker->randomDigit() >= 5 ? $faker->sentences(3, true) : NULL
+			];
+
+			for ($i = 0; $i < 3; $i++) {
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "text"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "paragraph"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => false,
+					"type" => "color"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "choice",
+					"choices" => json_encode($faker->words(3)),
+					"choice_type" => "radio"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "choice",
+					"choices" => json_encode($faker->words(3)),
+					"choice_type" => "checkbox"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "choice",
+					"choices" => json_encode($faker->words(3)),
+					"choice_type" => "dropdown"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => false,
+					"type" => "switch"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "slider",
+					"slider_min" => 0,
+					"slider_max" => 100,
+					"slider_step" => 1
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => false,
+					"type" => "rating",
+					"rating_stars" => 5
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "datetime"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "table",
+					"table_columns" => json_encode($faker->words(3)),
+					"table_rows" => json_encode($faker->words(3)),
+					"table_type" => "radio"
+				]);
+
+				$prev_qn = Question::create([
+					...$question_data($prev_qn),
+					"required" => true,
+					"type" => "table",
+					"table_columns" => json_encode($faker->words(3)),
+					"table_rows" => json_encode($faker->words(3)),
+					"table_type" => "checkbox"
+				]);
+			}
+		}
+
+		$main_response = Response::create([
+			"user_id" => $main_user->id,
+			"form_id" => $noauth_form->id
+		]);
+		$other_response = Response::create([
+			"user_id" => $other_user->id,
+			"form_id" => $auth_form->id
+		]);
+
+		foreach (Question::all() as $question) {
+			$answer_data = [
+				"user_id" => $question->form_id == $auth_form->id ? $other_user->id : $main_user->id,
+				"form_id" => $question->form_id,
+				"response_id" => $question->form_id == $auth_form ? $other_response->id : $main_response->id,
+				"question_id" => $question->id,
+			];
+
+			switch ($question->type) {
+				case "text":
+					$answer_data["text"] = $faker->sentence();
+					break;
+				case "paragraph":
+					$answer_data["paragraph"] = $faker->sentences(3, true);
+					break;
+				case "color":
+					$answer_data["color"] =  $faker->randomDigit() >= 5 ? $faker->hexcolor() : NULL;
+					break;
+				case "choice":
+					$answer_data["choices"] = json_encode(
+						$faker->randomElements(
+							json_decode($question->choices),
+							$question->choice_type == "checkbox" ? 2 : 1
+						)
+					);
+					break;
+				case "switch":
+					$answer_data["switch"] = $faker->boolean();
+					break;
+				case "slider":
+					$answer_data["slider"] = $faker->numberBetween(0, 100);
+					break;
+				case "rating":
+					$answer_data["rating"] = $faker->numberBetween(1, $question->rating_stars);
+					break;
+				case "datetime":
+					$answer_data["date"] = $faker->date();
+					$answer_data["time"] = $faker->time();
+					break;
+				case "table":
+					$answer_data["table"] = json_encode(array_map(
+						fn ($row) => [
+							$row,
+							$faker->randomElement(json_decode($question->table_columns))
+						],
+						json_decode($question->table_rows)
+					));
+					break;
+			}
+
+			Answer::create($answer_data);
+		}
 	}
 }
