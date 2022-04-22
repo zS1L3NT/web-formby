@@ -17,6 +17,15 @@ class Question extends Model
 		"description",
 		"photo",
 		"required",
-		"type"
+		"type",
+		"choices",
+		"choice_type",
+		"slider_min",
+		"slider_max",
+		"slider_step",
+		"rating_stars",
+		"table_columns",
+		"table_rows",
+		"table_type"
 	];
 }
