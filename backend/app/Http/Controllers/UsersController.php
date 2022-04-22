@@ -11,7 +11,7 @@ class UsersController extends Controller
 
 	public function __construct()
 	{
-		$this->middleware("auth.jwt")->only(["show, update"]);
+		$this->middleware("auth.jwt")->only(["show", "update"]);
 
 		$this->validate("login", [
 			"email" => ["required", "email"],
