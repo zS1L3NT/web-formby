@@ -17,6 +17,7 @@ return new class extends Migration
 			$table->uuid('id')->primary();
 			$table->uuid('user_id');
 			$table->uuid('form_id');
+			$table->uuid('response_id');
 			$table->uuid('question_id');
 
 			$table->string('text')->nullable();
@@ -32,6 +33,7 @@ return new class extends Migration
 
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->foreign('form_id')->references('id')->on('forms');
+			$table->foreign('response_id')->references('id')->on('responses');
 			$table->foreign('question_id')->references('id')->on('questions');
 
 			$table->timestamps();
