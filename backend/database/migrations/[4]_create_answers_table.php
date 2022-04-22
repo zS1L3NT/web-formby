@@ -31,10 +31,10 @@ return new class extends Migration
 			$table->time('time')->nullable();
 			$table->json('table')->nullable();
 
-			$table->foreign('user_id')->references('id')->on('users');
-			$table->foreign('form_id')->references('id')->on('forms');
-			$table->foreign('response_id')->references('id')->on('responses');
-			$table->foreign('question_id')->references('id')->on('questions');
+			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+			$table->foreign('form_id')->references('id')->on('forms')->cascadeOnDelete();
+			$table->foreign('response_id')->references('id')->on('responses')->cascadeOnDelete();
+			$table->foreign('question_id')->references('id')->on('questions')->cascadeOnDelete();
 
 			$table->timestamps();
 		});

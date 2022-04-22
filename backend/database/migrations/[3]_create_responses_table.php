@@ -18,8 +18,8 @@ return new class extends Migration
 			$table->uuid('user_id')->nullable();
 			$table->uuid('form_id');
 
-			$table->foreign('user_id')->references('id')->on('users');
-			$table->foreign('form_id')->references('id')->on('forms');
+			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+			$table->foreign('form_id')->references('id')->on('forms')->cascadeOnDelete();
 
 			$table->timestamps();
 		});

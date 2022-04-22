@@ -21,7 +21,7 @@ return new class extends Migration
 			$table->boolean('requires_auth')->default(false);
 			$table->boolean('live')->default(false);
 
-			$table->foreign('user_id')->references('id')->on('users');
+			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 
 			$table->timestamps();
 		});

@@ -33,14 +33,14 @@ return new class extends Migration
 			$table->json('table_rows')->nullable();
 			$table->enum('table_type', ['radio', 'checkbox'])->nullable();
 
-			$table->foreign('form_id')->references('id')->on('forms');
+			$table->foreign('form_id')->references('id')->on('forms')->cascadeOnDelete();
 
 			$table->timestamps();
 		});
 
 		// Create foreign key reference after table is created, since reference is to itself
 		Schema::table('questions', function (Blueprint $table) {
-			$table->foreign('previous_question_id')->references('id')->on('questions');
+			$table->foreign('previous_question_id')->references('id')->on('questions')->cascadeOnDelete();
 		});
 	}
 
