@@ -16,7 +16,7 @@ return new class extends Migration
 		Schema::create('questions', function (Blueprint $table) {
 			$table->uuid('id')->primary();
 			$table->uuid('form_id');
-			$table->uuid('next_question_id')->nullable();
+			$table->uuid('previous_question_id')->nullable();
 			$table->string('title');
 			$table->string('description')->nullable();
 			$table->string('photo')->nullable();
@@ -40,7 +40,7 @@ return new class extends Migration
 
 		// Create foreign key reference after table is created, since reference is to itself
 		Schema::table('questions', function (Blueprint $table) {
-			$table->foreign('next_question_id')->references('id')->on('questions');
+			$table->foreign('previous_question_id')->references('id')->on('questions');
 		});
 	}
 

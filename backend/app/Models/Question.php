@@ -12,7 +12,7 @@ class Question extends Model
 
 	protected $fillable = [
 		"form_id",
-		"next_question_id",
+		"previous_question_id",
 		"title",
 		"description",
 		"photo",
