@@ -90,4 +90,30 @@ class FormsController extends Controller
 			"message" => "Form updated successfully!"
 		];
 	}
+
+	public function destroy(Request $request, string $form_id)
+	{
+		$form = Form::find($form_id);
+
+		if ($form == NULL) {
+			return error([
+				"type" => "Invalid Form ID",
+				"message" => "Form with ID \"$form_id\" doesn't exist"
+			], 404);
+		}
+
+		$user = auth()->user();
+		if ($user == NULL || $form->user_id != $user->id) {
+			return error([
+				"type" => "Unauthorized",
+				"message" => "You are not authorized to delete this form"
+			], 403);
+		}
+
+		$form->delete();
+
+		return [
+			"message" => "Form deleted successfully!"
+		];
+	}
 }

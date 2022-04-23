@@ -22,7 +22,4 @@ Route::controller(UsersController::class)->group(function () {
 	Route::put("/user", "update");
 });
 
-Route::controller(FormsController::class)->group(function () {
-	Route::get("/forms/{form_id}", "show");
-	Route::put("/forms/{form_id}", "update");
-});
+Route::apiResource("/form", FormsController::class)->only(["show", "update", "delete"]);
