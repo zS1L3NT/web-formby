@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
-use App\Models\Question;
 
 class FormsController extends Controller
 {
@@ -37,8 +36,6 @@ class FormsController extends Controller
 
 	public function show(Form $form)
 	{
-		$last_question_id = request('last_question_id');
-
 		$user = auth()->user();
 		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
 			return error([
@@ -54,21 +51,7 @@ class FormsController extends Controller
 			], 403);
 		}
 
-		$questions = [];
-		for ($i = 0; $i < 10; $i++) {
-			$question = Question::query()->where("previous_question_id", $last_question_id)->first();
-			if ($question != NULL) {
-				$questions[] = $question;
-				$last_question_id = $question->id;
-			} else {
-				break;
-			}
-		}
-
-		return [
-			...$form->toArray(),
-			"questions" => $questions
-		];
+		return $form;
 	}
 
 	public function update(Form $form)
