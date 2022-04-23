@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\QuestionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +17,13 @@ use App\Http\Controllers\UsersController;
 */
 
 Route::controller(UsersController::class)->group(function () {
-	Route::post("/login", "login");
-	Route::post("/register", "register");
-	Route::post("/logout", "logout");
-	Route::get("/user", "show");
-	Route::put("/user", "update");
+	Route::post("login", "login");
+	Route::post("register", "register");
+	Route::post("logout", "logout");
+	Route::get("user", "show");
+	Route::put("user", "update");
 });
 
-Route::apiResource("/form", FormsController::class)->except(["index"]);
+Route::apiResource("forms", FormsController::class)->except(["index"]);
+
+Route::apiResource("forms.questions", QuestionsController::class);
