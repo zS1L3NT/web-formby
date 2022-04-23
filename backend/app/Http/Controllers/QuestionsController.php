@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Form;
 use App\Models\Question;
 
 class QuestionsController extends Controller
@@ -63,8 +64,16 @@ class QuestionsController extends Controller
 		];
 	}
 
-	public function show(Question $question)
+	public function show(Form $form, Question $question)
 	{
+		if ($form->requires_auth && auth()->user() == NULL) {
+			return response([
+				"type" => "Unauthorized",
+				"message" => "This form requires authentication"
+			], 403);
+		}
+
+		return $question;
 	}
 
 	public function update(Question $question)
