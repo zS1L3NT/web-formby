@@ -137,7 +137,20 @@ class QuestionsController extends Controller
 		];
 	}
 
-	public function delete(Question $question)
+	public function destroy(Form $form, Question $question)
 	{
+		$user = auth()->user();
+		if ($user == NULL || $form->user_id != $user->id) {
+			return error([
+				"type" => "Unauthorized",
+				"message" => "You are not authorized to delete this question"
+			], 403);
+		}
+
+		$question->delete();
+
+		return [
+			"message" => "Question deleted successfully!"
+		];
 	}
 }
