@@ -28,7 +28,7 @@ class FormsController extends Controller
 
 	public function store()
 	{
-		$form = Form::create(request()->data);
+		$form = Form::create([...request()->data, "user_id" => auth()->user()->id]);
 		$form->save();
 
 		return [
