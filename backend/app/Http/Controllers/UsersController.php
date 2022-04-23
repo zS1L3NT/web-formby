@@ -50,7 +50,6 @@ class UsersController extends Controller
 	public function register()
 	{
 		$user = User::create(request()->data);
-		$user->save();
 
 		return [
 			"message" => "Registered successfully!",
@@ -76,7 +75,6 @@ class UsersController extends Controller
 	{
 		$user = User::find(auth()->user()->id);
 		$user->update(request()->data);
-		$user->save();
 
 		return [
 			"message" => "User updated successfully!"
