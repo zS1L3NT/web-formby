@@ -18,6 +18,7 @@ use App\Http\Controllers\UsersController;
 Route::controller(UsersController::class)->group(function () {
 	Route::post("/login", "login");
 	Route::post("/register", "register");
+	Route::post("/logout", "logout");
 	Route::get("/user", "show");
 	Route::put("/user", "update");
 });

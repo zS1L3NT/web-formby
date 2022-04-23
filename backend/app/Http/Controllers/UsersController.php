@@ -10,7 +10,7 @@ class UsersController extends Controller
 
 	public function __construct()
 	{
-		$this->middleware("auth.jwt")->only(["show", "update"]);
+		$this->middleware("auth.jwt")->only(["logout", "show", "update"]);
 
 		$this->validate("login", [
 			"email" => ["required", "email"],
@@ -36,6 +36,7 @@ class UsersController extends Controller
 	{
 		if ($token = auth()->attempt(request()->data)) {
 			return [
+				"message" => "Logged in successfully!",
 				"token" => $token
 			];
 		} else {
@@ -52,7 +53,17 @@ class UsersController extends Controller
 		$user->save();
 
 		return [
-			"message" => "Registered successfully!"
+			"message" => "Registered successfully!",
+			"token" => auth()->login($user)
+		];
+	}
+
+	public function logout()
+	{
+		auth()->logout();
+
+		return [
+			"message" => "Logged out successfully!"
 		];
 	}
 
@@ -68,7 +79,7 @@ class UsersController extends Controller
 		$user->save();
 
 		return [
-			"message" => "User updated successfully!",
+			"message" => "User updated successfully!"
 		];
 	}
 }
