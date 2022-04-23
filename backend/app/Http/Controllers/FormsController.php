@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Question;
-use Illuminate\Http\Request;
 
 class FormsController extends Controller
 {
@@ -27,9 +26,9 @@ class FormsController extends Controller
 		]);
 	}
 
-	public function store(Request $request)
+	public function store()
 	{
-		$form = Form::create($request->data);
+		$form = Form::create(request()->data);
 		$form->save();
 
 		return [
@@ -37,17 +36,9 @@ class FormsController extends Controller
 		];
 	}
 
-	public function show(Request $request, string $form_id)
+	public function show(Form $form)
 	{
-		$last_question_id = $request->query('last_question_id');
-		$form = Form::find($form_id);
-
-		if ($form == NULL) {
-			return error([
-				"type" => "Invalid Form ID",
-				"message" => "Form with ID \"$form_id\" doesn't exist"
-			], 404);
-		}
+		$last_question_id = request('last_question_id');
 
 		$user = auth()->user();
 		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
@@ -81,17 +72,8 @@ class FormsController extends Controller
 		];
 	}
 
-	public function update(Request $request, string $form_id)
+	public function update(Form $form)
 	{
-		$form = Form::find($form_id);
-
-		if ($form == NULL) {
-			return error([
-				"type" => "Invalid Form ID",
-				"message" => "Form with ID \"$form_id\" doesn't exist"
-			], 404);
-		}
-
 		$user = auth()->user();
 		if ($user == NULL || $form->user_id != $user->id) {
 			return error([
@@ -100,7 +82,7 @@ class FormsController extends Controller
 			], 403);
 		}
 
-		$form->update($request->data);
+		$form->update(request()->data);
 		$form->save();
 
 		return [
@@ -108,17 +90,8 @@ class FormsController extends Controller
 		];
 	}
 
-	public function destroy(Request $request, string $form_id)
+	public function destroy(Form $form)
 	{
-		$form = Form::find($form_id);
-
-		if ($form == NULL) {
-			return error([
-				"type" => "Invalid Form ID",
-				"message" => "Form with ID \"$form_id\" doesn't exist"
-			], 404);
-		}
-
 		$user = auth()->user();
 		if ($user == NULL || $form->user_id != $user->id) {
 			return error([

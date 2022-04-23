@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
@@ -33,9 +32,9 @@ class UsersController extends Controller
 		]);
 	}
 
-	public function login(Request $request)
+	public function login()
 	{
-		if ($token = auth()->attempt($request->data)) {
+		if ($token = auth()->attempt(request()->data)) {
 			return [
 				"token" => $token
 			];
@@ -47,9 +46,9 @@ class UsersController extends Controller
 		}
 	}
 
-	public function register(Request $request)
+	public function register()
 	{
-		$user = User::create($request->data);
+		$user = User::create(request()->data);
 		$user->save();
 
 		return [
@@ -57,15 +56,15 @@ class UsersController extends Controller
 		];
 	}
 
-	public function show(Request $request)
+	public function show()
 	{
 		return User::find(auth()->user()->id);
 	}
 
-	public function update(Request $request)
+	public function update()
 	{
 		$user = User::find(auth()->user()->id);
-		$user->update($request->data);
+		$user->update(request()->data);
 		$user->save();
 
 		return [
