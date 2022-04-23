@@ -33,13 +33,13 @@ class QuestionsController extends Controller
 		]);
 	}
 
-	public function index()
+	public function index(string $form_id)
 	{
 		$last_question_id = request("last_question_id");
 
 		$questions = [];
 		for ($i = 0; $i < 10; $i++) {
-			$question = Question::query()->where("previous_question_id", $last_question_id)->first();
+			$question = Question::query()->where("form_id", $form_id)->where("previous_question_id", $last_question_id)->first();
 			if ($question != NULL) {
 				$questions[] = $question;
 				$last_question_id = $question->id;
