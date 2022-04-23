@@ -22,4 +22,4 @@ Route::controller(UsersController::class)->group(function () {
 	Route::put("/user", "update");
 });
 
-Route::apiResource("/form", FormsController::class)->only(["show", "update", "delete"]);
+Route::apiResource("/form", FormsController::class)->except(["index"]);

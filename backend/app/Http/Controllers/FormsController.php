@@ -12,12 +12,29 @@ class FormsController extends Controller
 	{
 		$this->middleware('auth.jwt')->only(["update"]);
 
+		$this->validate("store", [
+			"name" => ["required", "max:255", "string"],
+			"description" => ["required", "max:255", "string"],
+			"requires_auth" => ["boolean"],
+			"live" => ["boolean"]
+		]);
+
 		$this->validate("update", [
 			"name" => ["max:255", "string"],
 			"description" => ["max:255", "string"],
 			"requires_auth" => ["boolean"],
 			"live" => ["boolean"]
 		]);
+	}
+
+	public function store(Request $request)
+	{
+		$form = Form::create($request->data);
+		$form->save();
+
+		return [
+			"message" => "Form created successfully!"
+		];
 	}
 
 	public function show(Request $request, string $form_id)
