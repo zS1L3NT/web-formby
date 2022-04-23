@@ -82,6 +82,13 @@ class FormsController extends Controller
 			], 403);
 		}
 
+		if ($form->live) {
+			return error([
+				"type" => "Form is Live",
+				"message" => "You cannot edit a live form!"
+			]);
+		}
+
 		$form->update(request()->data);
 		$form->save();
 
