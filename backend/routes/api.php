@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FormsController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +20,8 @@ Route::controller(UsersController::class)->group(function () {
 	Route::post("/register", "register");
 	Route::get("/user", "show");
 	Route::put("/user", "update");
+});
+
+Route::controller(FormsController::class)->group(function () {
+	Route::get("/forms/{form_id}", "show");
 });
