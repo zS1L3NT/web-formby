@@ -41,9 +41,9 @@ class Question extends Model
 		return json_decode($choices);
 	}
 
-	public function setChoicesAttribute(array $choices)
+	public function setChoicesAttribute(array|NULL $choices)
 	{
-		$this->attributes['choices'] = json_encode($choices);
+		$this->attributes['choices'] = $choices == NULL ? NULL : json_encode($choices);
 	}
 
 	public function getTableColumnsAttribute($table)
@@ -51,9 +51,9 @@ class Question extends Model
 		return json_decode($table);
 	}
 
-	public function setTableColumnsAttribute(array $table)
+	public function setTableColumnsAttribute(array|NULL $table)
 	{
-		$this->attributes['table_columns'] = json_encode($table);
+		$this->attributes['table_columns'] = $table == NULL ? NULL : json_encode($table);
 	}
 
 	public function getTableRowsAttribute($table)
@@ -61,8 +61,8 @@ class Question extends Model
 		return json_decode($table);
 	}
 
-	public function setTableRowsAttribute(array $table)
+	public function setTableRowsAttribute(array|NULL $table)
 	{
-		$this->attributes['table_rows'] = json_encode($table);
+		$this->attributes['table_rows'] = $table == NULL ? NULL : json_encode($table);
 	}
 }

@@ -32,6 +32,27 @@ class QuestionsController extends Controller
 			"table_rows" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
 			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
 		]);
+
+		$this->validate("update", [
+			"title" => ["max:255", "string"],
+			"description" => ["max:255", "string"],
+			"photo" => ["max:255", "url"],
+			"required" => ["boolean"],
+			"type" => ["in:text,paragraph,color,choice,switch,slider,rating,datetime,table"],
+
+			"choices.*" => ["required_if:type,choice", "prohibited_unless:type,choice", "max:255", "string"],
+			"choices" => ["required_if:type,choice", "prohibited_unless:type,choice", "array"],
+			"choice_type" => ["required_if:type,choice", "prohibited_unless:type,choice", "in:radio,checkbox:dropdown"],
+			"slider_min" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
+			"slider_max" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
+			"slider_step" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
+			"rating_stars" => ["required_if:type,rating", "prohibited_unless:type,rating", "integer"],
+			"table_columns.*" => ["required_if:type,table", "prohibited_unless:type,table", "max:255", "string"],
+			"table_columns" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
+			"table_rows.*" => ["required_if:type,table", "prohibited_unless:type,table", "max:255", "string"],
+			"table_rows" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
+			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
+		]);
 	}
 
 	public function index(string $form_id)
@@ -76,8 +97,44 @@ class QuestionsController extends Controller
 		return $question;
 	}
 
-	public function update(Question $question)
+	public function update(Form $form, Question $question)
 	{
+		$user = auth()->user();
+		if ($user == NULL || $form->user_id != $user->id) {
+			return error([
+				"type" => "Unauthorized",
+				"message" => "You are not authorized to update this question"
+			], 403);
+		}
+
+		if ($form->live) {
+			return error([
+				"type" => "Form is Live",
+				"message" => "You cannot edit a question from a live form"
+			]);
+		}
+
+		$data = request()->data;
+		if (isset($data["type"])) {
+			$question->update([
+				"choices" => NULL,
+				"choice_type" => NULL,
+				"slider_min" => NULL,
+				"slider_max" => NULL,
+				"slider_step" => NULL,
+				"rating_stars" => NULL,
+				"table_columns" => NULL,
+				"table_rows" => NULL,
+				"table_type" => NULL,
+				...$data
+			]);
+		} else {
+			$question->update($data);
+		}
+
+		return [
+			"message" => "Question updated successfully!"
+		];
 	}
 
 	public function delete(Question $question)
