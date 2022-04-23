@@ -16,4 +16,9 @@ class Form extends Model
 		"requires_auth",
 		"live"
 	];
+
+	protected $casts = [
+		"requires_auth" => "boolean",
+		"live" => "boolean"
+	];
 }

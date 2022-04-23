@@ -28,6 +28,14 @@ class Question extends Model
 		"table_type"
 	];
 
+	protected $casts = [
+		"required" => "boolean",
+		"slider_min" => "integer",
+		"slider_max" => "integer",
+		"slider_step" => "integer",
+		"rating_stars" => "integer"
+	];
+
 	public function getChoicesAttribute($choices)
 	{
 		return json_decode($choices);

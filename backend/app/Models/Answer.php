@@ -21,8 +21,13 @@ class Answer extends Model
 		"slider",
 		"rating",
 		"date",
-		"time",
-		"table"
+		"time"
+	];
+
+	protected $casts = [
+		"switch" => "boolean",
+		"slider" => "integer",
+		"rating" => "integer"
 	];
 
 	public function getChoicesAttribute($choices)
