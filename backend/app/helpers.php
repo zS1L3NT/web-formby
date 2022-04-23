@@ -1,9 +1,9 @@
 <?php
 
-function errors(array ...$errors)
+function error($error, $status = 400)
 {
 	return response(
-		["errors" => $errors],
-		400
+		["error" => $error],
+		$status
 	);
 }

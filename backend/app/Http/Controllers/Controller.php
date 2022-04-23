@@ -22,8 +22,9 @@ class Controller extends BaseController
 			$extra_keys = array_keys(array_diff_key($request->all(), $rules));
 			if (count($extra_keys) > 0 || $validator->fails()) {
 				return response(
-					["errors" => [[
-						"type" => "Request Body",
+					["error" => [
+						"type" => "Invalid Request Body",
+						"message" => "The request body contains invalid data",
 						"fields" => array_merge(
 							array_reduce(
 								$extra_keys,
@@ -32,7 +33,7 @@ class Controller extends BaseController
 							),
 							$validator->errors()->messages()
 						)
-					]]],
+					]],
 					400
 				);
 			}
