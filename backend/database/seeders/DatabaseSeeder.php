@@ -25,13 +25,13 @@ class DatabaseSeeder extends Seeder
 			"name" => "Zechariah Tan",
 			"photo" => "https://media-exp1.licdn.com/dms/image/C5603AQH44a3q4YZIzQ/profile-displayphoto-shrink_800_800/0/1634632712439?e=1655942400&v=beta&t=9CXewWyIS3g93mFEYOZ1fIcOJqqDB0z8g2qKTzPJ1fY",
 			"email" => "zechariahtan144@gmail.com",
-			"password" => '$2y$10$l8NKnLh7AHrVpYWKksP.7OCuKK9q2143zy.0IY1/Sgs8tvdpvHSju' // P@ssw0rd
+			"password" => 'P@ssw0rd'
 		]);
 		$other_user = User::create([
 			"name" => "Joey Lim",
 			"photo" => "https://media-exp1.licdn.com/dms/image/C5603AQGfItIgsZeC-g/profile-displayphoto-shrink_800_800/0/1648962418190?e=1655942400&v=beta&t=M_RgY0en6pxsjzKwz1_qfIo8qCPPNI9okYJlZPhVLRI",
 			"email" => "jyorien@gmail.com",
-			"password" => '$2y$10$l8NKnLh7AHrVpYWKksP.7OCuKK9q2143zy.0IY1/Sgs8tvdpvHSju' // P@ssw0rd
+			"password" => 'P@ssw0rd'
 		]);
 
 		$auth_form = Form::create([
