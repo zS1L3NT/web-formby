@@ -53,7 +53,7 @@ class UsersController extends Controller
 		$user->save();
 
 		return [
-			"message" => "Registration successful!"
+			"message" => "Registered successfully!"
 		];
 	}
 
@@ -68,9 +68,8 @@ class UsersController extends Controller
 		$user->update($request->data);
 		$user->save();
 
-		$fields = count($request->data);
 		return [
-			"message" => $fields . " field" . ($fields > 1 ? "s" : "") . " updated",
+			"message" => "User updated successfully!",
 		];
 	}
 }
