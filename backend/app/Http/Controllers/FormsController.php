@@ -9,7 +9,7 @@ class FormsController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth.jwt')->only(["update"]);
+		$this->middleware('auth.jwt')->only(["store", "update", "destroy"]);
 
 		$this->validate("store", [
 			"name" => ["required", "max:255", "string"],
