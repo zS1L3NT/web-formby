@@ -75,11 +75,10 @@ class QuestionsController extends Controller
 
 	public function store(Form $form)
 	{
-		$user = auth()->user();
-		if ($user == NULL || $form->user_id != $user->id) {
+		if ($form->user_id != auth()->user()->id) {
 			return error([
 				"type" => "Unauthorized",
-				"message" => "You are not authorized to add a question"
+				"message" => "You are not authorized to add a question to this form"
 			], 403);
 		}
 
@@ -111,7 +110,7 @@ class QuestionsController extends Controller
 		if ($form->requires_auth && auth()->user() == NULL) {
 			return response([
 				"type" => "Unauthorized",
-				"message" => "This form requires authentication"
+				"message" => "You are not authorized to view this question"
 			], 403);
 		}
 
@@ -120,8 +119,7 @@ class QuestionsController extends Controller
 
 	public function update(Form $form, Question $question)
 	{
-		$user = auth()->user();
-		if ($user == NULL || $form->user_id != $user->id) {
+		if ($form->user_id != auth()->user()->id) {
 			return error([
 				"type" => "Unauthorized",
 				"message" => "You are not authorized to update this question"
@@ -131,12 +129,11 @@ class QuestionsController extends Controller
 		if ($form->live) {
 			return error([
 				"type" => "Form is Live",
-				"message" => "You cannot edit a question from a live form"
+				"message" => "You cannot edit a question from a live form!"
 			]);
 		}
 
-		$data = request()->data;
-		if (isset($data["type"])) {
+		if (request("type") != NULL) {
 			$question->update([
 				"choices" => NULL,
 				"choice_type" => NULL,
@@ -147,10 +144,10 @@ class QuestionsController extends Controller
 				"table_columns" => NULL,
 				"table_rows" => NULL,
 				"table_type" => NULL,
-				...$data
+				...request()->data
 			]);
 		} else {
-			$question->update($data);
+			$question->update(request()->data);
 		}
 
 		return [
@@ -160,8 +157,7 @@ class QuestionsController extends Controller
 
 	public function destroy(Form $form, Question $question)
 	{
-		$user = auth()->user();
-		if ($user == NULL || $form->user_id != $user->id) {
+		if ($form->user_id != auth()->user()->id) {
 			return error([
 				"type" => "Unauthorized",
 				"message" => "You are not authorized to delete this question"

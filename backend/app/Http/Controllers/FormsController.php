@@ -40,14 +40,14 @@ class FormsController extends Controller
 		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
 			return error([
 				"type" => "Form Closed",
-				"message" => "This form is not accepting responses"
+				"message" => "This form is not accepting any responses"
 			], 400);
 		}
 
 		if ($form->requires_auth && $user == NULL) {
 			return response([
 				"type" => "Unauthorized",
-				"message" => "This form requires authentication"
+				"message" => "You are not authorized to view this form"
 			], 403);
 		}
 
@@ -56,8 +56,7 @@ class FormsController extends Controller
 
 	public function update(Form $form)
 	{
-		$user = auth()->user();
-		if ($user == NULL || $form->user_id != $user->id) {
+		if ($form->user_id != auth()->user()->id) {
 			return error([
 				"type" => "Unauthorized",
 				"message" => "You are not authorized to update this form"
@@ -80,8 +79,7 @@ class FormsController extends Controller
 
 	public function destroy(Form $form)
 	{
-		$user = auth()->user();
-		if ($user == NULL || $form->user_id != $user->id) {
+		if ($form->user_id != auth()->user()->id) {
 			return error([
 				"type" => "Unauthorized",
 				"message" => "You are not authorized to delete this form"
