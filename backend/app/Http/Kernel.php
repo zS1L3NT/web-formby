@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 		'form.owner_modify' => \App\Http\Middleware\FormOwnerModify::class,
-    ];
+		'form.view' => \App\Http\Middleware\FormView::class,
+	];
 }

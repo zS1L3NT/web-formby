@@ -55,25 +55,11 @@ class QuestionsController extends Controller
 		]);
 
 		$this->middleware('form.owner_modify')->only(["store", "update", "destroy"]);
+		$this->middleware('form.view')->only(["index", "show"]);
 	}
 
 	public function index(Form $form)
 	{
-		$user = auth()->user();
-		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
-			return error([
-				"type" => "Form Closed",
-				"message" => "This question is not accepting any responses"
-			], 400);
-		}
-
-		if ($form->requires_auth && $user == NULL) {
-			return response([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to view this form"
-			], 403);
-		}
-
 		$last_question_id = request("last_question_id");
 
 		$questions = [];
@@ -120,21 +106,6 @@ class QuestionsController extends Controller
 
 	public function show(Form $form, Question $question)
 	{
-		$user = auth()->user();
-		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
-			return error([
-				"type" => "Form Closed",
-				"message" => "This question is not accepting any responses"
-			], 400);
-		}
-
-		if ($form->requires_auth && $user == NULL) {
-			return response([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to view this question"
-			], 403);
-		}
-
 		return $question;
 	}
 

@@ -25,6 +25,7 @@ class FormsController extends Controller
 		]);
 
 		$this->middleware('form.owner_modify')->only(["update", "destroy"]);
+		$this->middleware('form.view')->only(["show"]);
 	}
 
 	public function index()
@@ -48,21 +49,6 @@ class FormsController extends Controller
 
 	public function show(Form $form)
 	{
-		$user = auth()->user();
-		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
-			return error([
-				"type" => "Form Closed",
-				"message" => "This form is not accepting any responses"
-			], 400);
-		}
-
-		if ($form->requires_auth && $user == NULL) {
-			return response([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to view this form"
-			], 403);
-		}
-
 		return $form;
 	}
 
