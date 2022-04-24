@@ -73,12 +73,33 @@ class QuestionsController extends Controller
 		return $questions;
 	}
 
-	public function store(string $form_id)
+	public function store(Form $form)
 	{
-		Question::create([
+		$user = auth()->user();
+		if ($user == NULL || $form->user_id != $user->id) {
+			return error([
+				"type" => "Unauthorized",
+				"message" => "You are not authorized to add a question"
+			], 403);
+		}
+
+		if ($form->live) {
+			return error([
+				"type" => "Form is Live",
+				"message" => "You cannot add a question to a live form"
+			]);
+		}
+
+		$question = Question::create([
 			...request()->data,
-			"form_id" => $form_id
+			"form_id" => $form->id
 		]);
+
+		Question::query()
+			->where("form_id", $form->id)
+			->where("previous_question_id", request("previous_question_id"))
+			->whereNot("id", $question->id)
+			->update(["previous_question_id" => $question->id]);
 
 		return [
 			"message" => "Question created successfully!"
@@ -146,6 +167,12 @@ class QuestionsController extends Controller
 				"message" => "You are not authorized to delete this question"
 			], 403);
 		}
+
+		Question::query()
+			->where("form_id", $form->id)
+			->where("previous_question_id", $question->id)
+			->whereNot("id", $question->id)
+			->update(["previous_question_id" => $question->previous_question_id]);
 
 		$question->delete();
 
