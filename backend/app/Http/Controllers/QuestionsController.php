@@ -56,6 +56,7 @@ class QuestionsController extends Controller
 
 		$this->middleware('form.owner_modify')->only(["store", "update", "destroy"]);
 		$this->middleware('form.view')->only(["index", "show"]);
+		$this->middleware('form.live_modify')->only(["store", "update"]);
 	}
 
 	public function index(Form $form)
@@ -81,13 +82,6 @@ class QuestionsController extends Controller
 
 	public function store(Form $form)
 	{
-		if ($form->live) {
-			return error([
-				"type" => "Form is Live",
-				"message" => "You cannot add a question to a live form"
-			]);
-		}
-
 		$question = Question::create([
 			...request()->data,
 			"form_id" => $form->id
@@ -111,13 +105,6 @@ class QuestionsController extends Controller
 
 	public function update(Form $form, Question $question)
 	{
-		if ($form->live) {
-			return error([
-				"type" => "Form is Live",
-				"message" => "You cannot edit a question from a live form!"
-			]);
-		}
-
 		if (request("type") != NULL) {
 			$question->update([
 				"choices" => NULL,

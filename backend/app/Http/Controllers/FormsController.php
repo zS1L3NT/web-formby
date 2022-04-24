@@ -26,6 +26,7 @@ class FormsController extends Controller
 
 		$this->middleware('form.owner_modify')->only(["update", "destroy"]);
 		$this->middleware('form.view')->only(["show"]);
+		$this->middleware('form.live_modify')->only(["update"]);
 	}
 
 	public function index()
@@ -54,13 +55,6 @@ class FormsController extends Controller
 
 	public function update(Form $form)
 	{
-		if ($form->live) {
-			return error([
-				"type" => "Form is Live",
-				"message" => "You cannot edit a live form!"
-			]);
-		}
-
 		$form->update(request()->data);
 
 		return [
