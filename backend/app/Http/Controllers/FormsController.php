@@ -8,7 +8,7 @@ class FormsController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth.jwt')->only(["store", "update", "destroy"]);
+		$this->middleware('auth.jwt')->except(["show"]);
 
 		$this->validate("store", [
 			"name" => ["required", "max:255", "string"],
@@ -23,6 +23,16 @@ class FormsController extends Controller
 			"requires_auth" => ["boolean"],
 			"live" => ["boolean"]
 		]);
+	}
+
+	public function index()
+	{
+		$page = request()->query("page") ?? 1;
+		return Form::query()
+			->where("user_id", auth()->user()->id)
+			->skip(($page - 1) * 10)
+			->limit(10)
+			->get();
 	}
 
 	public function store()

@@ -24,6 +24,6 @@ Route::controller(UsersController::class)->group(function () {
 	Route::put("user", "update");
 });
 
-Route::apiResource("forms", FormsController::class)->except(["index"]);
+Route::apiResource("forms", FormsController::class);
 
 Route::apiResource("forms.questions", QuestionsController::class);
