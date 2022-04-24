@@ -53,6 +53,8 @@ class QuestionsController extends Controller
 			"table_rows" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
 			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
 		]);
+
+		$this->middleware('form.owner_modify')->only(["store", "update", "destroy"]);
 	}
 
 	public function index(Form $form)
@@ -93,13 +95,6 @@ class QuestionsController extends Controller
 
 	public function store(Form $form)
 	{
-		if ($form->user_id != auth()->user()->id) {
-			return error([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to add a question to this form"
-			], 403);
-		}
-
 		if ($form->live) {
 			return error([
 				"type" => "Form is Live",
@@ -145,13 +140,6 @@ class QuestionsController extends Controller
 
 	public function update(Form $form, Question $question)
 	{
-		if ($form->user_id != auth()->user()->id) {
-			return error([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to update this question"
-			], 403);
-		}
-
 		if ($form->live) {
 			return error([
 				"type" => "Form is Live",
@@ -183,13 +171,6 @@ class QuestionsController extends Controller
 
 	public function destroy(Form $form, Question $question)
 	{
-		if ($form->user_id != auth()->user()->id) {
-			return error([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to delete this question"
-			], 403);
-		}
-
 		Question::query()
 			->where("form_id", $form->id)
 			->where("previous_question_id", $question->id)

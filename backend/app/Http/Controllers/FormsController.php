@@ -23,6 +23,8 @@ class FormsController extends Controller
 			"requires_auth" => ["boolean"],
 			"live" => ["boolean"]
 		]);
+
+		$this->middleware('form.owner_modify')->only(["update", "destroy"]);
 	}
 
 	public function index()
@@ -66,13 +68,6 @@ class FormsController extends Controller
 
 	public function update(Form $form)
 	{
-		if ($form->user_id != auth()->user()->id) {
-			return error([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to update this form"
-			], 403);
-		}
-
 		if ($form->live) {
 			return error([
 				"type" => "Form is Live",
@@ -89,13 +84,6 @@ class FormsController extends Controller
 
 	public function destroy(Form $form)
 	{
-		if ($form->user_id != auth()->user()->id) {
-			return error([
-				"type" => "Unauthorized",
-				"message" => "You are not authorized to delete this form"
-			], 403);
-		}
-
 		$form->delete();
 
 		return [
