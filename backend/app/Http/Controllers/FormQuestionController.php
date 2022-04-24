@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Question;
 
-class QuestionsController extends Controller
+class FormQuestionController extends Controller
 {
 	public function __construct()
 	{

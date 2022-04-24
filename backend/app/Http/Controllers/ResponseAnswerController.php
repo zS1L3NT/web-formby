@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ResponsesController extends Controller
+class AnswerController extends Controller
 {
     //
 }

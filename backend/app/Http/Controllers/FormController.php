@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 
-class FormsController extends Controller
+class FormController extends Controller
 {
 	public function __construct()
 	{

@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FormsController;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\QuestionsController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FormQuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +16,7 @@ use App\Http\Controllers\QuestionsController;
 |
 */
 
-Route::controller(UsersController::class)->group(function () {
+Route::controller(UserController::class)->group(function () {
 	Route::post("login", "login");
 	Route::post("register", "register");
 	Route::post("logout", "logout");
@@ -24,6 +24,6 @@ Route::controller(UsersController::class)->group(function () {
 	Route::put("user", "update");
 });
 
-Route::apiResource("forms", FormsController::class);
+Route::apiResource("forms", FormController::class);
 
-Route::apiResource("forms.questions", QuestionsController::class);
+Route::apiResource("forms.questions", FormQuestionController::class);
