@@ -55,13 +55,31 @@ class QuestionsController extends Controller
 		]);
 	}
 
-	public function index(string $form_id)
+	public function index(Form $form)
 	{
+		$user = auth()->user();
+		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
+			return error([
+				"type" => "Form Closed",
+				"message" => "This question is not accepting any responses"
+			], 400);
+		}
+
+		if ($form->requires_auth && $user == NULL) {
+			return response([
+				"type" => "Unauthorized",
+				"message" => "You are not authorized to view this form"
+			], 403);
+		}
+
 		$last_question_id = request("last_question_id");
 
 		$questions = [];
 		for ($i = 0; $i < 10; $i++) {
-			$question = Question::query()->where("form_id", $form_id)->where("previous_question_id", $last_question_id)->first();
+			$question = Question::query()
+				->where("form_id", $form->id)
+				->where("previous_question_id", $last_question_id)
+				->first();
 			if ($question != NULL) {
 				$questions[] = $question;
 				$last_question_id = $question->id;
@@ -107,7 +125,15 @@ class QuestionsController extends Controller
 
 	public function show(Form $form, Question $question)
 	{
-		if ($form->requires_auth && auth()->user() == NULL) {
+		$user = auth()->user();
+		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
+			return error([
+				"type" => "Form Closed",
+				"message" => "This question is not accepting any responses"
+			], 400);
+		}
+
+		if ($form->requires_auth && $user == NULL) {
 			return response([
 				"type" => "Unauthorized",
 				"message" => "You are not authorized to view this question"
