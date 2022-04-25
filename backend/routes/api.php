@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\FormQuestionController;
-use App\Http\Controllers\FormResponseController;
-use App\Http\Controllers\FormResponseAnswerController;
+use App\Http\Controllers\ResponseAnswerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +30,6 @@ Route::apiResource("forms", FormController::class);
 
 Route::apiResource("forms.questions", FormQuestionController::class);
 
-Route::apiResource("forms.responses", FormResponseController::class)->only(["index", "store"]);
+Route::apiResource("responses", ResponseController::class);
 
-Route::apiResource("forms.responses.answers", FormResponseAnswerController::class);
+Route::apiResource("responses.answers", ResponseAnswerController::class);

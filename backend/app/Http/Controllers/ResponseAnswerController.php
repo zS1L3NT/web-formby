@@ -6,7 +6,7 @@ use App\Models\Form;
 use App\Models\Answer;
 use App\Models\Response;
 
-class FormResponseAnswerController extends Controller
+class ResponseAnswerController extends Controller
 {
 	public function __construct()
 	{
@@ -21,7 +21,7 @@ class FormResponseAnswerController extends Controller
 	 */
 	public function index(Form $form, Response $response)
 	{
-		return Answer::query()->where("form_id", $form->id)->where("response_id", $response->id)->get();
+		return Answer::query()->where("response_id", $response->id)->get();
 	}
 
 	/**

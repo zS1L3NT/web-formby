@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Response;
 
-class FormResponseController extends Controller
+class ResponseController extends Controller
 {
 	public function __construct()
 	{
