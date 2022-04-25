@@ -36,3 +36,8 @@ Route::apiResource("forms.answers", FormAnswerController::class)->only(["index"]
 Route::apiResource("responses", ResponseController::class)->except(["index"]);
 
 Route::apiResource("responses.answers", ResponseAnswerController::class);
+
+Route::fallback(fn () => error([
+	"type" => "Page Not Found",
+	"message" => "The route you requested could not be found"
+]));
