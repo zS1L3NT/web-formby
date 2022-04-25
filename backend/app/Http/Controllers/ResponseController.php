@@ -9,9 +9,18 @@ class ResponseController extends Controller
 {
 	public function __construct()
 	{
+		$this->middleware('auth.jwt')->only(["show", "update", "destroy"]);
+
 		$this->validate("store", [
 			"form_id" => ["required", "uuid", "exists:forms,id"]
 		]);
+
+		$this->validate("update", [
+			"live" => ["required", "boolean"]
+		]);
+
+		$this->middleware("response.owner")->only(["update", "destroy"]);
+		$this->middleware("response.live_restrict")->only(["update", "destroy"]);
 	}
 
 	/**
@@ -50,6 +59,54 @@ class ResponseController extends Controller
 
 		return [
 			"message" => "Response created successfully!"
+		];
+	}
+
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
+	public function show(Response $response)
+	{
+		$form = Form::query()->find($response->form_id);
+
+		if ($form->user_id != auth()->user()->id) {
+			return error([
+				"type" => "Unauthorized",
+				"message" => "You have no permission to view this response"
+			]);
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 * - response.owner
+	 * - response.live_restrict
+	 */
+	public function update(Response $response)
+	{
+		$response->update(request()->data);
+
+		return [
+			"message" => "Response updated successfully!"
+		];
+	}
+
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 * - response.owner
+	 * - response.live_restrict
+	 */
+	public function delete(Response $response)
+	{
+		$response->delete();
+
+		return [
+			"message" => "Response deleted successfully!"
 		];
 	}
 }

@@ -30,6 +30,6 @@ Route::apiResource("forms", FormController::class);
 
 Route::apiResource("forms.questions", FormQuestionController::class);
 
-Route::apiResource("responses", ResponseController::class);
+Route::apiResource("responses", ResponseController::class)->except(["index"]);
 
 Route::apiResource("responses.answers", ResponseAnswerController::class);
