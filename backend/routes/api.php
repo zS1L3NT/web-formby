@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\FormAnswerController;
 use App\Http\Controllers\FormQuestionController;
 use App\Http\Controllers\ResponseAnswerController;
 
@@ -29,6 +30,8 @@ Route::controller(UserController::class)->group(function () {
 Route::apiResource("forms", FormController::class);
 
 Route::apiResource("forms.questions", FormQuestionController::class);
+
+Route::apiResource("forms.answers", FormAnswerController::class)->only(["index"]);
 
 Route::apiResource("responses", ResponseController::class)->except(["index"]);
 
