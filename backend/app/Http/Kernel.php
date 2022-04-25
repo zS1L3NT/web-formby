@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
 		'form.user' => \App\Http\Middleware\FormUser::class,
 		'form.owner' => \App\Http\Middleware\FormOwner::class,
 		'form.live_restrict' => \App\Http\Middleware\FormLiveRestrict::class,
+		'response.owner' => \App\Http\Middleware\ResponseOwner::class,
 		'response.live_restrict' => \App\Http\Middleware\ResponseLiveRestrict::class,
 	];
 }
