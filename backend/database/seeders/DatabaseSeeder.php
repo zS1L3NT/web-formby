@@ -163,7 +163,7 @@ class DatabaseSeeder extends Seeder
 			$answer_data = [
 				"user_id" => $question->form_id == $auth_form->id ? $other_user->id : $main_user->id,
 				"form_id" => $question->form_id,
-				"response_id" => $question->form_id == $auth_form ? $other_response->id : $main_response->id,
+				"response_id" => $question->form_id == $auth_form->id ? $other_response->id : $main_response->id,
 				"question_id" => $question->id,
 			];
 
