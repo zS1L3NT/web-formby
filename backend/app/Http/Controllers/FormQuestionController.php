@@ -54,11 +54,15 @@ class FormQuestionController extends Controller
 			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
 		]);
 
-		$this->middleware('form.modify')->only(["store", "update", "destroy"]);
 		$this->middleware('form.view')->only(["index", "show"]);
+		$this->middleware('form.modify')->only(["store", "update", "destroy"]);
 		$this->middleware('form.live_modify')->only(["store", "update"]);
 	}
 
+	/**
+	 * Middleware:
+	 * - form.view
+	 */
 	public function index(Form $form)
 	{
 		$last_question_id = request("last_question_id");
@@ -80,6 +84,12 @@ class FormQuestionController extends Controller
 		return $questions;
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 * - form.modify
+	 * - form.live_modify
+	 */
 	public function store(Form $form)
 	{
 		$question = Question::create([
@@ -98,11 +108,21 @@ class FormQuestionController extends Controller
 		];
 	}
 
+	/**
+	 * Middleware:
+	 * - form.view
+	 */
 	public function show(Form $form, Question $question)
 	{
 		return $question;
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 * - form.modify
+	 * - form.live_modify
+	 */
 	public function update(Form $form, Question $question)
 	{
 		if (request("type") != NULL) {
@@ -127,6 +147,11 @@ class FormQuestionController extends Controller
 		];
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 * - form.modify
+	 */
 	public function destroy(Form $form, Question $question)
 	{
 		Question::query()

@@ -57,6 +57,10 @@ class UserController extends Controller
 		];
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
 	public function logout()
 	{
 		auth()->logout();
@@ -66,15 +70,22 @@ class UserController extends Controller
 		];
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
 	public function show()
 	{
 		return User::find(auth()->user()->id);
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
 	public function update()
 	{
-		$user = User::find(auth()->user()->id);
-		$user->update(request()->data);
+		User::find(auth()->user()->id)->update(request()->data);
 
 		return [
 			"message" => "User updated successfully!"

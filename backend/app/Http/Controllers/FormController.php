@@ -24,11 +24,15 @@ class FormController extends Controller
 			"live" => ["boolean"]
 		]);
 
-		$this->middleware('form.modify')->only(["update", "destroy"]);
 		$this->middleware('form.view')->only(["show"]);
+		$this->middleware('form.modify')->only(["update", "destroy"]);
 		$this->middleware('form.live_modify')->only(["update"]);
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
 	public function index()
 	{
 		$page = request()->query("page") ?? 1;
@@ -39,6 +43,10 @@ class FormController extends Controller
 			->get();
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
 	public function store()
 	{
 		Form::create([...request()->data, "user_id" => auth()->user()->id]);
@@ -48,11 +56,21 @@ class FormController extends Controller
 		];
 	}
 
+	/**
+	 * Middleware:
+	 * - form.view
+	 */
 	public function show(Form $form)
 	{
 		return $form;
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 * - form.modify
+	 * - form.live_modify
+	 */
 	public function update(Form $form)
 	{
 		$form->update(request()->data);
@@ -62,6 +80,11 @@ class FormController extends Controller
 		];
 	}
 
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 * - form.modify
+	 */
 	public function destroy(Form $form)
 	{
 		$form->delete();
