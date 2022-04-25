@@ -54,14 +54,14 @@ class FormQuestionController extends Controller
 			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
 		]);
 
-		$this->middleware('form.view')->only(["index", "show"]);
-		$this->middleware('form.modify')->only(["store", "update", "destroy"]);
-		$this->middleware('form.live_modify')->only(["store", "update"]);
+		$this->middleware('form.user')->only(["index", "show"]);
+		$this->middleware('form.owner')->only(["store", "update", "destroy"]);
+		$this->middleware('form.live_restrict')->only(["store", "update"]);
 	}
 
 	/**
 	 * Middleware:
-	 * - form.view
+	 * - form.user
 	 */
 	public function index(Form $form)
 	{
@@ -87,8 +87,8 @@ class FormQuestionController extends Controller
 	/**
 	 * Middleware:
 	 * - auth.jwt
-	 * - form.modify
-	 * - form.live_modify
+	 * - form.owner
+	 * - form.live_restrict
 	 */
 	public function store(Form $form)
 	{
@@ -110,7 +110,7 @@ class FormQuestionController extends Controller
 
 	/**
 	 * Middleware:
-	 * - form.view
+	 * - form.user
 	 */
 	public function show(Form $form, Question $question)
 	{
@@ -120,8 +120,8 @@ class FormQuestionController extends Controller
 	/**
 	 * Middleware:
 	 * - auth.jwt
-	 * - form.modify
-	 * - form.live_modify
+	 * - form.owner
+	 * - form.live_restrict
 	 */
 	public function update(Form $form, Question $question)
 	{
@@ -150,7 +150,7 @@ class FormQuestionController extends Controller
 	/**
 	 * Middleware:
 	 * - auth.jwt
-	 * - form.modify
+	 * - form.owner
 	 */
 	public function destroy(Form $form, Question $question)
 	{

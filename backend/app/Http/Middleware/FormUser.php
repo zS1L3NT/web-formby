@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class FormModify
+class FormUser
 {
 	/**
 	 * Handle an incoming request.
@@ -18,10 +18,18 @@ class FormModify
 	{
 		$form = $request->route()->parameter("form");
 
-		if ($form->user_id != auth()->user()->id) {
+		$user = auth()->user();
+		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
 			return error([
+				"type" => "Form Closed",
+				"message" => "This form is not accepting any responses"
+			], 400);
+		}
+
+		if ($form->requires_auth && $user == NULL) {
+			return response([
 				"type" => "Unauthorized",
-				"message" => "You have no permission to view or modify this form"
+				"message" => "You need to be authorized to view this form"
 			], 403);
 		}
 

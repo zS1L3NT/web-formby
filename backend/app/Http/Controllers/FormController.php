@@ -24,9 +24,9 @@ class FormController extends Controller
 			"live" => ["boolean"]
 		]);
 
-		$this->middleware('form.view')->only(["show"]);
-		$this->middleware('form.modify')->only(["update", "destroy"]);
-		$this->middleware('form.live_modify')->only(["update"]);
+		$this->middleware('form.user')->only(["show"]);
+		$this->middleware('form.owner')->only(["update", "destroy"]);
+		$this->middleware('form.live_restrict')->only(["update"]);
 	}
 
 	/**
@@ -58,7 +58,7 @@ class FormController extends Controller
 
 	/**
 	 * Middleware:
-	 * - form.view
+	 * - form.user
 	 */
 	public function show(Form $form)
 	{
@@ -68,8 +68,8 @@ class FormController extends Controller
 	/**
 	 * Middleware:
 	 * - auth.jwt
-	 * - form.modify
-	 * - form.live_modify
+	 * - form.owner
+	 * - form.live_restrict
 	 */
 	public function update(Form $form)
 	{
@@ -83,7 +83,7 @@ class FormController extends Controller
 	/**
 	 * Middleware:
 	 * - auth.jwt
-	 * - form.modify
+	 * - form.owner
 	 */
 	public function destroy(Form $form)
 	{
