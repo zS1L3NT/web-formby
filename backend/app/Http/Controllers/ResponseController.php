@@ -9,38 +9,43 @@ class ResponseController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth.jwt')->only(["index"]);
-
-		$this->middleware('form.user')->only(["store"]);
+		$this->validate("store", [
+			"form_id" => ["required", "uuid", "exists:forms,id"]
+		]);
 	}
 
 	/**
 	 * Middleware:
-	 * - auth.jwt
 	 */
-	public function index(Form $form)
-	{
-		return Response::query()->where("form_id", $form->id)->get();
-	}
-
-	/**
-	 * Middleware:
-	 * - form.user
-	 */
-	public function store(Form $form)
+	public function store()
 	{
 		$user = auth()->user();
 
-		if (Response::query()->where("form_id", $form->id)->where("user_id", $user->id)->exists()) {
+		if ($user != NULL && Response::query()->where("form_id", request("form_id"))->where("user_id", $user->id)->exists()) {
 			return error([
-				"type" => "Already Responded",
-				"message" => "You have already responsed to this form!"
+				"type" => "Responded Already Submitted",
+				"message" => "You have already submitted a response to this form!"
 			], 400);
+		}
+
+		$form = Form::query()->find(request("form_id"));
+		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
+			return error([
+				"type" => "Form Closed",
+				"message" => "This form is not accepting any responses"
+			], 400);
+		}
+
+		if ($form->requires_auth && $user == NULL) {
+			return response([
+				"type" => "Unauthorized",
+				"message" => "You need to be authorized to view this form"
+			], 403);
 		}
 
 		Response::create([
 			"user_id" => $user != NULL ? $user->id : NULL,
-			"form_id" => $form->id,
+			"form_id" => request("form_id"),
 		]);
 
 		return [
