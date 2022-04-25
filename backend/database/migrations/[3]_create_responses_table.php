@@ -17,6 +17,7 @@ return new class extends Migration
 			$table->uuid('id')->primary();
 			$table->uuid('user_id')->nullable();
 			$table->uuid('form_id');
+			$table->boolean('live')->default(false);
 
 			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 			$table->foreign('form_id')->references('id')->on('forms')->cascadeOnDelete();
