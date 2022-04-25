@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FormQuestionController;
+use App\Http\Controllers\FormResponseController;
+use App\Http\Controllers\FormResponseAnswerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +29,7 @@ Route::controller(UserController::class)->group(function () {
 Route::apiResource("forms", FormController::class);
 
 Route::apiResource("forms.questions", FormQuestionController::class);
+
+Route::apiResource("forms.responses", FormResponseController::class);
+
+Route::apiResource("forms.responses.answers", FormResponseAnswerController::class);
