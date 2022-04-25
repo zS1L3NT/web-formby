@@ -30,6 +30,6 @@ Route::apiResource("forms", FormController::class);
 
 Route::apiResource("forms.questions", FormQuestionController::class);
 
-Route::apiResource("forms.responses", FormResponseController::class);
+Route::apiResource("forms.responses", FormResponseController::class)->only(["index", "store"]);
 
 Route::apiResource("forms.responses.answers", FormResponseAnswerController::class);
