@@ -54,7 +54,7 @@ class FormQuestionController extends Controller
 			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
 		]);
 
-		$this->middleware('form.owner_modify')->only(["store", "update", "destroy"]);
+		$this->middleware('form.modify')->only(["store", "update", "destroy"]);
 		$this->middleware('form.view')->only(["index", "show"]);
 		$this->middleware('form.live_modify')->only(["store", "update"]);
 	}

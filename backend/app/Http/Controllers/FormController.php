@@ -24,7 +24,7 @@ class FormController extends Controller
 			"live" => ["boolean"]
 		]);
 
-		$this->middleware('form.owner_modify')->only(["update", "destroy"]);
+		$this->middleware('form.modify')->only(["update", "destroy"]);
 		$this->middleware('form.view')->only(["show"]);
 		$this->middleware('form.live_modify')->only(["update"]);
 	}
