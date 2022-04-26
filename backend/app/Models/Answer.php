@@ -11,7 +11,6 @@ class Answer extends Model
 
 	protected $fillable = [
 		"user_id",
-		"form_id",
 		"question_id",
 		"text",
 		"paragraph",

@@ -150,7 +150,6 @@ class DatabaseSeeder extends Seeder
 		foreach (Question::all() as $question) {
 			$answer_data = [
 				"user_id" => $question->form_id == $auth_form->id ? $other_user->id : $main_user->id,
-				"form_id" => $question->form_id,
 				"question_id" => $question->id,
 			];
 

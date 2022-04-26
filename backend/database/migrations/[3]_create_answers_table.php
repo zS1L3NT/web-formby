@@ -16,7 +16,6 @@ return new class extends Migration
 		Schema::create('answers', function (Blueprint $table) {
 			$table->uuid('id')->primary();
 			$table->uuid('user_id')->nullable();
-			$table->uuid('form_id');
 			$table->uuid('question_id');
 
 			$table->string('text')->nullable();
@@ -31,7 +30,6 @@ return new class extends Migration
 			$table->json('table')->nullable();
 
 			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-			$table->foreign('form_id')->references('id')->on('forms')->cascadeOnDelete();
 			$table->foreign('question_id')->references('id')->on('questions')->cascadeOnDelete();
 
 			$table->timestamps();
