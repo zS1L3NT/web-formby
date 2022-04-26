@@ -19,7 +19,7 @@ class JWTAuthenticated
 		if (auth()->user()) {
 			return $next($request);
 		} else {
-			return error([
+			return response([
 				"type" => "Unauthorized",
 				"message" => "This route requires authetication"
 			], 401);

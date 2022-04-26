@@ -19,7 +19,7 @@ class ResponseLiveRestrict
 		$response = $request->route()->parameter("response");
 
 		if ($response->live) {
-			return error([
+			return response([
 				"type" => "Response Already Submitted",
 				"message" => "You cannot modify or delete a submitted response!"
 			]);

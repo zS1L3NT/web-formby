@@ -40,7 +40,7 @@ class UserController extends Controller
 				"token" => $token
 			];
 		} else {
-			return error([
+			return response([
 				"type" => "Login Error",
 				"message" => "Invalid login credentials"
 			]);

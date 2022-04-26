@@ -56,7 +56,7 @@ class AnswerController extends Controller
 
 			if ($question->type == "choice") {
 				if ($question->choice_type != "checkbox" && count($answer->choices) > 1) {
-					return error([
+					return response([
 						"type" => "Invalid Choice Data",
 						"message" => "answers.$i.choices: A choice type of " . $question->choice_type . " cannot have more than 1 value"
 					]);
@@ -67,7 +67,7 @@ class AnswerController extends Controller
 				$qr = $question->table_rows;
 				$ar = array_map(fn ($item) => $item[0], $answer->table);
 				if (count(array_diff($qr, $ar)) > 0 || count(array_diff($ar, $qr)) > 0) {
-					return error([
+					return response([
 						"type" => "Invalid Table Data",
 						"message" => "answers.$i.table: You must fill in a value for all rows of the table"
 					]);

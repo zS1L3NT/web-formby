@@ -19,7 +19,7 @@ class FormOwner
 		$form = $request->route()->parameter("form");
 
 		if ($form->user_id != auth()->user()->id) {
-			return error([
+			return response([
 				"type" => "Unauthorized",
 				"message" => "You have no permission to view or modify this form"
 			], 403);

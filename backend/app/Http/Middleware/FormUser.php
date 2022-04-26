@@ -20,7 +20,7 @@ class FormUser
 
 		$user = auth()->user();
 		if (!$form->live && ($user == NULL || $user->id != $form->user_id)) {
-			return error([
+			return response([
 				"type" => "Form Closed",
 				"message" => "This form is not accepting any responses"
 			], 400);

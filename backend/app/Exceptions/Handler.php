@@ -53,13 +53,13 @@ class Handler extends ExceptionHandler
 	{
 		if ($throwable instanceof ModelNotFoundException) {
 			$model = explode("\\", (string) $throwable->getModel())[2];
-			return error([
+			return response([
 				"type" => "$model not found",
 				"message" => "There was no " . strtolower($model) . " with the requested id: " . $throwable->getIds()[0],
 			]);
 		}
 
-		return error([
+		return response([
 			"type" => "Unhandled Exception",
 			"message" => $throwable->getMessage(),
 			"stack" => $throwable->getTrace(),
