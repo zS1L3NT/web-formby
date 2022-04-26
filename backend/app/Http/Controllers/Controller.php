@@ -19,7 +19,15 @@ class Controller extends BaseController
 		$middleware = function (Request $request, Closure $next) use ($rules) {
 			$validator = Validator::make($request->only(array_keys($rules)), $rules);
 
-			$extra_keys = array_keys(array_diff_key($request->all(), $rules));
+			$extra_keys = array_filter(
+				array_keys(
+					array_diff_key(
+						$request->all(),
+						$rules
+					)
+				),
+				fn ($key) => is_string($key)
+			);
 			if (count($extra_keys) > 0 || $validator->fails()) {
 				return response(
 					["error" => [

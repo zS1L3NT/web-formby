@@ -6,7 +6,6 @@ use App\Models\Form;
 use App\Models\User;
 use App\Models\Answer;
 use App\Models\Question;
-use App\Models\Response;
 use Illuminate\Database\Seeder;
 use Faker\Factory as FakerFactory;
 
@@ -59,111 +58,98 @@ class DatabaseSeeder extends Seeder
 				"photo" => $faker->randomDigit() >= 5 ? $faker->sentences(3, true) : NULL
 			];
 
-			for ($i = 0; $i < 3; $i++) {
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "text"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "text"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "paragraph"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "paragraph"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => false,
-					"type" => "color"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => false,
+				"type" => "color"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "choice",
-					"choices" => $faker->words(3),
-					"choice_type" => "radio"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "choice",
+				"choices" => $faker->words(3),
+				"choice_type" => "radio"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "choice",
-					"choices" => $faker->words(3),
-					"choice_type" => "checkbox"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "choice",
+				"choices" => $faker->words(3),
+				"choice_type" => "checkbox"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "choice",
-					"choices" => $faker->words(3),
-					"choice_type" => "dropdown"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "choice",
+				"choices" => $faker->words(3),
+				"choice_type" => "dropdown"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => false,
-					"type" => "switch"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => false,
+				"type" => "switch"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "slider",
-					"slider_min" => 0,
-					"slider_max" => 100,
-					"slider_step" => 1
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "slider",
+				"slider_min" => 0,
+				"slider_max" => 100,
+				"slider_step" => 1
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => false,
-					"type" => "rating",
-					"rating_stars" => 5
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => false,
+				"type" => "rating",
+				"rating_stars" => 5
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "datetime"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "datetime"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "table",
-					"table_columns" => $faker->words(3),
-					"table_rows" => $faker->words(3),
-					"table_type" => "radio"
-				]);
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "table",
+				"table_columns" => $faker->words(3),
+				"table_rows" => $faker->words(3),
+				"table_type" => "radio"
+			]);
 
-				$prev_qn = Question::create([
-					...$question_data($prev_qn),
-					"required" => true,
-					"type" => "table",
-					"table_columns" => $faker->words(3),
-					"table_rows" => $faker->words(3),
-					"table_type" => "checkbox"
-				]);
-			}
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "table",
+				"table_columns" => $faker->words(3),
+				"table_rows" => $faker->words(3),
+				"table_type" => "checkbox"
+			]);
 		}
-
-		$main_response = Response::create([
-			"user_id" => $main_user->id,
-			"form_id" => $noauth_form->id
-		]);
-		$other_response = Response::create([
-			"user_id" => $other_user->id,
-			"form_id" => $auth_form->id
-		]);
 
 		foreach (Question::all() as $question) {
 			$answer_data = [
 				"user_id" => $question->form_id == $auth_form->id ? $other_user->id : $main_user->id,
-				"form_id" => $question->form_id,
-				"response_id" => $question->form_id == $auth_form->id ? $other_response->id : $main_response->id,
 				"question_id" => $question->id,
 			];
 

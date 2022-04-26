@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Answer;
-use App\Models\Response;
 
 class FormAnswerController extends Controller
 {
@@ -20,15 +19,6 @@ class FormAnswerController extends Controller
 	 */
 	public function index(Form $form)
 	{
-		return Answer::query()
-			->where("form_id", $form->id)
-			->whereIn(
-				"response_id",
-				Response::query()
-					->where("form_id", $form->id)
-					->where("live", true)
-					->get("id")
-			)
-			->get();
+		return Answer::query()->where("form_id", $form->id)->get();
 	}
 }
