@@ -21,8 +21,10 @@ class FillQuestionData
 
 		$question_id = $request->input("question_id");
 		if ($question_id != NULL && is_string($question_id)) {
-			$body["question"] = Question::query()->find($question_id)->toArray();
-			$request->replace($body);
+			if ($question = Question::query()->find($question_id)) {
+				$body["question"] = $question->toArray();
+				$request->replace($body);
+			}
 		}
 
 		return $next($request);
