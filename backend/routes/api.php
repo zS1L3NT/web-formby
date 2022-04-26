@@ -32,7 +32,7 @@ Route::apiResource("forms.questions", FormQuestionController::class);
 
 Route::apiResource("forms.answers", FormAnswerController::class)->only(["index"]);
 
-Route::apiResource("answers", AnswerController::class);
+Route::apiResource("answers", AnswerController::class)->only(["store"]);
 
 Route::fallback(fn () => error([
 	"type" => "Page Not Found",
