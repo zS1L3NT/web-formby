@@ -17,15 +17,13 @@ class FillQuestionData
 	 */
 	public function handle(Request $request, Closure $next)
 	{
-		$body = $request->all();
-
-		$question_id = $request->input("question_id");
-		if ($question_id != NULL && is_string($question_id)) {
-			if ($question = Question::query()->find($question_id)) {
-				$body["question"] = $question->toArray();
-				$request->replace($body);
-			}
-		}
+		$request->replace([
+			"questions" => array_map(
+				fn ($answer) => Question::query()->find($answer["question_id"])->toArray(),
+				$request->all()
+			),
+			"answers" => $request->all(),
+		]);
 
 		return $next($request);
 	}
