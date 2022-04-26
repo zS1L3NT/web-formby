@@ -22,7 +22,8 @@ class Answer extends Model
 		"slider",
 		"rating",
 		"date",
-		"time"
+		"time",
+		"table"
 	];
 
 	protected $casts = [
