@@ -20,16 +20,15 @@ class FormAnswerController extends Controller
 	 */
 	public function index(Form $form)
 	{
-		$response_ids = array_map(
-			fn ($data) => $data["id"],
-			Response::query()
-				->where("live", false)
-				->get("id")
-				->toArray()
-		);
 		return Answer::query()
 			->where("form_id", $form->id)
-			->whereIn("response_id", $response_ids)
+			->whereIn(
+				"response_id",
+				Response::query()
+					->where("form_id", $form->id)
+					->where("live", true)
+					->get("id")
+			)
 			->get();
 	}
 }
