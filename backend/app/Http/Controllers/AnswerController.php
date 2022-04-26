@@ -13,8 +13,8 @@ class AnswerController extends Controller
 	public function __construct()
 	{
 		$this->validate("store", [
-			"*.question_id" => ["sometimes", "uuid", "exists:question,id"],
-			"*" => ["required", "array"]
+			"answers.*.question_id" => ["required", "uuid", "exists:questions,id"],
+			"answers" => ["required", "array"],
 		]);
 
 		$this->middleware('fill_question_data')->only(["store"]);
@@ -82,7 +82,6 @@ class AnswerController extends Controller
 				"user_id" => $user != NULL ? $user->id : NULL,
 			]);
 		}
-
 
 		return [
 			"message" => "Answer created successfully!"

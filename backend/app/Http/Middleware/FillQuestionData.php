@@ -20,9 +20,9 @@ class FillQuestionData
 		$request->replace([
 			"questions" => array_map(
 				fn ($answer) => Question::query()->find($answer["question_id"])->toArray(),
-				$request->all()
+				$request->input("answers")
 			),
-			"answers" => $request->all(),
+			"answers" => $request->input("answers"),
 		]);
 
 		return $next($request);
