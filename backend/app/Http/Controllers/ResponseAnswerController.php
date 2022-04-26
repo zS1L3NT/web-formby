@@ -67,6 +67,21 @@ class ResponseAnswerController extends Controller
 	 */
 	public function store(Response $response)
 	{
+		$choice_type = request("question.choice_type");
+		if ($choice_type != NULL) {
+			if ($choice_type != "checkbox" && count(request("choices")) > 1) {
+				return error([
+					"type" => "Invalid Choice Data",
+					"message" => "A choice type of $choice_type cannot have more than 1 value"
+				]);
+			}
+		}
+		
+		// $table_type = request("question.table_type");
+		// if ($table_type != NULL) {
+		// 	if ($table_type != "checkbox" && )
+		// }
+
 		$user = auth()->user();
 		Answer::create([
 			...request()->data,
