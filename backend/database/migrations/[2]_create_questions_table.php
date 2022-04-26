@@ -28,7 +28,7 @@ return new class extends Migration
 			$table->integer('slider_min')->nullable();
 			$table->integer('slider_max')->nullable();
 			$table->integer('slider_step')->nullable();
-			$table->integer('rating_stars')->nullable();
+			$table->integer('rating_max')->nullable();
 			$table->json('table_columns')->nullable();
 			$table->json('table_rows')->nullable();
 			$table->enum('table_type', ['radio', 'checkbox'])->nullable();

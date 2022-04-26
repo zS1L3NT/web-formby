@@ -22,7 +22,7 @@ class Question extends Model
 		"slider_min",
 		"slider_max",
 		"slider_step",
-		"rating_stars",
+		"rating_max",
 		"table_columns",
 		"table_rows",
 		"table_type"
@@ -33,7 +33,7 @@ class Question extends Model
 		"slider_min" => "integer",
 		"slider_max" => "integer",
 		"slider_step" => "integer",
-		"rating_stars" => "integer"
+		"rating_max" => "integer"
 	];
 
 	public function getChoicesAttribute($choices)
