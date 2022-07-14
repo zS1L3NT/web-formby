@@ -173,8 +173,9 @@ const _Navigation: FC<PropsWithChildren<{}>> = props => {
 										["Login", "/login"],
 										["Register", "/register"]
 								  ]) as [string, string][]
-						).map(([text, href]) => (
+						).map(([text, href], i) => (
 							<Flex
+								key={i}
 								py={2}
 								as={Link}
 								_hover={{

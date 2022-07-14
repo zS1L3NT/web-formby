@@ -1,13 +1,15 @@
 import { FC, PropsWithChildren, useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import {
-	Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement,
-	Link as ChakraLink, Stack, Text
+	Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Link,
+	Stack, Text
 } from "@chakra-ui/react"
 
 const _Register: FC<PropsWithChildren<{}>> = props => {
+	const navigate = useNavigate()
+
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
@@ -89,9 +91,11 @@ const _Register: FC<PropsWithChildren<{}>> = props => {
 						fontSize="md"
 						align="center">
 						Already have an account?{" "}
-						<ChakraLink color="blue.400">
-							<Link to="/login">Login</Link>
-						</ChakraLink>
+						<Link
+							color="blue.400"
+							onClick={() => navigate("/login")}>
+							Login
+						</Link>
 					</Text>
 				</Stack>
 			</Stack>
