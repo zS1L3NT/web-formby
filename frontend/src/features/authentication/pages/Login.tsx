@@ -1,18 +1,51 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { FC, PropsWithChildren, useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import {
 	Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Link,
-	Stack, Text
+	Stack, Text, useBoolean, useToast
 } from "@chakra-ui/react"
 
-const _Login: FC<PropsWithChildren<{}>> = props => {
-	const navigate = useNavigate()
+import AuthContext from "../../../contexts/AuthContext"
+import fetcher from "../../../utils/fetcher"
 
+const _Login: FC<PropsWithChildren<{}>> = props => {
+	const {
+		auth: { token }
+	} = useContext(AuthContext)
+	const navigate = useNavigate()
+	const toast = useToast()
+
+	const [loading, setLoading] = useBoolean()
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 	const [showPassword, setShowPassword] = useState(false)
+
+	const handleLogin = async () => {
+		setLoading.on()
+		try {
+			const data = await fetcher({
+				url: "/login",
+				method: "POST",
+				token: token!,
+				body: {
+					email,
+					password
+				}
+			})
+			console.log(data)
+		} catch (e) {
+			console.log(e)
+			toast({
+				title: "Runtime Error",
+				description: `${e}`,
+				status: "error",
+				isClosable: true
+			})
+		}
+		setLoading.off()
+	}
 
 	return (
 		<Container m="auto">
@@ -68,8 +101,10 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 					}}>
 					<Button
 						size="lg"
-						loadingText="Submitting"
-						variant="primary">
+						variant="primary"
+						isLoading={loading}
+						loadingText="Logging in..."
+						onClick={handleLogin}>
 						Login
 					</Button>
 				</Stack>

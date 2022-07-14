@@ -29,7 +29,7 @@ export default extendTheme({
 					bg: "blue.400",
 					color: "white",
 					_hover: {
-						bg: "blue.500"
+						bg: "blue.500 !important"
 					}
 				}
 			}
