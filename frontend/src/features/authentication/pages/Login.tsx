@@ -17,14 +17,23 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 			<Heading textAlign="center">Login</Heading>
 			<Text align="center">to gain full access to Formby</Text>
 			<Stack
-				w="md"
+				maxW="md"
 				bg="white"
 				rounded="lg"
 				boxShadow="lg"
-				mt={8}
+				mt={{
+					base: 6,
+					md: 8
+				}}
 				mx="auto"
-				p={8}
-				spacing={4}>
+				p={{
+					base: 6,
+					md: 8
+				}}
+				spacing={{
+					base: 3,
+					md: 4
+				}}>
 				<FormControl isRequired>
 					<FormLabel>Email address</FormLabel>
 					<Input
@@ -50,7 +59,11 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 						</InputRightElement>
 					</InputGroup>
 				</FormControl>
-				<Stack pt={6}>
+				<Stack
+					pt={{
+						base: 4,
+						md: 6
+					}}>
 					<Button
 						size="lg"
 						loadingText="Submitting"
@@ -58,7 +71,11 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 						Login
 					</Button>
 				</Stack>
-				<Stack pt={6}>
+				<Stack
+					pt={{
+						base: 4,
+						md: 6
+					}}>
 					<Text
 						fontSize="md"
 						align="center">
