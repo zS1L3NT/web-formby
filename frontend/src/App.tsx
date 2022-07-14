@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ChakraProvider, Flex } from "@chakra-ui/react"
 
 import Navigation from "./components/Navigator"
-import { Login } from "./features/authentication"
+import { Login, Register } from "./features/authentication"
 import { Landing } from "./features/landing"
 import theme from "./theme"
 
@@ -27,6 +27,10 @@ const _App: FC<PropsWithChildren<{}>> = props => {
 							<Route
 								path="/login"
 								element={<Login />}
+							/>
+							<Route
+								path="/register"
+								element={<Register />}
 							/>
 						</Routes>
 					</Flex>
