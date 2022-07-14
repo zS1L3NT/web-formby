@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom"
 
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Collapse, Flex, HStack, IconButton, Image, Link, Stack, Text, useDisclosure
+	Avatar, Box, Button, Collapse, Flex, HStack, IconButton, Image, Link, Menu, MenuButton,
+	MenuDivider, MenuItem, MenuList, Stack, Text, useDisclosure, VStack
 } from "@chakra-ui/react"
 
 const _Navigation: FC<PropsWithChildren<{}>> = props => {
 	const navigate = useNavigate()
 	const { isOpen, onToggle } = useDisclosure()
+
+	const authenticated = true
 
 	const sideMargins = { base: 2, md: 16, lg: 32 }
 
@@ -81,19 +84,73 @@ const _Navigation: FC<PropsWithChildren<{}>> = props => {
 					justifyContent="end"
 					mr={sideMargins}>
 					<HStack
-						display={{ base: "none", md: "block" }}
+						display={{ base: "none", md: "flex" }}
 						spacing={3}>
 						<Button
+							hidden={authenticated}
 							color="blue.500"
 							onClick={() => navigate("/login")}>
 							Login
 						</Button>
 						<Button
+							hidden={authenticated}
 							variant="primary"
 							onClick={() => navigate("/register")}>
 							Register
 						</Button>
+						<Button
+							hidden={!authenticated}
+							variant="primary"
+							onClick={() => navigate("/create")}>
+							Create Form
+						</Button>
 					</HStack>
+					<Menu>
+						<MenuButton
+							as={Button}
+							rounded="full"
+							variant="link"
+							cursor="pointer"
+							ml={4}>
+							<Avatar
+								w="40px"
+								h="40px"
+								src="https://avatars.dicebear.com/api/male/username.svg"
+							/>
+						</MenuButton>
+						<MenuList alignItems="center">
+							<VStack
+								w="2xs"
+								px={4}>
+								<Avatar
+									size="xl"
+									src="https://avatars.dicebear.com/api/male/username.svg"
+								/>
+								<Text
+									wordBreak="break-all"
+									textAlign="center">
+									Zechariah Tan
+								</Text>
+								<Text
+									fontSize="sm"
+									wordBreak="break-all"
+									textAlign="center">
+									zechariahtan144@gmail.com
+								</Text>
+							</VStack>
+							<MenuDivider />
+							<MenuItem
+								onClick={() => navigate("/account")}
+								justifyContent="center">
+								Account Settings
+							</MenuItem>
+							<MenuItem
+								onClick={() => navigate("/logout")}
+								justifyContent="center">
+								Logout
+							</MenuItem>
+						</MenuList>
+					</Menu>
 				</Flex>
 			</Flex>
 
@@ -109,38 +166,31 @@ const _Navigation: FC<PropsWithChildren<{}>> = props => {
 						bg="white"
 						p={4}
 						display={{ md: "none" }}>
-						<Flex
-							py={2}
-							as={Link}
-							_hover={{
-								textDecoration: "none"
-							}}
-							onClick={() => {
-								navigate("/login")
-								onToggle()
-							}}>
-							<Text
-								fontWeight={600}
-								color="gray.600">
-								Login
-							</Text>
-						</Flex>
-						<Flex
-							py={2}
-							as={Link}
-							_hover={{
-								textDecoration: "none"
-							}}
-							onClick={() => {
-								navigate("/register")
-								onToggle()
-							}}>
-							<Text
-								fontWeight={600}
-								color="gray.600">
-								Register
-							</Text>
-						</Flex>
+						{(
+							(authenticated
+								? [["Create Form", "/create"]]
+								: [
+										["Login", "/login"],
+										["Register", "/register"]
+								  ]) as [string, string][]
+						).map(([text, href]) => (
+							<Flex
+								py={2}
+								as={Link}
+								_hover={{
+									textDecoration: "none"
+								}}
+								onClick={() => {
+									navigate(href)
+									onToggle()
+								}}>
+								<Text
+									fontWeight={600}
+									color="gray.600">
+									{text}
+								</Text>
+							</Flex>
+						))}
 					</Stack>
 				</Collapse>
 			</Box>
