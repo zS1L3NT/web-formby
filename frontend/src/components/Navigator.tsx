@@ -12,7 +12,7 @@ const _Navigation: FC<PropsWithChildren<{}>> = props => {
 		<Flex
 			h="60px"
 			p={2}
-			background="white"
+			bg="white"
 			shadow="sm"
 			align="center">
 			<Flex
