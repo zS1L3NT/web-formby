@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ChakraProvider, Flex } from "@chakra-ui/react"
 
 import Navigation from "./components/Navigator"
+import { AuthProvider } from "./contexts/AuthContext"
 import { Login, Register } from "./features/authentication"
 import { Landing } from "./features/landing"
 import theme from "./theme"
@@ -11,31 +12,33 @@ import theme from "./theme"
 const _App: FC<PropsWithChildren<{}>> = props => {
 	return (
 		<BrowserRouter>
-			<ChakraProvider theme={theme}>
-				<Flex
-					w="max"
-					h="max"
-					bg="gray.50"
-					direction="column">
-					<Navigation />
-					<Flex flex="1">
-						<Routes>
-							<Route
-								path="/"
-								element={<Landing />}
-							/>
-							<Route
-								path="/login"
-								element={<Login />}
-							/>
-							<Route
-								path="/register"
-								element={<Register />}
-							/>
-						</Routes>
+			<AuthProvider>
+				<ChakraProvider theme={theme}>
+					<Flex
+						w="max"
+						h="max"
+						bg="gray.50"
+						direction="column">
+						<Navigation />
+						<Flex flex="1">
+							<Routes>
+								<Route
+									path="/"
+									element={<Landing />}
+								/>
+								<Route
+									path="/login"
+									element={<Login />}
+								/>
+								<Route
+									path="/register"
+									element={<Register />}
+								/>
+							</Routes>
+						</Flex>
 					</Flex>
-				</Flex>
-			</ChakraProvider>
+				</ChakraProvider>
+			</AuthProvider>
 		</BrowserRouter>
 	)
 }
