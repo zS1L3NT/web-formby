@@ -28,7 +28,6 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 			const data = await fetcher({
 				url: "/login",
 				method: "POST",
-				token: token!,
 				body: {
 					email,
 					password

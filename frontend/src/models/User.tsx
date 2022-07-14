@@ -1,3 +1,12 @@
+export type iUserData = {
+	id: string
+	name: string
+	email: string
+	photo: string
+	created_at: string
+	updated_at: string
+}
+
 export default class User {
 	public id: string
 	public name: string
