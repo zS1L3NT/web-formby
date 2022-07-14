@@ -15,6 +15,7 @@ export default extendTheme({
 		Text: {
 			baseStyle: {
 				color: "gray.500",
+				fontWeight: "medium",
 				fontSize: {
 					base: "md",
 					sm: "lg",
