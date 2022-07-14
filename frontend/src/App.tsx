@@ -14,6 +14,7 @@ const _App: FC<PropsWithChildren<{}>> = props => {
 				<Flex
 					w="max"
 					h="max"
+					background="gray.50"
 					direction="column">
 					<Navigation />
 					<Flex flex="1">
