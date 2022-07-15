@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext, useState } from "react"
+import { FC, KeyboardEvent, PropsWithChildren, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
@@ -8,41 +8,76 @@ import {
 } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"
+import User from "../../../models/User"
 import fetcher from "../../../utils/fetcher"
 
 const _Login: FC<PropsWithChildren<{}>> = props => {
-	const {
-		auth: { token }
-	} = useContext(AuthContext)
+	const { setToken, setUser } = useContext(AuthContext)
 	const navigate = useNavigate()
 	const toast = useToast()
 
 	const [loading, setLoading] = useBoolean()
 	const [email, setEmail] = useState("")
+	const [emailError, setEmailError] = useState<string | null>(null)
 	const [password, setPassword] = useState("")
+	const [passwordError, setPasswordError] = useState<string | null>(null)
 	const [showPassword, setShowPassword] = useState(false)
+
+	useOnlyUnauthenticated()
+
+	useEffect(() => {
+		setEmailError(null)
+		setPasswordError(null)
+	}, [email, password])
+
+	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			e.target.blur()
+			handleLogin()
+		}
+	}
 
 	const handleLogin = async () => {
 		setLoading.on()
-		try {
-			const data = await fetcher({
-				url: "/login",
-				method: "POST",
-				body: {
-					email,
-					password
-				}
-			})
-			console.log(data)
-		} catch (e) {
-			console.log(e)
+
+		const [error, data] = await fetcher({
+			url: "/login",
+			method: "POST",
+			body: {
+				email,
+				password
+			}
+		})
+
+		if (error) {
+			console.error(error)
 			toast({
-				title: "Runtime Error",
-				description: `${e}`,
+				title: error.type,
+				description: error.message,
 				status: "error",
 				isClosable: true
 			})
+
+			if ("fields" in error) {
+				const fields = error.fields!
+				if ("email" in fields) {
+					setEmailError(fields.email!.join("\n"))
+				}
+				if ("password" in fields) {
+					setPasswordError(fields.password!.join("\n"))
+				}
+			}
+		} else {
+			setToken(data.token)
+			setUser(User.fromJson(data.user))
+			toast({
+				title: data.message,
+				status: "success",
+				isClosable: true
+			})
 		}
+
 		setLoading.off()
 	}
 
@@ -73,8 +108,17 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 					<Input
 						type="email"
 						value={email}
+						isInvalid={!!emailError}
 						onChange={e => setEmail(e.target.value)}
+						onKeyDown={handleKeyDown}
 					/>
+					{emailError ? (
+						<Text
+							variant="inputError"
+							mt={1}>
+							{emailError}
+						</Text>
+					) : null}
 				</FormControl>
 				<FormControl isRequired>
 					<FormLabel>Password</FormLabel>
@@ -82,7 +126,9 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 						<Input
 							type={showPassword ? "text" : "password"}
 							value={password}
+							isInvalid={!!passwordError}
 							onChange={e => setPassword(e.target.value)}
+							onKeyDown={handleKeyDown}
 						/>
 						<InputRightElement h="max">
 							<Button
@@ -92,6 +138,13 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 							</Button>
 						</InputRightElement>
 					</InputGroup>
+					{passwordError ? (
+						<Text
+							variant="inputError"
+							mt={1}>
+							{passwordError}
+						</Text>
+					) : null}
 				</FormControl>
 				<Stack
 					pt={{

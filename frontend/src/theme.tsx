@@ -21,6 +21,12 @@ export default extendTheme({
 					sm: "lg",
 					md: "xl"
 				}
+			},
+			variants: {
+				inputError: {
+					color: "red.500",
+					fontSize: "sm"
+				}
 			}
 		},
 		Button: {
