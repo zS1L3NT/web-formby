@@ -8,28 +8,14 @@ export type iUserData = {
 }
 
 export default class User {
-	public id: string
-	public name: string
-	public email: string
-	public photo: string
-	public createdAt: Date
-	public updatedAt: Date
-
 	constructor(
-		id: string,
-		name: string,
-		email: string,
-		photo: string,
-		createdAt: Date,
-		updatedAt: Date
-	) {
-		this.id = id
-		this.name = name
-		this.email = email
-		this.photo = photo
-		this.createdAt = createdAt
-		this.updatedAt = updatedAt
-	}
+		public id: string,
+		public name: string,
+		public email: string,
+		public photo: string,
+		public createdAt: Date,
+		public updatedAt: Date
+	) {}
 
 	static fromJson(json: iUserData) {
 		return new User(
