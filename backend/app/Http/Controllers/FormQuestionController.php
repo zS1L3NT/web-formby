@@ -21,7 +21,7 @@ class FormQuestionController extends Controller
 
 			"choices.*" => ["required_if:type,choice", "prohibited_unless:type,choice", "max:255", "string"],
 			"choices" => ["required_if:type,choice", "prohibited_unless:type,choice", "array"],
-			"choice_type" => ["required_if:type,choice", "prohibited_unless:type,choice", "in:radio,checkbox:dropdown"],
+			"choice_type" => ["required_if:type,choice", "prohibited_unless:type,choice", "in:radio,checkbox,dropdown"],
 			"slider_min" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
 			"slider_max" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
 			"slider_step" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
@@ -42,7 +42,7 @@ class FormQuestionController extends Controller
 
 			"choices.*" => ["required_if:type,choice", "prohibited_unless:type,choice", "max:255", "string"],
 			"choices" => ["required_if:type,choice", "prohibited_unless:type,choice", "array"],
-			"choice_type" => ["required_if:type,choice", "prohibited_unless:type,choice", "in:radio,checkbox:dropdown"],
+			"choice_type" => ["required_if:type,choice", "prohibited_unless:type,choice", "in:radio,checkbox,dropdown"],
 			"slider_min" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
 			"slider_max" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
 			"slider_step" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
