@@ -85,6 +85,11 @@ export default async <
 		url: U
 		method: M extends Method ? M : never
 	} & (Routes[U][M] extends { body: infer B } ? (B extends object ? { body: B } : {}) : never) &
+		(Routes[U][M] extends { parameters: infer P }
+			? P extends string[]
+				? { parameters: Record<P[number], string> }
+				: {}
+			: never) &
 		(Routes[U][M] extends { authentication: infer A }
 			? A extends true
 				? { token: string }
