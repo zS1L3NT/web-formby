@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import { ChakraProvider, Flex } from "@chakra-ui/react"
 
-import Navigation from "./components/Navigator"
+import Navigator from "./components/Navigator"
 import { _AuthProvider as AuthProvider } from "./contexts/AuthContext"
 import { Login, Register } from "./features/authentication"
 import { Landing } from "./features/landing"
@@ -19,7 +19,7 @@ const _App: FC<PropsWithChildren<{}>> = props => {
 						h="max"
 						bg="gray.50"
 						direction="column">
-						<Navigation />
+						<Navigator />
 						<Flex flex="1">
 							<Routes>
 								<Route

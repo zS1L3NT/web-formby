@@ -7,7 +7,7 @@ import {
 	MenuDivider, MenuItem, MenuList, Stack, Text, useDisclosure, VStack
 } from "@chakra-ui/react"
 
-const _Navigation: FC<PropsWithChildren<{}>> = props => {
+const _Navigator: FC<PropsWithChildren<{}>> = props => {
 	const navigate = useNavigate()
 	const { isOpen, onToggle } = useDisclosure()
 
@@ -199,4 +199,4 @@ const _Navigation: FC<PropsWithChildren<{}>> = props => {
 	)
 }
 
-export default _Navigation
+export default _Navigator
