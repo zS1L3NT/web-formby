@@ -41,14 +41,12 @@ type Routes = {
 			}
 		}
 	}
-	"/show": {
+	"/user": {
 		GET: {
 			authentication: true
 			body: null
 			response: iUserData
 		}
-	}
-	"/update": {
 		PUT: {
 			authentication: true
 			body: Partial<Omit<iUserData, "created_at" | "updated_at">>

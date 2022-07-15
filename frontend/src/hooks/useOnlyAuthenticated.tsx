@@ -15,7 +15,11 @@ const useOnlyAuthenticated = (redirect = "/login") => {
 		}
 
 		if (!user) {
-			fetcher({ url: "/show", method: "GET", token }).then(([error, data]) => {
+			fetcher({
+				url: "/user",
+				method: "GET",
+				token
+			}).then(([error, data]) => {
 				if (error) {
 					setToken(null)
 					setUser(null)
