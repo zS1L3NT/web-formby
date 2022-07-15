@@ -37,13 +37,14 @@ class UserController extends Controller
 		if ($token = auth()->attempt(request()->data)) {
 			return [
 				"message" => "Logged in successfully!",
-				"token" => $token
+				"token" => $token,
+				"user" => auth()->user()
 			];
 		} else {
 			return response([
 				"type" => "Login Error",
 				"message" => "Invalid login credentials"
-			]);
+			], 400);
 		}
 	}
 
@@ -53,7 +54,8 @@ class UserController extends Controller
 
 		return [
 			"message" => "Registered successfully!",
-			"token" => auth()->login($user)
+			"token" => auth()->login($user),
+			"user" => $user
 		];
 	}
 
@@ -88,7 +90,8 @@ class UserController extends Controller
 		User::find(auth()->user()->id)->update(request()->data);
 
 		return [
-			"message" => "User updated successfully!"
+			"message" => "User updated successfully!",
+			"user" => auth()->user()
 		];
 	}
 }
