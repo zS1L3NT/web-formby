@@ -14,6 +14,12 @@ type Routes = {
 			}
 		}
 	}
+	"/forms/{form_id}/answers": {
+		GET: {
+			parameters: ["form_id"]
+			response: iAnswerData<any>[]
+		}
+	}
 	"/register": {
 		POST: {
 			authentication: false
@@ -46,7 +52,6 @@ type Routes = {
 	"/logout": {
 		POST: {
 			authentication: true
-			body: null
 			response: {
 				message: string
 			}
@@ -55,7 +60,6 @@ type Routes = {
 	"/user": {
 		GET: {
 			authentication: true
-			body: null
 			response: WithTimestamps<iUserData>
 		}
 		PUT: {
@@ -84,12 +88,12 @@ export default async <
 	data: {
 		url: U
 		method: M extends Method ? M : never
-	} & (Routes[U][M] extends { body: infer B } ? (B extends object ? { body: B } : {}) : never) &
+	} & (Routes[U][M] extends { body: infer B } ? { body: B } : {}) &
 		(Routes[U][M] extends { parameters: infer P }
 			? P extends string[]
-				? { parameters: Record<P[number], string> }
-				: {}
-			: never) &
+				? { parameters: { [K in P[number]]: string } }
+				: never
+			: {}) &
 		(Routes[U][M] extends { authentication: infer A }
 			? A extends true
 				? { token: string }
@@ -97,11 +101,18 @@ export default async <
 			: { token: string | undefined })
 ): Promise<[ApiError, null] | [null, R]> => {
 	try {
+		const url = Object.entries<string>(
+			"parameters" in data ? (data as any).parameters : {}
+		).reduce(
+			(str, entry) => str.replace(`{${entry[0]}}`, entry[1]),
+			`http://localhost:8000/api${data.url}`
+		)
+
 		return [
 			null,
 			(
 				await axios({
-					url: `http://localhost:8000/api${data.url}`,
+					url,
 					method: data.method,
 					data: "body" in data ? (data as any).body : undefined,
 					headers:
