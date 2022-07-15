@@ -1,9 +1,19 @@
 import axios, { AxiosError, Method } from "axios"
 
 import { WithTimestamps } from "../models"
+import { iAnswerData } from "../models/Answer"
+import { iQuestionData } from "../models/Question"
 import { iUserData } from "../models/User"
 
 type Routes = {
+	"/answers": {
+		POST: {
+			body: {
+				question: iQuestionData<any>[]
+				answers: Omit<iAnswerData<any>, "id" | "user_id">[]
+			}
+		}
+	}
 	"/register": {
 		POST: {
 			authentication: false
@@ -79,7 +89,7 @@ export default async <
 			? A extends true
 				? { token: string }
 				: {}
-			: never)
+			: { token: string | undefined })
 ): Promise<[ApiError, null] | [null, R]> => {
 	try {
 		return [
