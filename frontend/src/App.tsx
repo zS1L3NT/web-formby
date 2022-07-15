@@ -5,6 +5,7 @@ import { Flex } from "@chakra-ui/react"
 
 import Navigator from "./components/Navigator"
 import { Login, Logout, Register } from "./features/authentication"
+import { Dashboard } from "./features/dashboard"
 import { Landing } from "./features/landing"
 
 const _App: FC<PropsWithChildren<{}>> = props => {
@@ -32,6 +33,10 @@ const _App: FC<PropsWithChildren<{}>> = props => {
 					<Route
 						path="/logout"
 						element={<Logout />}
+					/>
+					<Route
+						path="/dashboard"
+						element={<Dashboard />}
 					/>
 				</Routes>
 			</Flex>
