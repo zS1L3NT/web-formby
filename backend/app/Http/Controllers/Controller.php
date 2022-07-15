@@ -30,7 +30,7 @@ class Controller extends BaseController
 			);
 			if (count($extra_keys) > 0 || $validator->fails()) {
 				return response(
-					["error" => [
+					[
 						"type" => "Invalid Request Body",
 						"message" => "The request body contains invalid data",
 						"fields" => array_merge(
@@ -41,7 +41,7 @@ class Controller extends BaseController
 							),
 							$validator->errors()->messages()
 						)
-					]],
+					],
 					400
 				);
 			}
