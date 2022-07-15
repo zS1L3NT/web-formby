@@ -1,3 +1,4 @@
+import { ModelWithTimestamps, WithTimestamps } from "./"
 import { iQuestionType } from "./Form"
 
 export type iQuestionData<T extends iQuestionType> = {
@@ -15,30 +16,59 @@ export type iQuestionData<T extends iQuestionType> = {
 	(T extends "slider" ? { slider_min: number; slider_max: number; slider_step: number } : {}) &
 	(T extends "rating" ? { rating_max: number } : {}) &
 	(T extends "table"
-		? { table_columns: string[]; table_rows: string[]; table_type: "radio" | "checkbox" | null }
+		? { table_columns: string[]; table_rows: string[]; table_type: "radio" | "checkbox" }
 		: {})
 
-abstract class Question<T extends iQuestionType> {
+abstract class Question<T extends iQuestionType> extends ModelWithTimestamps {
 	constructor(
-		public id: string,
+		id: string,
 		public formId: string,
 		public previousQuestionId: string | null,
 		public title: string,
 		public description: string | null,
 		public photo: string | null,
 		public required: boolean,
-		public type: T
-	) {}
+		public type: T,
+		createdAt: string,
+		updatedAt: string
+	) {
+		super(id, createdAt, updatedAt)
+	}
 
-	static fromJson<T extends iQuestionType>(): Question<T> {
-		throw new Error()
+	static fromJson(json: WithTimestamps<iQuestionData<any>>): Question<any> {
+		if (json.type === "text") return new TextQuestion(json)
+		if (json.type === "paragraph") return new ParagraphQuestion(json)
+		if (json.type === "color") return new ColorQuestion(json)
+		if (json.type === "choice") return new ChoiceQuestion(json as any)
+		if (json.type === "switch") return new SwitchQuestion(json)
+		if (json.type === "slider") return new SliderQuestion(json as any)
+		if (json.type === "rating") return new RatingQuestion(json as any)
+		if (json.type === "datetime") return new DateTimeQuestion(json)
+		if (json.type === "table") return new TableQuestion(json as any)
+
+		throw new Error("Unknown question type")
 	}
 
 	abstract toJson(): iQuestionData<T>
 }
 
 export class TextQuestion extends Question<"text"> {
-	toJson(): iQuestionData<"text"> {
+	constructor(json: WithTimestamps<iQuestionData<"text">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"text",
+			json.created_at,
+			json.updated_at
+		)
+	}
+
+	override toJson(): iQuestionData<"text"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -53,7 +83,22 @@ export class TextQuestion extends Question<"text"> {
 }
 
 export class ParagraphQuestion extends Question<"paragraph"> {
-	toJson(): iQuestionData<"paragraph"> {
+	constructor(json: WithTimestamps<iQuestionData<"paragraph">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"paragraph",
+			json.created_at,
+			json.updated_at
+		)
+	}
+
+	override toJson(): iQuestionData<"paragraph"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -68,7 +113,22 @@ export class ParagraphQuestion extends Question<"paragraph"> {
 }
 
 export class ColorQuestion extends Question<"color"> {
-	toJson(): iQuestionData<"color"> {
+	constructor(json: WithTimestamps<iQuestionData<"color">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"color",
+			json.created_at,
+			json.updated_at
+		)
+	}
+
+	override toJson(): iQuestionData<"color"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -83,22 +143,27 @@ export class ColorQuestion extends Question<"color"> {
 }
 
 export class ChoiceQuestion extends Question<"choice"> {
-	constructor(
-		id: string,
-		formId: string,
-		previousQuestionId: string | null,
-		title: string,
-		description: string | null,
-		photo: string | null,
-		required: boolean,
-		type: "choice",
-		public choices: string[],
-		public choiceType: "radio" | "checkbox" | "dropdown"
-	) {
-		super(id, formId, previousQuestionId, title, description, photo, required, type)
+	public choices: string[]
+	public choiceType: "radio" | "checkbox" | "dropdown"
+
+	constructor(json: WithTimestamps<iQuestionData<"choice">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"choice",
+			json.created_at,
+			json.updated_at
+		)
+		this.choices = json.choices
+		this.choiceType = json.choice_type
 	}
 
-	toJson(): iQuestionData<"choice"> {
+	override toJson(): iQuestionData<"choice"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -115,7 +180,22 @@ export class ChoiceQuestion extends Question<"choice"> {
 }
 
 export class SwitchQuestion extends Question<"switch"> {
-	toJson(): iQuestionData<"switch"> {
+	constructor(json: WithTimestamps<iQuestionData<"switch">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"switch",
+			json.created_at,
+			json.updated_at
+		)
+	}
+
+	override toJson(): iQuestionData<"switch"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -130,23 +210,29 @@ export class SwitchQuestion extends Question<"switch"> {
 }
 
 export class SliderQuestion extends Question<"slider"> {
-	constructor(
-		id: string,
-		formId: string,
-		previousQuestionId: string | null,
-		title: string,
-		description: string | null,
-		photo: string | null,
-		required: boolean,
-		type: "slider",
-		public sliderMin: number,
-		public sliderMax: number,
-		public sliderStep: number
-	) {
-		super(id, formId, previousQuestionId, title, description, photo, required, type)
+	public sliderMin: number
+	public sliderMax: number
+	public sliderStep: number
+
+	constructor(json: WithTimestamps<iQuestionData<"slider">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"slider",
+			json.created_at,
+			json.updated_at
+		)
+		this.sliderMin = json.slider_min
+		this.sliderMax = json.slider_max
+		this.sliderStep = json.slider_step
 	}
 
-	toJson(): iQuestionData<"slider"> {
+	override toJson(): iQuestionData<"slider"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -164,21 +250,25 @@ export class SliderQuestion extends Question<"slider"> {
 }
 
 export class RatingQuestion extends Question<"rating"> {
-	constructor(
-		id: string,
-		formId: string,
-		previousQuestionId: string | null,
-		title: string,
-		description: string | null,
-		photo: string | null,
-		required: boolean,
-		type: "rating",
-		public ratingMax: number
-	) {
-		super(id, formId, previousQuestionId, title, description, photo, required, type)
+	public ratingMax: number
+
+	constructor(json: WithTimestamps<iQuestionData<"rating">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"rating",
+			json.created_at,
+			json.updated_at
+		)
+		this.ratingMax = json.rating_max
 	}
 
-	toJson(): iQuestionData<"rating"> {
+	override toJson(): iQuestionData<"rating"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -194,7 +284,22 @@ export class RatingQuestion extends Question<"rating"> {
 }
 
 export class DateTimeQuestion extends Question<"datetime"> {
-	toJson(): iQuestionData<"datetime"> {
+	constructor(json: WithTimestamps<iQuestionData<"datetime">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"datetime",
+			json.created_at,
+			json.updated_at
+		)
+	}
+
+	override toJson(): iQuestionData<"datetime"> {
 		return {
 			id: this.id,
 			form_id: this.formId,
@@ -209,23 +314,29 @@ export class DateTimeQuestion extends Question<"datetime"> {
 }
 
 export class TableQuestion extends Question<"table"> {
-	constructor(
-		id: string,
-		formId: string,
-		previousQuestionId: string | null,
-		title: string,
-		description: string | null,
-		photo: string | null,
-		required: boolean,
-		type: "table",
-		public tableColumns: string[],
-		public tableRows: string[],
-		public tableType: "radio" | "checkbox"
-	) {
-		super(id, formId, previousQuestionId, title, description, photo, required, type)
+	public tableColumns: string[]
+	public tableRows: string[]
+	public tableType: "radio" | "checkbox"
+
+	constructor(json: WithTimestamps<iQuestionData<"table">>) {
+		super(
+			json.id,
+			json.form_id,
+			json.previous_question_id,
+			json.title,
+			json.description,
+			json.photo,
+			json.required,
+			"table",
+			json.created_at,
+			json.updated_at
+		)
+		this.tableColumns = json.table_columns
+		this.tableRows = json.table_rows
+		this.tableType = json.table_type
 	}
 
-	toJson(): iQuestionData<"table"> {
+	override toJson(): iQuestionData<"table"> {
 		return {
 			id: this.id,
 			form_id: this.formId,

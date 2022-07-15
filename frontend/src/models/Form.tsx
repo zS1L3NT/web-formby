@@ -1,3 +1,5 @@
+import { ModelWithTimestamps, WithTimestamps } from "./"
+
 export type iQuestionType =
 	| "text"
 	| "paragraph"
@@ -16,23 +18,23 @@ export type iFormData = {
 	description: string
 	requires_auth: boolean
 	live: boolean
-	created_at: string
-	updated_at: string
 }
 
-export default class Form {
+export default class Form extends ModelWithTimestamps {
 	constructor(
-		public id: string,
+		id: string,
 		public userId: string,
 		public name: string,
 		public description: string,
 		public requiresAuth: boolean,
 		public live: boolean,
-		public createdAt: Date,
-		public updatedAt: Date
-	) {}
+		createdAt: string,
+		updatedAt: string
+	) {
+		super(id, createdAt, updatedAt)
+	}
 
-	static fromJson(json: iFormData): Form {
+	static fromJson(json: WithTimestamps<iFormData>): Form {
 		return new Form(
 			json.id,
 			json.user_id,
@@ -40,12 +42,12 @@ export default class Form {
 			json.description,
 			json.requires_auth,
 			json.live,
-			new Date(json.created_at),
-			new Date(json.updated_at)
+			json.created_at,
+			json.updated_at
 		)
 	}
 
-	toJson(): Omit<iFormData, "created_at" | "updated_at"> {
+	toJson(): iFormData {
 		return {
 			id: this.id,
 			user_id: this.userId,

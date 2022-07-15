@@ -1,5 +1,6 @@
 import axios, { AxiosError, Method } from "axios"
 
+import { WithTimestamps } from "../models"
 import { iUserData } from "../models/User"
 
 type Routes = {
@@ -14,7 +15,7 @@ type Routes = {
 			response: {
 				message: string
 				token: string
-				user: iUserData
+				user: WithTimestamps<iUserData>
 			}
 		}
 	}
@@ -28,7 +29,7 @@ type Routes = {
 			response: {
 				message: string
 				token: string
-				user: iUserData
+				user: WithTimestamps<iUserData>
 			}
 		}
 	}
@@ -45,14 +46,14 @@ type Routes = {
 		GET: {
 			authentication: true
 			body: null
-			response: iUserData
+			response: WithTimestamps<iUserData>
 		}
 		PUT: {
 			authentication: true
-			body: Partial<Omit<iUserData, "created_at" | "updated_at">>
+			body: Partial<iUserData>
 			response: {
 				message: string
-				user: iUserData
+				user: WithTimestamps<iUserData>
 			}
 		}
 	}
