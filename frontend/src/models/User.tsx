@@ -31,7 +31,7 @@ export default class User {
 		this.updatedAt = updatedAt
 	}
 
-	static fromJson(json: any) {
+	static fromJson(json: iUserData) {
 		return new User(
 			json.id,
 			json.name,
@@ -42,7 +42,7 @@ export default class User {
 		)
 	}
 
-	toJson() {
+	toJson(): Omit<iUserData, "created_at" | "updated_at"> {
 		return {
 			id: this.id,
 			name: this.name,
