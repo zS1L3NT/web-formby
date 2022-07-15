@@ -2,36 +2,33 @@ import { createContext, FC, PropsWithChildren, useState } from "react"
 
 import User from "../models/User"
 
-type iAuthData = {
-	token: string | null
-	user: User | null
-}
-
 const context = createContext<{
-	auth: iAuthData
-	setAuth: (value: iAuthData) => void
+	token: string | null
+	setToken: (token: string | null) => void
+	user: User | null
+	setUser: (user: User | null) => void
 }>({
-	auth: {
-		token: null,
-		user: null
-	},
-	setAuth: () => {}
+	token: null,
+	setToken: () => {},
+	user: null,
+	setUser: () => {}
 })
 
-export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
-	const [auth, setAuth] = useState<iAuthData>({
-		token: null,
-		user: null
-	})
+export const _AuthProvider: FC<PropsWithChildren<{}>> = props => {
+	const [token, setToken] = useState<string | null>(null)
+	const [user, setUser] = useState<User | null>(null)
 
 	return (
 		<context.Provider
 			value={{
-				auth,
-				setAuth
+				token,
+				setToken,
+				user,
+				setUser
 			}}>
 			{props.children}
 		</context.Provider>
 	)
 }
+
 export default context

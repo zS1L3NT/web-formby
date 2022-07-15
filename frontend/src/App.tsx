@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ChakraProvider, Flex } from "@chakra-ui/react"
 
 import Navigation from "./components/Navigator"
-import { AuthProvider } from "./contexts/AuthContext"
+import { _AuthProvider as AuthProvider } from "./contexts/AuthContext"
 import { Login, Register } from "./features/authentication"
 import { Landing } from "./features/landing"
 import theme from "./theme"
