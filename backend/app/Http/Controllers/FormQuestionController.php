@@ -11,6 +11,7 @@ class FormQuestionController extends Controller
 	{
 		$this->middleware('auth.jwt')->only(["store", "update", "destroy"]);
 
+		$when = fn ($type) => ["required_if:type,$type", "prohibited_unless:type,$type"];
 		$this->validate("store", [
 			"previous_question_id" => ["nullable", "uuid"],
 			"title" => ["required", "max:255", "string"],
@@ -19,18 +20,18 @@ class FormQuestionController extends Controller
 			"required" => ["boolean"],
 			"type" => ["required", "in:text,paragraph,color,choice,switch,slider,rating,datetime,table"],
 
-			"choices.*" => ["required_if:type,choice", "prohibited_unless:type,choice", "max:255", "string"],
-			"choices" => ["required_if:type,choice", "prohibited_unless:type,choice", "array"],
-			"choice_type" => ["required_if:type,choice", "prohibited_unless:type,choice", "in:radio,checkbox,dropdown"],
-			"slider_min" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
-			"slider_max" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
-			"slider_step" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
-			"rating_max" => ["required_if:type,rating", "prohibited_unless:type,rating", "integer"],
-			"table_columns.*" => ["required_if:type,table", "prohibited_unless:type,table", "max:255", "string"],
-			"table_columns" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
-			"table_rows.*" => ["required_if:type,table", "prohibited_unless:type,table", "max:255", "string"],
-			"table_rows" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
-			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
+			"choices.*" => [...$when("choice"), "max:255", "string"],
+			"choices" => [...$when("choice"), "array"],
+			"choice_type" => [...$when("choice"), "in:radio,checkbox,dropdown"],
+			"slider_min" => [...$when("slider"), "integer"],
+			"slider_max" => [...$when("slider"), "integer"],
+			"slider_step" => [...$when("slider"), "integer"],
+			"rating_max" => [...$when("rating"), "integer"],
+			"table_columns.*" => [...$when("table"), "max:255", "string"],
+			"table_columns" => [...$when("table"), "array"],
+			"table_rows.*" => [...$when("table"), "max:255", "string"],
+			"table_rows" => [...$when("table"), "array"],
+			"table_type" => [...$when("table"), "in:radio,checkbox"]
 		]);
 
 		$this->validate("update", [
@@ -40,18 +41,18 @@ class FormQuestionController extends Controller
 			"required" => ["boolean"],
 			"type" => ["in:text,paragraph,color,choice,switch,slider,rating,datetime,table"],
 
-			"choices.*" => ["required_if:type,choice", "prohibited_unless:type,choice", "max:255", "string"],
-			"choices" => ["required_if:type,choice", "prohibited_unless:type,choice", "array"],
-			"choice_type" => ["required_if:type,choice", "prohibited_unless:type,choice", "in:radio,checkbox,dropdown"],
-			"slider_min" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
-			"slider_max" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
-			"slider_step" => ["required_if:type,slider", "prohibited_unless:type,slider", "integer"],
-			"rating_max" => ["required_if:type,rating", "prohibited_unless:type,rating", "integer"],
-			"table_columns.*" => ["required_if:type,table", "prohibited_unless:type,table", "max:255", "string"],
-			"table_columns" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
-			"table_rows.*" => ["required_if:type,table", "prohibited_unless:type,table", "max:255", "string"],
-			"table_rows" => ["required_if:type,table", "prohibited_unless:type,table", "array"],
-			"table_type" => ["required_if:type,table", "prohibited_unless:type,table", "in:radio,checkbox"]
+			"choices.*" => [...$when("choice"), "max:255", "string"],
+			"choices" => [...$when("choice"), "array"],
+			"choice_type" => [...$when("choice"), "in:radio,checkbox,dropdown"],
+			"slider_min" => [...$when("slider"), "integer"],
+			"slider_max" => [...$when("slider"), "integer"],
+			"slider_step" => [...$when("slider"), "integer"],
+			"rating_max" => [...$when("rating"), "integer"],
+			"table_columns.*" => [...$when("table"), "max:255", "string"],
+			"table_columns" => [...$when("table"), "array"],
+			"table_rows.*" => [...$when("table"), "max:255", "string"],
+			"table_rows" => [...$when("table"), "array"],
+			"table_type" => [...$when("table"), "in:radio,checkbox"]
 		]);
 
 		$this->middleware('form.user')->only(["index", "show"]);

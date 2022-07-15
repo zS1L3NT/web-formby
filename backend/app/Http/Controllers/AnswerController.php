@@ -31,8 +31,8 @@ class AnswerController extends Controller
 			"answers.*.switch" => [...$when("switch"), "boolean"],
 			"answers.*.slider" => [...$when("slider"), "integer"],
 			"answers.*.rating" => [...$when("rating"), "integer"],
-			"answers.*.date" => [...$when("date"), "regex:$this->date_regex"],
-			"answers.*.time" => [...$when("time"), "regex:$this->time_regex"],
+			"answers.*.date" => [...$when("datetime"), "regex:$this->date_regex"],
+			"answers.*.time" => [...$when("datetime"), "regex:$this->time_regex"],
 			"answers.*.table.*.0" => [...$when("table"), "in_array:questions.*.table_rows.*"],
 			"answers.*.table.*.1" => [...$when("table"), "in_array:questions.*.table_columns.*"],
 			"answers.*.table.*" => [...$when("table"), "array", "size:2"],
@@ -59,7 +59,7 @@ class AnswerController extends Controller
 					return response([
 						"type" => "Invalid Choice Data",
 						"message" => "answers.$i.choices: A choice type of " . $question->choice_type . " cannot have more than 1 value"
-					]);
+					], 400);
 				}
 			}
 
@@ -70,7 +70,7 @@ class AnswerController extends Controller
 					return response([
 						"type" => "Invalid Table Data",
 						"message" => "answers.$i.table: You must fill in a value for all rows of the table"
-					]);
+					], 400);
 				}
 			}
 		}
