@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import { Flex } from "@chakra-ui/react"
 
 import Navigator from "./components/Navigator"
-import { Login, Register } from "./features/authentication"
+import { Login, Logout, Register } from "./features/authentication"
 import { Landing } from "./features/landing"
 
 const _App: FC<PropsWithChildren<{}>> = props => {
@@ -28,6 +28,10 @@ const _App: FC<PropsWithChildren<{}>> = props => {
 					<Route
 						path="/register"
 						element={<Register />}
+					/>
+					<Route
+						path="/logout"
+						element={<Logout />}
 					/>
 				</Routes>
 			</Flex>
