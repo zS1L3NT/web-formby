@@ -1,10 +1,16 @@
-import { FC, PropsWithChildren } from "react"
+import { FC, PropsWithChildren, useContext } from "react"
 import { AiOutlineGithub } from "react-icons/ai"
+import { useNavigate } from "react-router-dom"
 
 import { ArrowForwardIcon } from "@chakra-ui/icons"
 import { Box, Button, chakra, Container, Heading, HStack, Text } from "@chakra-ui/react"
 
+import AuthContext from "../../../contexts/AuthContext"
+
 const _Landing: FC<PropsWithChildren<{}>> = props => {
+	const { token } = useContext(AuthContext)
+	const navigate = useNavigate()
+
 	return (
 		<Container
 			m="auto"
@@ -34,12 +40,14 @@ const _Landing: FC<PropsWithChildren<{}>> = props => {
 				<Button
 					size="lg"
 					colorScheme="blue"
-					rightIcon={<ArrowForwardIcon />}>
+					rightIcon={<ArrowForwardIcon />}
+					onClick={() => navigate(token ? "/dashboard" : "/login")}>
 					Get Started
 				</Button>
 				<Button
 					size="lg"
-					leftIcon={<AiOutlineGithub size={20} />}>
+					leftIcon={<AiOutlineGithub size={20} />}
+					onClick={() => window.open("https://github.com/zS1L3NT/web-formby")}>
 					GitHub
 				</Button>
 			</HStack>
