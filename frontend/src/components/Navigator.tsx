@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react"
+import { FC, PropsWithChildren, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons"
@@ -7,11 +7,13 @@ import {
 	MenuDivider, MenuItem, MenuList, Stack, Text, useDisclosure, VStack
 } from "@chakra-ui/react"
 
-const _Navigator: FC<PropsWithChildren<{}>> = props => {
-	const navigate = useNavigate()
-	const { isOpen, onToggle } = useDisclosure()
+import AuthContext from "../contexts/AuthContext"
 
-	const authenticated = true
+const _Navigator: FC<PropsWithChildren<{}>> = props => {
+	const { token, user } = useContext(AuthContext)
+	const navigate = useNavigate()
+
+	const { isOpen, onToggle } = useDisclosure()
 
 	const sideMargins = { base: 2, md: 16, lg: 32 }
 
@@ -87,70 +89,72 @@ const _Navigator: FC<PropsWithChildren<{}>> = props => {
 						display={{ base: "none", md: "flex" }}
 						spacing={3}>
 						<Button
-							hidden={authenticated}
+							hidden={!!token}
 							color="blue.500"
 							onClick={() => navigate("/login")}>
 							Login
 						</Button>
 						<Button
-							hidden={authenticated}
+							hidden={!!token}
 							variant="primary"
 							onClick={() => navigate("/register")}>
 							Register
 						</Button>
 						<Button
-							hidden={!authenticated}
+							hidden={!token}
 							variant="primary"
 							onClick={() => navigate("/create")}>
 							Create Form
 						</Button>
 					</HStack>
-					<Menu>
-						<MenuButton
-							as={Button}
-							rounded="full"
-							variant="link"
-							cursor="pointer"
-							ml={4}>
-							<Avatar
-								w="40px"
-								h="40px"
-								src="https://avatars.dicebear.com/api/male/username.svg"
-							/>
-						</MenuButton>
-						<MenuList alignItems="center">
-							<VStack
-								w="2xs"
-								px={4}>
+					{user ? (
+						<Menu>
+							<MenuButton
+								as={Button}
+								rounded="full"
+								variant="link"
+								cursor="pointer"
+								ml={4}>
 								<Avatar
-									size="xl"
-									src="https://avatars.dicebear.com/api/male/username.svg"
+									w="40px"
+									h="40px"
+									src={user.photo}
 								/>
-								<Text
-									wordBreak="break-all"
-									textAlign="center">
-									Zechariah Tan
-								</Text>
-								<Text
-									fontSize="sm"
-									wordBreak="break-all"
-									textAlign="center">
-									zechariahtan144@gmail.com
-								</Text>
-							</VStack>
-							<MenuDivider />
-							<MenuItem
-								onClick={() => navigate("/account")}
-								justifyContent="center">
-								Account Settings
-							</MenuItem>
-							<MenuItem
-								onClick={() => navigate("/logout")}
-								justifyContent="center">
-								Logout
-							</MenuItem>
-						</MenuList>
-					</Menu>
+							</MenuButton>
+							<MenuList alignItems="center">
+								<VStack
+									w="2xs"
+									px={4}>
+									<Avatar
+										size="xl"
+										src={user.photo}
+									/>
+									<Text
+										wordBreak="break-all"
+										textAlign="center">
+										{user.name}
+									</Text>
+									<Text
+										fontSize="sm"
+										wordBreak="break-all"
+										textAlign="center">
+										{user.email}
+									</Text>
+								</VStack>
+								<MenuDivider />
+								<MenuItem
+									onClick={() => navigate("/account")}
+									justifyContent="center">
+									Account Settings
+								</MenuItem>
+								<MenuItem
+									onClick={() => navigate("/logout")}
+									justifyContent="center">
+									Logout
+								</MenuItem>
+							</MenuList>
+						</Menu>
+					) : null}
 				</Flex>
 			</Flex>
 
@@ -167,7 +171,7 @@ const _Navigator: FC<PropsWithChildren<{}>> = props => {
 						p={4}
 						display={{ md: "none" }}>
 						{(
-							(authenticated
+							(token
 								? [["Create Form", "/create"]]
 								: [
 										["Login", "/login"],
