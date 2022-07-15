@@ -56,13 +56,13 @@ class Handler extends ExceptionHandler
 			return response([
 				"type" => "$model not found",
 				"message" => "There was no " . strtolower($model) . " with the requested id: " . $throwable->getIds()[0],
-			]);
+			], 400);
 		}
 
 		return response([
 			"type" => "Unhandled Exception",
 			"message" => $throwable->getMessage(),
 			"stack" => $throwable->getTrace(),
-		]);
+		], 400);
 	}
 }

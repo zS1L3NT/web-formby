@@ -22,7 +22,7 @@ class ResponseLiveRestrict
 			return response([
 				"type" => "Response Already Submitted",
 				"message" => "You cannot modify or delete a submitted response!"
-			]);
+			], 400);
 		}
 
 		return $next($request);

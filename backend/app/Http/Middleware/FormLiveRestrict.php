@@ -22,7 +22,7 @@ class FormLiveRestrict
 			return response([
 				"type" => "Form is Live",
 				"message" => "You cannot modify a live form!"
-			]);
+			], 400);
 		}
 
 		return $next($request);
