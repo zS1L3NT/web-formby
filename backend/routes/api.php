@@ -37,4 +37,4 @@ Route::apiResource("answers", AnswerController::class)->only(["store"]);
 Route::fallback(fn () => response([
 	"type" => "Page Not Found",
 	"message" => "The route you requested could not be found"
-]));
+], 404));
