@@ -18,6 +18,7 @@ type Routes = {
 	"/forms": {
 		GET: {
 			authentication: true
+			query: ["page"]
 			response: WithTimestamps<iFormData>[]
 		}
 		POST: {
@@ -164,6 +165,11 @@ export default async <
 				? { parameters: { [K in P[number]]: string } }
 				: never
 			: {}) &
+		(Routes[U][M] extends { query: infer Q }
+			? Q extends string[]
+				? { query: { [K in Q[number]]: string } }
+				: never
+			: {}) &
 		(Routes[U][M] extends { authentication: infer A }
 			? A extends true
 				? { token: string }
@@ -171,18 +177,24 @@ export default async <
 			: { token: string | undefined })
 ): Promise<[ApiError, null] | [null, R]> => {
 	try {
-		const url = Object.entries<string>(
-			"parameters" in data ? (data as any).parameters : {}
-		).reduce(
-			(str, entry) => str.replace(`{${entry[0]}}`, entry[1]),
-			`http://localhost:8000/api${data.url}`
+		const url = new URL(
+			Object.entries<string>("parameters" in data ? (data as any).parameters : {}).reduce(
+				(str, entry) => str.replace(`{${entry[0]}}`, entry[1]),
+				`http://localhost:8000/api${data.url}`
+			)
 		)
+
+		if ("query" in data) {
+			for (const [key, value] of Object.entries<string>((data as any).query)) {
+				url.searchParams.append(key, value)
+			}
+		}
 
 		return [
 			null,
 			(
 				await axios({
-					url,
+					url: url.href,
 					method: data.method,
 					data: "body" in data ? (data as any).body : undefined,
 					headers:
