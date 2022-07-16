@@ -151,6 +151,13 @@ export type ApiError = {
 	fields?: Record<string, string[]>
 }
 
+const API_ERROR: ObjectValidator<ApiError> = OBJECT({
+	type: STRING(),
+	message: STRING(),
+	stack: LIST(),
+	fields: OBJECT()
+})
+
 export default async <
 	U extends keyof Routes,
 	M extends keyof Routes[U],
@@ -205,6 +212,19 @@ export default async <
 			).data as R
 		]
 	} catch (e) {
-		return [(e as AxiosError).response!.data as ApiError, null]
+		const error = e as AxiosError
+
+		const result = validate(error.response?.data, API_ERROR)
+		if (result.success) {
+			return [result.data, null]
+		} else {
+			return [
+				{
+					type: error.name,
+					message: error.message
+				},
+				null
+			]
+		}
 	}
 }

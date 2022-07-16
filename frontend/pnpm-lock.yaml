@@ -17,6 +17,7 @@ specifiers:
   react-icons: ^4.4.0
   react-router-dom: ^6.3.0
   typescript: ^4.7.4
+  validate-any: ^1.3.2
   vite: ^2.9.14
 
 dependencies:
@@ -30,6 +31,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.4.0_react@18.2.0
   react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
+  validate-any: 1.3.2
 
 devDependencies:
   '@babel/core': 7.18.6
@@ -2206,6 +2208,10 @@ packages:
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.4.0
+    dev: false
+
+  /validate-any/1.3.2:
+    resolution: {integrity: sha512-L1SpFcOpnFR4u7slwdtVRecyI/SAun/QvoFM3pJw+hE/4/D5LJMs2wcf8OYVOM8CpNab/zsXb58w9ck3XkIYNg==}
     dev: false
 
   /vite/2.9.14:
