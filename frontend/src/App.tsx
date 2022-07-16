@@ -4,9 +4,11 @@ import { Route, Routes } from "react-router-dom"
 import { Flex } from "@chakra-ui/react"
 
 import Navigator from "./components/Navigator"
-import { Login, Logout, Register } from "./features/authentication"
+import Login from "./features/authentication/pages/Login"
+import Logout from "./features/authentication/pages/Logout"
+import Register from "./features/authentication/pages/Register"
 import Dashboard from "./features/dashboard/pages/Dashboard"
-import { Landing } from "./features/landing"
+import Landing from "./features/landing/pages/Landing"
 
 const App: FC<PropsWithChildren<{}>> = props => {
 	return (

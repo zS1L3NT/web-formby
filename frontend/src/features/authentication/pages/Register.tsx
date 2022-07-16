@@ -7,7 +7,7 @@ import {
 	Stack, Text
 } from "@chakra-ui/react"
 
-const _Register: FC<PropsWithChildren<{}>> = props => {
+const Register: FC<PropsWithChildren<{}>> = props => {
 	const navigate = useNavigate()
 
 	const [name, setName] = useState("")
@@ -103,4 +103,4 @@ const _Register: FC<PropsWithChildren<{}>> = props => {
 	)
 }
 
-export default _Register
+export default Register

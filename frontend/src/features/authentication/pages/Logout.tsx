@@ -7,7 +7,7 @@ import AuthContext from "../../../contexts/AuthContext"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
 import fetcher from "../../../utils/fetcher"
 
-const _Logout: FC<PropsWithChildren<{}>> = props => {
+const Logout: FC<PropsWithChildren<{}>> = props => {
 	const { token, setToken, setUser } = useContext(AuthContext)
 	const navigate = useNavigate()
 	const toast = useToast()
@@ -49,4 +49,4 @@ const _Logout: FC<PropsWithChildren<{}>> = props => {
 	return <></>
 }
 
-export default _Logout
+export default Logout

@@ -9,7 +9,7 @@ import {
 
 import AuthContext from "../contexts/AuthContext"
 
-const _Navigator: FC<PropsWithChildren<{}>> = props => {
+const Navigator: FC<PropsWithChildren<{}>> = props => {
 	const { token, user } = useContext(AuthContext)
 	const navigate = useNavigate()
 
@@ -203,4 +203,4 @@ const _Navigator: FC<PropsWithChildren<{}>> = props => {
 	)
 }
 
-export default _Navigator
+export default Navigator

@@ -7,7 +7,7 @@ import { Box, Button, chakra, Container, Heading, HStack, Text } from "@chakra-u
 
 import AuthContext from "../../../contexts/AuthContext"
 
-const _Landing: FC<PropsWithChildren<{}>> = props => {
+const Landing: FC<PropsWithChildren<{}>> = props => {
 	const { token } = useContext(AuthContext)
 	const navigate = useNavigate()
 
@@ -55,4 +55,4 @@ const _Landing: FC<PropsWithChildren<{}>> = props => {
 	)
 }
 
-export default _Landing
+export default Landing

@@ -15,7 +15,7 @@ const context = createContext<{
 	setUser: () => {}
 })
 
-export const _AuthProvider: FC<PropsWithChildren<{}>> = props => {
+export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 	const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
 	const [user, setUser] = useState<User | null>(null)
 

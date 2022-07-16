@@ -12,7 +12,7 @@ import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"
 import User from "../../../models/User"
 import fetcher from "../../../utils/fetcher"
 
-const _Login: FC<PropsWithChildren<{}>> = props => {
+const Login: FC<PropsWithChildren<{}>> = props => {
 	const { setToken, setUser } = useContext(AuthContext)
 	const navigate = useNavigate()
 	const toast = useToast()
@@ -181,4 +181,4 @@ const _Login: FC<PropsWithChildren<{}>> = props => {
 	)
 }
 
-export default _Login
+export default Login
