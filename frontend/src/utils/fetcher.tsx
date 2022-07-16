@@ -1,4 +1,6 @@
 import axios, { AxiosError, Method } from "axios"
+import { LIST, OBJECT, STRING, validate } from "validate-any"
+import ObjectValidator from "validate-any/dist/validators/ObjectValidator"
 
 import { WithTimestamps } from "../models"
 import { iAnswerData } from "../models/Answer"
@@ -31,7 +33,6 @@ type Routes = {
 	}
 	"/forms/{form_id}": {
 		GET: {
-			authentication: false
 			parameters: ["form_id"]
 			response: WithTimestamps<iFormData>
 		}
@@ -60,7 +61,6 @@ type Routes = {
 	}
 	"/forms/{form_id}/questions": {
 		GET: {
-			authentication: false
 			parameters: ["form_id"]
 			response: WithTimestamps<iQuestionData<any>>[]
 		}
@@ -75,7 +75,6 @@ type Routes = {
 	}
 	"/forms/{form_id}/questions/{question_id}": {
 		GET: {
-			authentication: false
 			parameters: ["form_id", "question_id"]
 			response: WithTimestamps<iQuestionData<any>>
 		}
@@ -144,7 +143,7 @@ type Routes = {
 	}
 }
 
-export type ApiError = {
+type ApiError = {
 	type: string
 	message: string
 	stack?: any[]
@@ -181,7 +180,7 @@ export default async <
 			? A extends true
 				? { token: string }
 				: {}
-			: { token: string | undefined })
+			: { token: string | null })
 ): Promise<[ApiError, null] | [null, R]> => {
 	try {
 		const url = new URL(

@@ -8,6 +8,7 @@ import Login from "./features/authentication/pages/Login"
 import Logout from "./features/authentication/pages/Logout"
 import Register from "./features/authentication/pages/Register"
 import Dashboard from "./features/dashboard/pages/Dashboard"
+import FormPage from "./features/forms/pages/FormPage"
 import Landing from "./features/landing/pages/Landing"
 
 const App: FC<PropsWithChildren<{}>> = props => {
@@ -39,6 +40,10 @@ const App: FC<PropsWithChildren<{}>> = props => {
 					<Route
 						path="/dashboard"
 						element={<Dashboard />}
+					/>
+					<Route
+						path="/forms/:id"
+						element={<FormPage />}
 					/>
 				</Routes>
 			</Flex>
