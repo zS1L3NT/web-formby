@@ -1,7 +1,7 @@
 import { createContext, FC, PropsWithChildren, useEffect, useState } from "react"
 
+import useFetcher from "../hooks/useFetcher"
 import User from "../models/User"
-import fetcher from "../utils/fetcher"
 
 const context = createContext<{
 	token: string | null
@@ -16,6 +16,8 @@ const context = createContext<{
 })
 
 export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
+	const fetcher = useFetcher()
+
 	const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
 	const [user, setUser] = useState<User | null>(null)
 
@@ -27,26 +29,25 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 				url: "/user",
 				method: "GET",
 				token
-			}).then(([error, data]) => {
-				if (error) {
-					console.error(error)
+			}).then(({ data }) => {
+				if (data) {
+					setUser(User.fromJson(data))
+				} else {
 					setToken(null)
 					localStorage.removeItem("token")
-				} else {
-					setUser(User.fromJson(data))
 				}
 			})
 		}
 	}, [])
 
 	const setTokenAndLocalStorage = (token: string | null) => {
-		setToken(token)
-
 		if (token) {
 			localStorage.setItem("token", token)
 		} else {
 			localStorage.removeItem("token")
 		}
+		
+		setToken(token)
 	}
 
 	return (

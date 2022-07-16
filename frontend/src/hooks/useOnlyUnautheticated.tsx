@@ -1,17 +1,19 @@
-import { useContext, useEffect } from "react"
+import { useContext, useDebugValue, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import AuthContext from "../contexts/AuthContext"
 
 const useOnlyUnauthenticated = (redirect = "/dashboard") => {
-	const { token } = useContext(AuthContext)
+	const { token, user } = useContext(AuthContext)
 	const navigate = useNavigate()
+
+	useDebugValue(`token ${token !== null ? "!" : "="}== null`)
 
 	useEffect(() => {
 		if (token) {
 			navigate(redirect)
 		}
-	}, [token])
+	}, [token, user])
 }
 
 export default useOnlyUnauthenticated

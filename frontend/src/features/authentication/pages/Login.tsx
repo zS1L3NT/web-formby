@@ -8,12 +8,13 @@ import {
 } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import useFetcher from "../../../hooks/useFetcher"
 import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"
 import User from "../../../models/User"
-import fetcher from "../../../utils/fetcher"
 
 const Login: FC<PropsWithChildren<{}>> = props => {
 	const { setToken, setUser } = useContext(AuthContext)
+	const fetcher = useFetcher()
 	const navigate = useNavigate()
 	const toast = useToast()
 
@@ -41,7 +42,7 @@ const Login: FC<PropsWithChildren<{}>> = props => {
 	const handleLogin = async () => {
 		setLoading.on()
 
-		const [error, data] = await fetcher({
+		const { data, error } = await fetcher({
 			url: "/login",
 			method: "POST",
 			body: {
@@ -50,25 +51,17 @@ const Login: FC<PropsWithChildren<{}>> = props => {
 			}
 		})
 
-		if (error) {
-			console.error(error)
-			toast({
-				title: error.type,
-				description: error.message,
-				status: "error",
-				isClosable: true
-			})
-
-			if ("fields" in error) {
-				const fields = error.fields!
-				if ("email" in fields) {
-					setEmailError(fields.email!.join("\n"))
-				}
-				if ("password" in fields) {
-					setPasswordError(fields.password!.join("\n"))
-				}
+		if (error && "fields" in error) {
+			const fields = error.fields!
+			if ("email" in fields) {
+				setEmailError(fields.email!.join("\n"))
 			}
-		} else {
+			if ("password" in fields) {
+				setPasswordError(fields.password!.join("\n"))
+			}
+		}
+
+		if (data) {
 			setToken(data.token)
 			setUser(User.fromJson(data.user))
 			toast({

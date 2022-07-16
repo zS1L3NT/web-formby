@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom"
 import { useToast } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import useFetcher from "../../../hooks/useFetcher"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
-import fetcher from "../../../utils/fetcher"
 
 const Logout: FC<PropsWithChildren<{}>> = props => {
 	const { token, setToken, setUser } = useContext(AuthContext)
+	const fetcher = useFetcher()
 	const navigate = useNavigate()
 	const toast = useToast()
 
@@ -27,16 +28,8 @@ const Logout: FC<PropsWithChildren<{}>> = props => {
 			url: "/logout",
 			method: "POST",
 			token
-		}).then(([error, data]) => {
-			if (error) {
-				console.error(error)
-				// toast({
-				// 	title: error.type,
-				// 	description: error.message,
-				// 	status: "error",
-				// 	isClosable: true
-				// })
-			} else {
+		}).then(({ data }) => {
+			if (data) {
 				toast({
 					title: data.message,
 					status: "success",

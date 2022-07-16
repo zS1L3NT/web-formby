@@ -1,16 +1,16 @@
 import { FC, PropsWithChildren, useContext, useEffect, useState } from "react"
 
-import { Center, Container, Grid, Heading, Spinner, useToast } from "@chakra-ui/react"
+import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import useFetcher from "../../../hooks/useFetcher"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
 import Form from "../../../models/Form"
-import fetcher from "../../../utils/fetcher"
 import FormItem from "../components/FormItem"
 
 const Dashboard: FC<PropsWithChildren<{}>> = props => {
 	const { token } = useContext(AuthContext)
-	const toast = useToast()
+	const fetcher = useFetcher()
 
 	const [forms, setForms] = useState<Form[] | null>(null)
 
@@ -26,16 +26,8 @@ const Dashboard: FC<PropsWithChildren<{}>> = props => {
 				page: "1"
 			},
 			token
-		}).then(([error, data]) => {
-			if (error) {
-				console.error(error)
-				toast({
-					title: error.type,
-					description: error.message,
-					status: "error",
-					isClosable: true
-				})
-			} else {
+		}).then(({ data }) => {
+			if (data) {
 				setForms(data.map(Form.fromJson))
 			}
 		})
