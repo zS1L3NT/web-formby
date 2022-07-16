@@ -8,7 +8,7 @@ import { Login, Logout, Register } from "./features/authentication"
 import { Dashboard } from "./features/dashboard"
 import { Landing } from "./features/landing"
 
-const _App: FC<PropsWithChildren<{}>> = props => {
+const App: FC<PropsWithChildren<{}>> = props => {
 	return (
 		<Flex
 			w="max"
@@ -44,4 +44,4 @@ const _App: FC<PropsWithChildren<{}>> = props => {
 	)
 }
 
-export default _App
+export default App
