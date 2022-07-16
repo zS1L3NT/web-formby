@@ -5,7 +5,7 @@ import { Flex } from "@chakra-ui/react"
 
 import Navigator from "./components/Navigator"
 import { Login, Logout, Register } from "./features/authentication"
-import { Dashboard } from "./features/dashboard"
+import Dashboard from "./features/dashboard/pages/Dashboard"
 import { Landing } from "./features/landing"
 
 const App: FC<PropsWithChildren<{}>> = props => {
