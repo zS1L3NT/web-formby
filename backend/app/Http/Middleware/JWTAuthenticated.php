@@ -18,6 +18,11 @@ class JWTAuthenticated
 	{
 		if (auth()->user()) {
 			return $next($request);
+		} else if (request()->header("Authorization")) {
+			return response([
+				"type" => "Unauthorized",
+				"message" => "Invalid authorization token"
+			], 401);
 		} else {
 			return response([
 				"type" => "Unauthorized",
