@@ -38,8 +38,8 @@ class FormController extends Controller
 		$page = request()->query("page") ?? 1;
 		return Form::query()
 			->where("user_id", auth()->user()->id)
-			->skip(($page - 1) * 10)
-			->limit(10)
+			->skip(($page - 1) * 20)
+			->limit(20)
 			->get();
 	}
 
