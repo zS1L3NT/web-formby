@@ -1,6 +1,9 @@
-import { FC, PropsWithChildren } from "react"
+import { FC, PropsWithChildren, useState } from "react"
+
+import { Box } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
+import EditableText from "../../../components/EditableText"
 import Form from "../../../models/Form"
 
 const FormHeader: FC<
@@ -11,7 +14,38 @@ const FormHeader: FC<
 > = props => {
 	const { form, editable } = props
 
-	return <Card></Card>
+	const [name, setName] = useState(form.name)
+	const [description, setDescription] = useState(form.description)
+
+	return (
+		<Card
+			_hover={{
+				shadow: "lg"
+			}}>
+			<EditableText
+				editable={editable}
+				placeholder="Add a title"
+				text={name}
+				setText={setName}
+				fontSize="4xl"
+				color="black"
+				noOfLines={2}
+			/>
+			<Box
+				mt={2}
+				mb={8}>
+				<EditableText
+					editable={editable}
+					placeholder="Add a description"
+					text={description}
+					setText={setDescription}
+					fontSize="lg"
+					noOfLines={10}>
+					{form.description}
+				</EditableText>
+			</Box>
+		</Card>
+	)
 }
 
 export default FormHeader
