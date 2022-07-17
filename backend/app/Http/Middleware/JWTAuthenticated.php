@@ -22,12 +22,12 @@ class JWTAuthenticated
 			return response([
 				"type" => "Unauthorized",
 				"message" => "Invalid authorization token"
-			], 401);
+			], 403);
 		} else {
 			return response([
 				"type" => "Unauthorized",
 				"message" => "This route requires authetication"
-			], 401);
+			], 403);
 		}
 	}
 }
