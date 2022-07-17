@@ -19,7 +19,7 @@ export type iQuestionData<T extends iQuestionType> = {
 		? { table_columns: string[]; table_rows: string[]; table_type: "radio" | "checkbox" }
 		: {})
 
-abstract class Question<T extends iQuestionType> extends ModelWithTimestamps {
+export abstract class Question extends ModelWithTimestamps {
 	constructor(
 		id: string,
 		public formId: string,
@@ -28,14 +28,14 @@ abstract class Question<T extends iQuestionType> extends ModelWithTimestamps {
 		public description: string | null,
 		public photo: string | null,
 		public required: boolean,
-		public type: T,
+		public type: iQuestionType,
 		createdAt: string,
 		updatedAt: string
 	) {
 		super(id, createdAt, updatedAt)
 	}
 
-	static fromJson(json: WithTimestamps<iQuestionData<any>>): Question<any> {
+	static fromJson(json: WithTimestamps<iQuestionData<any>>): Question {
 		if (json.type === "text") return new TextQuestion(json)
 		if (json.type === "paragraph") return new ParagraphQuestion(json)
 		if (json.type === "color") return new ColorQuestion(json)
@@ -49,10 +49,10 @@ abstract class Question<T extends iQuestionType> extends ModelWithTimestamps {
 		throw new Error("Unknown question type")
 	}
 
-	abstract toJson(): iQuestionData<T>
+	abstract toJson(): iQuestionData<iQuestionType>
 }
 
-export class TextQuestion extends Question<"text"> {
+export class TextQuestion extends Question {
 	constructor(json: WithTimestamps<iQuestionData<"text">>) {
 		super(
 			json.id,
@@ -82,7 +82,7 @@ export class TextQuestion extends Question<"text"> {
 	}
 }
 
-export class ParagraphQuestion extends Question<"paragraph"> {
+export class ParagraphQuestion extends Question {
 	constructor(json: WithTimestamps<iQuestionData<"paragraph">>) {
 		super(
 			json.id,
@@ -112,7 +112,7 @@ export class ParagraphQuestion extends Question<"paragraph"> {
 	}
 }
 
-export class ColorQuestion extends Question<"color"> {
+export class ColorQuestion extends Question {
 	constructor(json: WithTimestamps<iQuestionData<"color">>) {
 		super(
 			json.id,
@@ -142,7 +142,7 @@ export class ColorQuestion extends Question<"color"> {
 	}
 }
 
-export class ChoiceQuestion extends Question<"choice"> {
+export class ChoiceQuestion extends Question {
 	public choices: string[]
 	public choiceType: "radio" | "checkbox" | "dropdown"
 
@@ -179,7 +179,7 @@ export class ChoiceQuestion extends Question<"choice"> {
 	}
 }
 
-export class SwitchQuestion extends Question<"switch"> {
+export class SwitchQuestion extends Question {
 	constructor(json: WithTimestamps<iQuestionData<"switch">>) {
 		super(
 			json.id,
@@ -209,7 +209,7 @@ export class SwitchQuestion extends Question<"switch"> {
 	}
 }
 
-export class SliderQuestion extends Question<"slider"> {
+export class SliderQuestion extends Question {
 	public sliderMin: number
 	public sliderMax: number
 	public sliderStep: number
@@ -249,7 +249,7 @@ export class SliderQuestion extends Question<"slider"> {
 	}
 }
 
-export class RatingQuestion extends Question<"rating"> {
+export class RatingQuestion extends Question {
 	public ratingMax: number
 
 	constructor(json: WithTimestamps<iQuestionData<"rating">>) {
@@ -283,7 +283,7 @@ export class RatingQuestion extends Question<"rating"> {
 	}
 }
 
-export class DateTimeQuestion extends Question<"datetime"> {
+export class DateTimeQuestion extends Question {
 	constructor(json: WithTimestamps<iQuestionData<"datetime">>) {
 		super(
 			json.id,
@@ -313,7 +313,7 @@ export class DateTimeQuestion extends Question<"datetime"> {
 	}
 }
 
-export class TableQuestion extends Question<"table"> {
+export class TableQuestion extends Question {
 	public tableColumns: string[]
 	public tableRows: string[]
 	public tableType: "radio" | "checkbox"

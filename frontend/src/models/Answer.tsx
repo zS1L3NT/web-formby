@@ -15,7 +15,7 @@ export type iAnswerData<T extends iQuestionType> = {
 	(T extends "datetime" ? { date: any; time: any } : {}) &
 	(T extends "table" ? { table: [string, string][] } : {})
 
-abstract class Answer<T extends iQuestionType> extends ModelWithTimestamps {
+export abstract class Answer extends ModelWithTimestamps {
 	constructor(
 		id: string,
 		public userId: string,
@@ -26,7 +26,7 @@ abstract class Answer<T extends iQuestionType> extends ModelWithTimestamps {
 		super(id, createdAt, updatedAt)
 	}
 
-	static fromJson(json: WithTimestamps<iAnswerData<any>>): Answer<any> {
+	static fromJson(json: WithTimestamps<iAnswerData<any>>): Answer {
 		if ("text" in json) return new TextAnswer(json)
 		if ("paragraph" in json) return new ParagraphAnswer(json)
 		if ("color" in json) return new ColorAnswer(json)
@@ -40,10 +40,10 @@ abstract class Answer<T extends iQuestionType> extends ModelWithTimestamps {
 		throw new Error("Unknown answer type")
 	}
 
-	abstract toJson(): iAnswerData<T>
+	abstract toJson(): iAnswerData<iQuestionType>
 }
 
-export class TextAnswer extends Answer<"text"> {
+export class TextAnswer extends Answer {
 	public text: string
 
 	constructor(json: WithTimestamps<iAnswerData<"text">>) {
@@ -61,7 +61,7 @@ export class TextAnswer extends Answer<"text"> {
 	}
 }
 
-export class ParagraphAnswer extends Answer<"paragraph"> {
+export class ParagraphAnswer extends Answer {
 	public paragraph: string
 
 	constructor(json: WithTimestamps<iAnswerData<"paragraph">>) {
@@ -79,7 +79,7 @@ export class ParagraphAnswer extends Answer<"paragraph"> {
 	}
 }
 
-export class ColorAnswer extends Answer<"color"> {
+export class ColorAnswer extends Answer {
 	public color: string
 
 	constructor(json: WithTimestamps<iAnswerData<"color">>) {
@@ -97,7 +97,7 @@ export class ColorAnswer extends Answer<"color"> {
 	}
 }
 
-export class ChoiceAnswer extends Answer<"choice"> {
+export class ChoiceAnswer extends Answer {
 	public choices: string[]
 
 	constructor(json: WithTimestamps<iAnswerData<"choice">>) {
@@ -115,7 +115,7 @@ export class ChoiceAnswer extends Answer<"choice"> {
 	}
 }
 
-export class SwitchAnswer extends Answer<"switch"> {
+export class SwitchAnswer extends Answer {
 	public switch: boolean
 
 	constructor(json: WithTimestamps<iAnswerData<"switch">>) {
@@ -133,7 +133,7 @@ export class SwitchAnswer extends Answer<"switch"> {
 	}
 }
 
-export class SliderAnswer extends Answer<"slider"> {
+export class SliderAnswer extends Answer {
 	public slider: number
 
 	constructor(json: WithTimestamps<iAnswerData<"slider">>) {
@@ -151,7 +151,7 @@ export class SliderAnswer extends Answer<"slider"> {
 	}
 }
 
-export class RatingAnswer extends Answer<"rating"> {
+export class RatingAnswer extends Answer {
 	public rating: number
 
 	constructor(json: WithTimestamps<iAnswerData<"rating">>) {
@@ -169,7 +169,7 @@ export class RatingAnswer extends Answer<"rating"> {
 	}
 }
 
-export class DateTimeAnswer extends Answer<"datetime"> {
+export class DateTimeAnswer extends Answer {
 	public date: any
 	public time: any
 
@@ -190,7 +190,7 @@ export class DateTimeAnswer extends Answer<"datetime"> {
 	}
 }
 
-export class TableAnswer extends Answer<"table"> {
+export class TableAnswer extends Answer {
 	public table: [string, string][]
 
 	constructor(json: WithTimestamps<iAnswerData<"table">>) {
