@@ -13,6 +13,7 @@ specifiers:
   axios: ^0.27.2
   framer-motion: 6.4.3
   react: ^18.2.0
+  react-colorful: ^5.5.1
   react-dom: ^18.2.0
   react-icons: ^4.4.0
   react-router-dom: ^6.3.0
@@ -28,6 +29,7 @@ dependencies:
   axios: 0.27.2
   framer-motion: 6.4.3_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
+  react-colorful: 5.5.1_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.4.0_react@18.2.0
   react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
@@ -1962,6 +1964,16 @@ packages:
     dependencies:
       '@babel/runtime': 7.17.9
       react: 18.2.0
+    dev: false
+
+  /react-colorful/5.5.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-M1TJH2X3RXEt12sWkpa6hLc/bbYS0H6F4rIqjQZ+RxNBstpY67d9TrFXtqdZwhpmBXcCwEi7stKqFue3ZRkiOg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-dom/18.2.0_react@18.2.0:
