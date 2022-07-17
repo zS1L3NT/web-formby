@@ -24,7 +24,7 @@ const useOnlyAuthenticated = (redirect = "/login") => {
 					method: "GET",
 					token
 				},
-				false
+				{ toast: false }
 			).then(({ data }) => {
 				if (!data) return
 

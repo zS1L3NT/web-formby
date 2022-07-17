@@ -191,7 +191,10 @@ export default () => {
 					? { token: string }
 					: {}
 				: { token: string | null }),
-		toastOnError = true
+		onError?: {
+			redirect?: boolean
+			toast?: boolean
+		}
 	): Promise<{ data: R; error: ApiError | null } | { data: R | null; error: ApiError }> => {
 		try {
 			const url = new URL(
@@ -233,7 +236,7 @@ export default () => {
 				fields: result.data?.fields
 			}
 
-			if (toastOnError) {
+			if (onError?.toast === undefined || onError.toast) {
 				toast({
 					title: apiError.type,
 					description: apiError.message,
@@ -245,7 +248,9 @@ export default () => {
 			if (error.response?.status === 403) {
 				setToken(null)
 				setUser(null)
-				navigate("/login")
+				if (onError?.redirect === undefined || onError.toast) {
+					navigate("/login")
+				}
 			}
 
 			return {
