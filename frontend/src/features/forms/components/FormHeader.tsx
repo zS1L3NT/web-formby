@@ -24,6 +24,7 @@ const FormHeader: FC<
 			}}>
 			<EditableText
 				editable={editable}
+				required={true}
 				placeholder="Add a title"
 				text={name}
 				setText={setName}

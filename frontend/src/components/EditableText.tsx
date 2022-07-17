@@ -1,47 +1,59 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { FC, PropsWithChildren, useRef, useState } from "react"
 
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons"
 import {
-	ButtonGroup, ChakraProps, Collapse, ColorProps, IconButton, Text, TypographyProps, useBoolean
+	Box, ButtonGroup, Collapse, IconButton, Text, TextProps, useBoolean
 } from "@chakra-ui/react"
 
 const EditableText: FC<
 	PropsWithChildren<{
 		editable: boolean
+		required?: boolean
 		text: string
 		setText: (text: string) => void
 		placeholder?: string
-		fontWeight?: TypographyProps["fontWeight"]
-		fontSize?: TypographyProps["fontSize"]
-		color?: ColorProps["color"]
-		noOfLines?: ChakraProps["noOfLines"]
-	}>
+	} & TextProps>
 > = props => {
-	const { editable, text, setText, ...style } = props
+	const { editable, required, text, setText, placeholder, ...style } = props
 
+	const textRef = useRef<any>()
 	const [editing, setEditing] = useBoolean()
 	const [newText, setNewText] = useState(text)
 
 	return (
-		<>
+		<Box pos="relative">
 			<Text
+				ref={textRef}
+				suppressContentEditableWarning={true}
 				textAlign="left"
 				contentEditable={editable}
 				onFocus={setEditing.on}
 				// Delay so the collapse buttons still have the click event before unmounting
-				onBlur={() => setTimeout(setEditing.off, 100)}
 				rounded="lg"
 				outline="none"
 				borderWidth="2px"
 				borderColor={editing ? "blue.500" : "transparent"}
 				transition="background-color 0.3s, border-color 0.3s"
 				_hover={{
-					bg: editing ? "white" : editable ? "gray.100" : "white"
+					bg: editing ? "white" : editable ? "gray.100" : "white",
+					cursor: editable ? "text" : "normal"
 				}}
 				onInput={e => setNewText(e.currentTarget.innerText)}
+				opacity={!editing && text === "" ? 0.5 : 1}
 				{...style}>
-				{text}
+				{!editing && text === "" ? placeholder : text}
 			</Text>
+			{editing && newText === "" ? (
+				<Text
+					textAlign="left"
+					{...style}
+					pos="absolute"
+					top={0}
+					m="2px"
+					opacity="0.5">
+					{placeholder}
+				</Text>
+			) : null}
 
 			<Collapse
 				in={editing}
@@ -55,16 +67,28 @@ const EditableText: FC<
 					<IconButton
 						aria-label="close"
 						icon={<CloseIcon boxSize={3} />}
-						onClick={() => setNewText(text)}
+						onClick={() => {
+							setNewText(text)
+							textRef.current!.innerText = text
+							setEditing.off()
+						}}
 					/>
 					<IconButton
 						aria-label="check"
 						icon={<CheckIcon />}
-						onClick={() => setText(newText)}
+						onClick={() => {
+							if (required && newText === "") {
+								setNewText(text)
+								textRef.current!.innerText = text
+							} else {
+								setText(newText)
+							}
+							setEditing.off()
+						}}
 					/>
 				</ButtonGroup>
 			</Collapse>
-		</>
+		</Box>
 	)
 }
 
