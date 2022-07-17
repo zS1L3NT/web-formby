@@ -1,6 +1,14 @@
 import { FC, PropsWithChildren } from "react"
 
-const Respond: FC<PropsWithChildren<{}>> = props => {
+import Form from "../../../models/Form"
+import { Question } from "../../../models/Question"
+
+const Respond: FC<
+	PropsWithChildren<{
+		form: Form
+		questions: Question[] | null
+	}>
+> = props => {
 	return <></>
 }
 

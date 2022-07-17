@@ -9,6 +9,7 @@ import {
 import AuthContext from "../../../contexts/AuthContext"
 import useFetcher from "../../../hooks/useFetcher"
 import Form from "../../../models/Form"
+import { Question } from "../../../models/Question"
 import Questions from "./Questions"
 import Respond from "./Respond"
 import Responses from "./Responses"
@@ -21,6 +22,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 	const params = useParams()
 
 	const [form, setForm] = useState<Form | null>()
+	const [questions, setQuestions] = useState<Question[] | null>(null)
 
 	useEffect(() => {
 		const form_id = params["id"] ?? ""
@@ -39,11 +41,28 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 		).then(({ data }) => {
 			if (data) {
 				setForm(Form.fromJson(data))
-			} else {
-				setForm(null)
 			}
 		})
 	}, [params])
+
+	useEffect(() => {
+		if (!form) return
+
+		fetcher({
+			url: "/forms/{form_id}/questions",
+			method: "GET",
+			parameters: {
+				form_id: form.id
+			},
+			token
+		}).then(({ data }) => {
+			if (data) {
+				setQuestions(data.map(Question.fromJson))
+			} else {
+				setQuestions(null)
+			}
+		})
+	}, [form])
 
 	return (
 		<Container
@@ -52,7 +71,10 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			{form !== undefined ? (
 				form !== null ? (
 					!user || user.id !== form.userId ? (
-						<Respond />
+						<Respond
+							form={form}
+							questions={questions}
+						/>
 					) : (
 						<Tabs
 							variant="soft-rounded"
@@ -66,7 +88,11 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 							</TabList>
 							<TabPanels>
 								<TabPanel>
-									<Questions />
+									<Questions
+										form={form}
+										questions={questions}
+										editable={true}
+									/>
 								</TabPanel>
 								<TabPanel>
 									<Responses />
