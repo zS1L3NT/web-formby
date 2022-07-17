@@ -1,7 +1,7 @@
 import axios, { AxiosError, Method } from "axios"
 import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
-import { LIST, OBJECT, STRING, validate } from "validate-any"
+import { LIST, OBJECT, OR, STRING, UNDEFINED, validate } from "validate-any"
 import ObjectValidator from "validate-any/dist/validators/ObjectValidator"
 
 import { useToast } from "@chakra-ui/react"
@@ -158,8 +158,8 @@ type ApiError = {
 const API_ERROR: ObjectValidator<ApiError> = OBJECT({
 	type: STRING(),
 	message: STRING(),
-	stack: LIST(),
-	fields: OBJECT()
+	stack: OR(LIST(), UNDEFINED()),
+	fields: OR(OBJECT(), UNDEFINED())
 })
 
 export default () => {
