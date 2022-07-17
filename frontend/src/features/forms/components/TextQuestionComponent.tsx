@@ -23,21 +23,15 @@ const TextQuestionComponent: FC<
 			<EditableText
 				editable={editable}
 				required={true}
-				placeholder="Add a title"
-				fontSize="2xl"
+				variant="title"
 				text={title}
 				setText={setTitle}
-				color="black"
-				noOfLines={2}
 			/>
 			<EditableText
 				editable={editable}
-				placeholder="Add a description"
-				mt={2}
-				fontSize="lg"
+				variant="description"
 				text={description ?? ""}
 				setText={setDescription}
-				noOfLines={2}
 			/>
 			<Input
 				mt={4}

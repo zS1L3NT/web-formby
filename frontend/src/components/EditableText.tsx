@@ -6,15 +6,41 @@ import {
 } from "@chakra-ui/react"
 
 const EditableText: FC<
-	PropsWithChildren<{
-		editable: boolean
-		required?: boolean
-		text: string
-		setText: (text: string) => void
-		placeholder?: string
-	} & TextProps>
+	PropsWithChildren<
+		{
+			editable: boolean
+			required?: boolean
+			text: string
+			setText: (text: string) => void
+			placeholder?: string
+			variant?: "title" | "description"
+		} & TextProps
+	>
 > = props => {
-	const { editable, required, text, setText, placeholder, ...style } = props
+	const { editable, text, setText, variant, ...style } = props
+
+	const titleStyles = {
+		fontSize: "2xl",
+		placeholder: "Add a title",
+		color: "black",
+		noOfLines: 2
+	} as const
+
+	const descriptionStyles = {
+		fontSize: "lg",
+		placeholder: "Add a description",
+		mt: 2,
+		noOfLines: 2
+	} as const
+
+	const placeholder =
+		variant === "title"
+			? titleStyles.placeholder
+			: variant === "description"
+			? descriptionStyles.placeholder
+			: props.placeholder
+
+	const required = variant === "title" ?? props.required
 
 	const textRef = useRef<any>()
 	const [editing, setEditing] = useBoolean()
@@ -40,13 +66,17 @@ const EditableText: FC<
 				}}
 				onInput={e => setNewText(e.currentTarget.innerText)}
 				opacity={!editing && text === "" ? 0.5 : 1}
+				{...(variant === "title" ? titleStyles : {})}
+				{...(variant === "description" ? descriptionStyles : {})}
 				{...style}>
 				{!editing && text === "" ? placeholder : text}
 			</Text>
 			{editing && newText === "" ? (
 				<Text
-					textAlign="left"
+					{...(variant === "title" ? titleStyles : {})}
+					{...(variant === "description" ? descriptionStyles : {})}
 					{...style}
+					textAlign="left"
 					pos="absolute"
 					top={0}
 					m="2px"
