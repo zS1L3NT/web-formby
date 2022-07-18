@@ -1,3 +1,5 @@
+import "react-datepicker/dist/react-datepicker.css"
+
 import { FC, PropsWithChildren } from "react"
 import { Route, Routes } from "react-router-dom"
 

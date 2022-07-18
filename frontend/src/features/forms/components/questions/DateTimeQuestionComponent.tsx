@@ -1,7 +1,8 @@
-import { FC, PropsWithChildren } from "react"
+import { FC, PropsWithChildren, useState } from "react"
+import DatePicker from "react-datepicker"
 
-import Card from "../../../../components/Card"
 import { DateTimeQuestion } from "../../../../models/Question"
+import QuestionComponent from "../QuestionComponent"
 
 const DateTimeQuestionComponent: FC<
 	PropsWithChildren<{
@@ -11,7 +12,21 @@ const DateTimeQuestionComponent: FC<
 > = props => {
 	const { question, editable } = props
 
-	return <Card></Card>
+	const [date, setDate] = useState<Date | null>(new Date())
+
+	return (
+		<QuestionComponent
+			editable={editable}
+			question={question}>
+			<DatePicker
+				selected={date}
+				onChange={setDate}
+				showTimeInput
+				timeInputLabel="Time:"
+				dateFormat="MMMM d yyyy h:mm aa"
+			/>
+		</QuestionComponent>
+	)
 }
 
 export default DateTimeQuestionComponent
