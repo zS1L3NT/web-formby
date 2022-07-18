@@ -2,8 +2,8 @@ import { Box } from "@chakra-ui/react"
 import { FC, PropsWithChildren, useState } from "react"
 
 import Card from "../../../components/Card"
-import EditableText from "../../../components/EditableText"
 import { Question } from "../../../models/Question"
+import EditableText from "./EditableText"
 
 const QuestionComponent: FC<
 	PropsWithChildren<{
