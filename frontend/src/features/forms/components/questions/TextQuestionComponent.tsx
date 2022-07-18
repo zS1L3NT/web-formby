@@ -2,9 +2,8 @@ import { FC, PropsWithChildren, useState } from "react"
 
 import { Input } from "@chakra-ui/react"
 
-import Card from "../../../components/Card"
-import EditableText from "../../../components/EditableText"
-import { TextQuestion } from "../../../models/Question"
+import { TextQuestion } from "../../../../models/Question"
+import QuestionComponent from "../QuestionComponent"
 
 const TextQuestionComponent: FC<
 	PropsWithChildren<{
@@ -19,28 +18,16 @@ const TextQuestionComponent: FC<
 	const [text, setText] = useState("")
 
 	return (
-		<Card>
-			<EditableText
-				editable={editable}
-				required={true}
-				variant="title"
-				text={title}
-				setText={setTitle}
-			/>
-			<EditableText
-				editable={editable}
-				variant="description"
-				text={description ?? ""}
-				setText={setDescription}
-			/>
+		<QuestionComponent
+			editable={editable}
+			question={question}>
 			<Input
-				mt={4}
 				value={text}
 				onChange={e => setText(e.target.value)}
 				placeholder="Text answer"
 				disabled={editable}
 			/>
-		</Card>
+		</QuestionComponent>
 	)
 }
 

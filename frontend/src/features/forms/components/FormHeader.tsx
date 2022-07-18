@@ -29,7 +29,6 @@ const FormHeader: FC<
 				text={name}
 				setText={setName}
 				fontSize="4xl"
-				color="black"
 				noOfLines={2}
 			/>
 			<Box

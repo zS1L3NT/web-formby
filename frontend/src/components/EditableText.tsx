@@ -13,34 +13,11 @@ const EditableText: FC<
 			text: string
 			setText: (text: string) => void
 			placeholder?: string
-			variant?: "title" | "description"
+			variant?: "description"
 		} & TextProps
 	>
 > = props => {
-	const { editable, text, setText, variant, ...style } = props
-
-	const titleStyles = {
-		fontSize: "2xl",
-		placeholder: "Add a title",
-		color: "black",
-		noOfLines: 2
-	} as const
-
-	const descriptionStyles = {
-		fontSize: "lg",
-		placeholder: "Add a description",
-		mt: 2,
-		noOfLines: 2
-	} as const
-
-	const placeholder =
-		variant === "title"
-			? titleStyles.placeholder
-			: variant === "description"
-			? descriptionStyles.placeholder
-			: props.placeholder
-
-	const required = variant === "title" ?? props.required
+	const { editable, required, text, setText, placeholder, variant, ...style } = props
 
 	const textRef = useRef<any>()
 	const [editing, setEditing] = useBoolean()
@@ -55,6 +32,7 @@ const EditableText: FC<
 					textAlign="left"
 					contentEditable={editable}
 					onFocus={setEditing.on}
+					color="text"
 					// Delay so the collapse buttons still have the click event before unmounting
 					rounded="lg"
 					outline="none"
@@ -62,13 +40,11 @@ const EditableText: FC<
 					borderColor={editing ? "primary" : "transparent"}
 					transition="background-color 0.3s, border-color 0.3s"
 					_hover={{
-						bg: editing ? "white" : editable ? "primary" : "white",
+						bg: !editing && editable ? "highlight" : "card",
 						cursor: editable ? "text" : "normal"
 					}}
 					onInput={e => setNewText(e.currentTarget.innerText)}
 					opacity={!editing && text === "" ? 0.5 : 1}
-					{...(variant === "title" ? titleStyles : {})}
-					{...(variant === "description" ? descriptionStyles : {})}
 					{...style}>
 					{!editing && text === "" ? placeholder : text}
 				</Text>
@@ -76,9 +52,8 @@ const EditableText: FC<
 
 			{editing && newText === "" ? (
 				<Text
-					{...(variant === "title" ? titleStyles : {})}
-					{...(variant === "description" ? descriptionStyles : {})}
 					{...style}
+					color="text"
 					textAlign="left"
 					pos="absolute"
 					top={0}

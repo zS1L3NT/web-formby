@@ -18,7 +18,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 			w={{ base: "max", md: "20rem" }}
 			h="12rem"
 			p={4}
-			bg="white"
+			bg="card"
 			rounded="lg"
 			direction="column"
 			shadow="sm"
@@ -37,7 +37,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 				<Text
 					fontSize="18"
 					fontWeight="bold"
-					color="black"
+					color="bw"
 					noOfLines={2}>
 					{form.name}
 				</Text>
@@ -96,7 +96,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 		<Center
 			w={{ base: "max", md: "20rem" }}
 			h="12rem"
-			bg="white"
+			bg="card"
 			rounded="lg"
 			shadow="sm"
 			borderWidth="2px"

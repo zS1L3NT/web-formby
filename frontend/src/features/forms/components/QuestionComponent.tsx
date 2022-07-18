@@ -1,47 +1,45 @@
+import { Box } from "@chakra-ui/react"
 import { FC, PropsWithChildren, useState } from "react"
-
-import { Textarea } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
 import EditableText from "../../../components/EditableText"
-import { ParagraphQuestion } from "../../../models/Question"
+import { Question } from "../../../models/Question"
 
-const ParagraphQuestionComponent: FC<
+const QuestionComponent: FC<
 	PropsWithChildren<{
-		question: ParagraphQuestion
 		editable: boolean
+		question: Question
 	}>
 > = props => {
-	const { question, editable } = props
+	const { editable, question } = props
 
 	const [title, setTitle] = useState(question.title)
 	const [description, setDescription] = useState(question.description)
-	const [paragraph, setParagraph] = useState("")
 
 	return (
 		<Card>
 			<EditableText
 				editable={editable}
 				required={true}
-				variant="title"
 				text={title}
 				setText={setTitle}
+				placeholder="Add a title"
+				fontSize="2xl"
+				noOfLines={2}
 			/>
 			<EditableText
 				editable={editable}
-				variant="description"
 				text={description ?? ""}
 				setText={setDescription}
+				placeholder="Add a description"
+				fontSize="lg"
+				mt={2}
+				noOfLines={2}
 			/>
-			<Textarea
-				mt={4}
-				value={paragraph}
-				onChange={e => setParagraph(e.target.value)}
-				placeholder="Paragraph answer"
-				disabled={editable}
-			/>
+			<Box h={4} />
+			{props.children}
 		</Card>
 	)
 }
 
-export default ParagraphQuestionComponent
+export default QuestionComponent

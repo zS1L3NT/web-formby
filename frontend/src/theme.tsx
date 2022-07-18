@@ -14,12 +14,12 @@ export default extendTheme({
 	semanticTokens: {
 		colors: {
 			primary: {
-				_light: "blue.500",
-				_dark: "blue.400"
+				_light: "blue.400",
+				_dark: "blue.500"
 			},
 			primaryDark: {
-				_light: "blue.400",
-				_dark: "blue.300"
+				_light: "blue.500",
+				_dark: "blue.600"
 			},
 			background: {
 				_light: "gray.100",
@@ -30,11 +30,18 @@ export default extendTheme({
 				_dark: "gray.800"
 			},
 			error: "red.500",
+			bw: {
+				_light: "black",
+				_dark: "white"
+			},
 			text: {
 				_light: "gray.700",
 				_dark: "gray.200"
 			},
-			highlight: "gray.100"
+			highlight: {
+				_light: "gray.100",
+				_dark: "gray.700"
+			}
 		}
 	},
 	components: {
@@ -58,10 +65,10 @@ export default extendTheme({
 		Button: {
 			variants: {
 				primary: {
-					bg: "primaryDark",
+					bg: "primary",
 					color: "white",
 					_hover: {
-						bg: "primary !important"
+						bg: "primaryDark !important"
 					}
 				}
 			}

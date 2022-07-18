@@ -4,9 +4,8 @@ import { createRef, FC, PropsWithChildren, RefObject, useState } from "react"
 import { CloseIcon } from "@chakra-ui/icons"
 import { Checkbox, CheckboxGroup, Flex, Input, Radio, RadioGroup, Text } from "@chakra-ui/react"
 
-import Card from "../../../components/Card"
-import EditableText from "../../../components/EditableText"
-import { ChoiceQuestion } from "../../../models/Question"
+import { ChoiceQuestion } from "../../../../models/Question"
+import QuestionComponent from "../QuestionComponent"
 
 const ChoiceQuestionComponent: FC<
 	PropsWithChildren<{
@@ -25,20 +24,9 @@ const ChoiceQuestionComponent: FC<
 	const [selectedChoices, setSelectedChoices] = useState<string[]>([])
 
 	return (
-		<Card>
-			<EditableText
-				editable={editable}
-				required={true}
-				variant="title"
-				text={title}
-				setText={setTitle}
-			/>
-			<EditableText
-				editable={editable}
-				variant="description"
-				text={description ?? ""}
-				setText={setDescription}
-			/>
+		<QuestionComponent
+			editable={editable}
+			question={question}>
 			<CheckboxGroup
 				onChange={selected => setSelectedChoices(selected as string[])}
 				value={editable ? [] : selectedChoices}>
@@ -124,13 +112,13 @@ const ChoiceQuestionComponent: FC<
 							chakraStyles={{
 								container: provided => ({
 									...provided,
-									mt: 4,
+									mt: 4
 								}),
 								dropdownIndicator: provided => ({
 									...provided,
 									bg: "transparent",
 									px: 2,
-									cursor: "inherit",
+									cursor: "inherit"
 								}),
 								indicatorSeparator: provided => ({
 									...provided,
@@ -179,7 +167,7 @@ const ChoiceQuestionComponent: FC<
 					) : null}
 				</RadioGroup>
 			</CheckboxGroup>
-		</Card>
+		</QuestionComponent>
 	)
 }
 

@@ -3,9 +3,8 @@ import { HexColorPicker } from "react-colorful"
 
 import { Box, Flex, Input } from "@chakra-ui/react"
 
-import Card from "../../../components/Card"
-import EditableText from "../../../components/EditableText"
-import { ColorQuestion } from "../../../models/Question"
+import { ColorQuestion } from "../../../../models/Question"
+import QuestionComponent from "../QuestionComponent"
 
 const ColorQuestionComponent: FC<
 	PropsWithChildren<{
@@ -20,20 +19,9 @@ const ColorQuestionComponent: FC<
 	const [color, setColor] = useState("#000000")
 
 	return (
-		<Card>
-			<EditableText
-				editable={editable}
-				required={true}
-				variant="title"
-				text={title}
-				setText={setTitle}
-			/>
-			<EditableText
-				editable={editable}
-				variant="description"
-				text={description ?? ""}
-				setText={setDescription}
-			/>
+		<QuestionComponent
+			editable={editable}
+			question={question}>
 			<Flex
 				pos="relative"
 				direction="column"
@@ -41,8 +29,7 @@ const ColorQuestionComponent: FC<
 				alignItems="center">
 				<Box
 					w={{ base: "max", sm: 80 }}
-					h={48}
-					mt={4}>
+					h={48}>
 					<HexColorPicker
 						style={{
 							width: "100%",
@@ -78,7 +65,6 @@ const ColorQuestionComponent: FC<
 					pos="absolute"
 					w="max"
 					h="max"
-					bg="white"
 					zIndex={editable ? 5 : -1}
 					opacity={editable ? 0.5 : 0}
 					_hover={{
@@ -86,7 +72,7 @@ const ColorQuestionComponent: FC<
 					}}
 				/>
 			</Flex>
-		</Card>
+		</QuestionComponent>
 	)
 }
 

@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react"
 
-import Card from "../../../components/Card"
-import { DateTimeQuestion } from "../../../models/Question"
+import Card from "../../../../components/Card"
+import { DateTimeQuestion } from "../../../../models/Question"
 
 const DateTimeQuestionComponent: FC<
 	PropsWithChildren<{

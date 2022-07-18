@@ -7,16 +7,16 @@ import {
 	ChoiceQuestion, ColorQuestion, DateTimeQuestion, ParagraphQuestion, Question, RatingQuestion,
 	SliderQuestion, SwitchQuestion, TableQuestion, TextQuestion
 } from "../../../models/Question"
-import ChoiceQuestionComponent from "../components/ChoiceQuestionComponent"
-import ColorQuestionComponent from "../components/ColorQuestionComponent"
-import DateTimeQuestionComponent from "../components/DateTimeQuestionComponent"
 import FormHeader from "../components/FormHeader"
-import ParagraphQuestionComponent from "../components/ParagraphQuestionComponent"
-import RatingQuestionComponent from "../components/RatingQuestionComponent"
-import SliderQuestionComponent from "../components/SliderQuestionComponent"
-import SwitchQuestionComponent from "../components/SwitchQuestionComponent"
-import TableQuestionComponent from "../components/TableQuestionComponent"
-import TextQuestionComponent from "../components/TextQuestionComponent"
+import ChoiceQuestionComponent from "../components/questions/ChoiceQuestionComponent"
+import ColorQuestionComponent from "../components/questions/ColorQuestionComponent"
+import DateTimeQuestionComponent from "../components/questions/DateTimeQuestionComponent"
+import ParagraphQuestionComponent from "../components/questions/ParagraphQuestionComponent"
+import RatingQuestionComponent from "../components/questions/RatingQuestionComponent"
+import SliderQuestionComponent from "../components/questions/SliderQuestionComponent"
+import SwitchQuestionComponent from "../components/questions/SwitchQuestionComponent"
+import TableQuestionComponent from "../components/questions/TableQuestionComponent"
+import TextQuestionComponent from "../components/questions/TextQuestionComponent"
 
 const Questions: FC<
 	PropsWithChildren<{
