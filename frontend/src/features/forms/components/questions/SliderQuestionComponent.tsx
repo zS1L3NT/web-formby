@@ -2,8 +2,8 @@ import { FC, PropsWithChildren, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 
 import {
-	Box, InputGroup, NumberInput, NumberInputField, Slider, SliderFilledTrack, SliderMark,
-	SliderThumb, SliderTrack, Text
+	Box, Flex, InputGroup, InputLeftAddon, NumberInput, NumberInputField, Slider, SliderFilledTrack,
+	SliderMark, SliderThumb, SliderTrack, Text
 } from "@chakra-ui/react"
 
 import { SliderQuestion } from "../../../../models/Question"
@@ -23,8 +23,6 @@ const SliderQuestionComponent: FC<
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
-		setError("")
-
 		if (isNaN(sliderMin) || isNaN(sliderMax) || isNaN(sliderStep)) {
 			return setError("Please enter valid numbers")
 		}
@@ -41,8 +39,13 @@ const SliderQuestionComponent: FC<
 			return setError("Step must be more than 0")
 		}
 
-		if ((sliderMax / sliderStep) % 1 !== 0) {
+		const intervals = (sliderMax - sliderMin) / sliderStep
+		if (intervals % 1 !== 0) {
 			return setError("Max must be a multiple of Step")
+		}
+
+		if (intervals > 10) {
+			return setError("There must be less than 10 intervals between the min and max")
 		}
 
 		setError(null)
@@ -52,26 +55,45 @@ const SliderQuestionComponent: FC<
 		<QuestionComponent
 			editable={editable}
 			question={question}>
-			<InputGroup
-				w="max"
-				justifyContent="space-evenly">
-				<NumberInput
-					value={isNaN(sliderMin) ? "" : sliderMin}
-					onChange={min => setSliderMin(parseInt(min))}>
-					<NumberInputField />
-				</NumberInput>
-				<NumberInput
-					value={isNaN(sliderStep) ? "" : sliderStep}
-					onChange={step => setSliderStep(parseInt(step))}
-					min={1}>
-					<NumberInputField />
-				</NumberInput>
-				<NumberInput
-					value={isNaN(sliderMax) ? "" : sliderMax}
-					onChange={max => setSliderMax(parseInt(max))}>
-					<NumberInputField />
-				</NumberInput>
-			</InputGroup>
+			{editable ? (
+				<Flex
+					w="max"
+					direction={{ base: "column", md: "row" }}
+					justifyContent="space-evenly"
+					gap={4}
+					px={{ base: 0, md: 2 }}
+					mb={4}>
+					<InputGroup>
+						<InputLeftAddon children="Min" />
+						<NumberInput
+							flex="1"
+							value={isNaN(sliderMin) ? "" : sliderMin}
+							onChange={min => setSliderMin(parseInt(min))}>
+							<NumberInputField />
+						</NumberInput>
+					</InputGroup>
+					<InputGroup>
+						<InputLeftAddon children="Step" />
+						<NumberInput
+							flex="1"
+							value={isNaN(sliderStep) ? "" : sliderStep}
+							onChange={step => setSliderStep(parseInt(step))}
+							min={1}>
+							<NumberInputField />
+						</NumberInput>
+					</InputGroup>
+					<InputGroup>
+						<InputLeftAddon children="Max" />
+						<NumberInput
+							flex="1"
+							value={isNaN(sliderMax) ? "" : sliderMax}
+							onChange={max => setSliderMax(parseInt(max))}>
+							<NumberInputField />
+						</NumberInput>
+					</InputGroup>
+				</Flex>
+			) : null}
+
 			<Text
 				mt={2}
 				variant="inputError">
@@ -79,31 +101,32 @@ const SliderQuestionComponent: FC<
 			</Text>
 			<Box
 				mt={2}
-				px={8}>
-				{!error ? (
-					<ErrorBoundary fallbackRender={_ => <></>}>
-						<Slider
-							isDisabled={editable}
-							defaultValue={sliderMin}
-							min={sliderMin}
-							max={sliderMax}
-							step={sliderStep}>
-							{Array.from(Array((sliderMax - sliderMin) / sliderStep + 1)).map(
-								(_, i) => (
-									<SliderMark
-										key={i}
-										value={sliderMin + sliderStep * i}>
-										{sliderMin + sliderStep * i}
-									</SliderMark>
-								)
-							)}
-							<SliderTrack>
-								<SliderFilledTrack />
-							</SliderTrack>
-							<SliderThumb />
-						</Slider>
-					</ErrorBoundary>
-				) : null}
+				pl={{ base: 0, md: 2 }}
+				pr={{ base: 2, md: 4 }}>
+				<ErrorBoundary FallbackComponent={_ => <></>}>
+					<Slider
+						isDisabled={editable}
+						defaultValue={sliderMin}
+						min={sliderMin}
+						max={sliderMax}
+						step={sliderStep}>
+						{((sliderMax - sliderMin) / sliderStep + 1) % 1 === 0
+							? Array.from(Array((sliderMax - sliderMin) / sliderStep + 1)).map(
+									(_, i) => (
+										<SliderMark
+											key={i}
+											value={sliderMin + sliderStep * i}>
+											{sliderMin + sliderStep * i}
+										</SliderMark>
+									)
+							  )
+							: null}
+						<SliderTrack>
+							<SliderFilledTrack />
+						</SliderTrack>
+						<SliderThumb />
+					</Slider>
+				</ErrorBoundary>
 			</Box>
 		</QuestionComponent>
 	)
