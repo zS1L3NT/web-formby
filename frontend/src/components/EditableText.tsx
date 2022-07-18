@@ -48,29 +48,32 @@ const EditableText: FC<
 
 	return (
 		<Box pos="relative">
-			<Text
-				ref={textRef}
-				suppressContentEditableWarning={true}
-				textAlign="left"
-				contentEditable={editable}
-				onFocus={setEditing.on}
-				// Delay so the collapse buttons still have the click event before unmounting
-				rounded="lg"
-				outline="none"
-				borderWidth="2px"
-				borderColor={editing ? "blue.500" : "transparent"}
-				transition="background-color 0.3s, border-color 0.3s"
-				_hover={{
-					bg: editing ? "white" : editable ? "gray.100" : "white",
-					cursor: editable ? "text" : "normal"
-				}}
-				onInput={e => setNewText(e.currentTarget.innerText)}
-				opacity={!editing && text === "" ? 0.5 : 1}
-				{...(variant === "title" ? titleStyles : {})}
-				{...(variant === "description" ? descriptionStyles : {})}
-				{...style}>
-				{!editing && text === "" ? placeholder : text}
-			</Text>
+			{!editable && text === "" ? null : (
+				<Text
+					ref={textRef}
+					suppressContentEditableWarning={true}
+					textAlign="left"
+					contentEditable={editable}
+					onFocus={setEditing.on}
+					// Delay so the collapse buttons still have the click event before unmounting
+					rounded="lg"
+					outline="none"
+					borderWidth="2px"
+					borderColor={editing ? "blue.500" : "transparent"}
+					transition="background-color 0.3s, border-color 0.3s"
+					_hover={{
+						bg: editing ? "white" : editable ? "gray.100" : "white",
+						cursor: editable ? "text" : "normal"
+					}}
+					onInput={e => setNewText(e.currentTarget.innerText)}
+					opacity={!editing && text === "" ? 0.5 : 1}
+					{...(variant === "title" ? titleStyles : {})}
+					{...(variant === "description" ? descriptionStyles : {})}
+					{...style}>
+					{!editing && text === "" ? placeholder : text}
+				</Text>
+			)}
+
 			{editing && newText === "" ? (
 				<Text
 					{...(variant === "title" ? titleStyles : {})}
