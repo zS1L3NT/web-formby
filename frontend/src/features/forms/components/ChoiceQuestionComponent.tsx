@@ -1,3 +1,4 @@
+import { Select } from "chakra-react-select"
 import { createRef, FC, PropsWithChildren, RefObject, useState } from "react"
 
 import { CloseIcon } from "@chakra-ui/icons"
@@ -109,7 +110,36 @@ const ChoiceQuestionComponent: FC<
 						</Flex>
 					))}
 
-					{/* // ! SELECT */}
+					{!editable && question.choiceType === "dropdown" ? (
+						<Select
+							onChange={option => {
+								if (option !== null) {
+									setSelectedChoices([option.value])
+								}
+							}}
+							options={choices.map(choice => ({ value: choice, label: choice }))}
+							placeholder="Select a choice"
+							className="chakra-react-select"
+							classNamePrefix="chakra-react-select"
+							chakraStyles={{
+								container: provided => ({
+									...provided,
+									mt: 4,
+								}),
+								dropdownIndicator: provided => ({
+									...provided,
+									bg: "transparent",
+									px: 2,
+									cursor: "inherit",
+								}),
+								indicatorSeparator: provided => ({
+									...provided,
+									display: "none"
+								})
+							}}
+							colorScheme="blue.500"
+						/>
+					) : null}
 
 					{editable ? (
 						<Flex my={4}>
