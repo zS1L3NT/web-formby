@@ -51,8 +51,8 @@ const Login: FC<PropsWithChildren<{}>> = props => {
 			}
 		})
 
-		if (error && "fields" in error) {
-			const fields = error.fields!
+		if (error && "fields" in error && error.fields) {
+			const fields = error.fields
 			if ("email" in fields) {
 				setEmailError(fields.email!.join("\n"))
 			}
