@@ -117,13 +117,6 @@ class DatabaseSeeder extends Seeder
 
 			$prev_qn = Question::create([
 				...$question_data($prev_qn),
-				"required" => false,
-				"type" => "rating",
-				"rating_max" => 5
-			]);
-
-			$prev_qn = Question::create([
-				...$question_data($prev_qn),
 				"required" => true,
 				"type" => "datetime"
 			]);
@@ -174,9 +167,6 @@ class DatabaseSeeder extends Seeder
 					break;
 				case "slider":
 					$answer_data["slider"] = $faker->numberBetween(0, 100);
-					break;
-				case "rating":
-					$answer_data["rating"] = $faker->numberBetween(1, $question->rating_max);
 					break;
 				case "datetime":
 					$answer_data["date"] = $faker->date();

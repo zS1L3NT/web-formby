@@ -30,7 +30,6 @@ class AnswerController extends Controller
 			"answers.*.choices" => [...$when("choice"), "array", "min:1"],
 			"answers.*.switch" => [...$when("switch"), "boolean"],
 			"answers.*.slider" => [...$when("slider"), "integer"],
-			"answers.*.rating" => [...$when("rating"), "integer"],
 			"answers.*.date" => [...$when("datetime"), "regex:$this->date_regex"],
 			"answers.*.time" => [...$when("datetime"), "regex:$this->time_regex"],
 			"answers.*.table.*.0" => [...$when("table"), "in_array:questions.*.table_rows.*"],

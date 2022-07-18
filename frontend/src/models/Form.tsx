@@ -7,7 +7,6 @@ export type iQuestionType =
 	| "choice"
 	| "switch"
 	| "slider"
-	| "rating"
 	| "datetime"
 	| "table"
 

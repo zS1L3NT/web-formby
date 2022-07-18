@@ -24,7 +24,6 @@ return new class extends Migration
 			$table->json('choices')->nullable();
 			$table->boolean('switch')->nullable();
 			$table->integer('slider')->nullable();
-			$table->integer('rating')->nullable();
 			$table->date('date')->nullable();
 			$table->time('time')->nullable();
 			$table->json('table')->nullable();

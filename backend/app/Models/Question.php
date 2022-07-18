@@ -22,7 +22,6 @@ class Question extends Model
 		"slider_min",
 		"slider_max",
 		"slider_step",
-		"rating_max",
 		"table_columns",
 		"table_rows",
 		"table_type"
@@ -32,8 +31,7 @@ class Question extends Model
 		"required" => "boolean",
 		"slider_min" => "integer",
 		"slider_max" => "integer",
-		"slider_step" => "integer",
-		"rating_max" => "integer"
+		"slider_step" => "integer"
 	];
 
 	public function getChoicesAttribute($choices)

@@ -11,7 +11,6 @@ export type iAnswerData<T extends iQuestionType> = {
 	(T extends "choice" ? { choices: string[] } : {}) &
 	(T extends "switch" ? { switch: boolean } : {}) &
 	(T extends "slider" ? { slider: number } : {}) &
-	(T extends "rating" ? { rating: number } : {}) &
 	(T extends "datetime" ? { date: any; time: any } : {}) &
 	(T extends "table" ? { table: [string, string][] } : {})
 
@@ -33,7 +32,6 @@ export abstract class Answer extends ModelWithTimestamps {
 		if ("choice" in json) return new ChoiceAnswer(json)
 		if ("switch" in json) return new SwitchAnswer(json)
 		if ("slider" in json) return new SliderAnswer(json)
-		if ("rating" in json) return new RatingAnswer(json)
 		if ("date" in json && "time" in json) return new DateTimeAnswer(json)
 		if ("table" in json) return new TableAnswer(json)
 
@@ -147,24 +145,6 @@ export class SliderAnswer extends Answer {
 			user_id: this.userId,
 			question_id: this.questionId,
 			slider: this.slider
-		}
-	}
-}
-
-export class RatingAnswer extends Answer {
-	public rating: number
-
-	constructor(json: WithTimestamps<iAnswerData<"rating">>) {
-		super(json.id, json.user_id, json.question_id, json.created_at, json.updated_at)
-		this.rating = json.rating
-	}
-
-	override toJson(): iAnswerData<"rating"> {
-		return {
-			id: this.id,
-			user_id: this.userId,
-			question_id: this.questionId,
-			rating: this.rating
 		}
 	}
 }

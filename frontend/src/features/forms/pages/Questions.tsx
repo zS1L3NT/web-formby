@@ -4,7 +4,7 @@ import { Center, Spinner, Stack } from "@chakra-ui/react"
 
 import Form from "../../../models/Form"
 import {
-	ChoiceQuestion, ColorQuestion, DateTimeQuestion, ParagraphQuestion, Question, RatingQuestion,
+	ChoiceQuestion, ColorQuestion, DateTimeQuestion, ParagraphQuestion, Question,
 	SliderQuestion, SwitchQuestion, TableQuestion, TextQuestion
 } from "../../../models/Question"
 import FormHeader from "../components/FormHeader"
@@ -12,7 +12,6 @@ import ChoiceQuestionComponent from "../components/questions/ChoiceQuestionCompo
 import ColorQuestionComponent from "../components/questions/ColorQuestionComponent"
 import DateTimeQuestionComponent from "../components/questions/DateTimeQuestionComponent"
 import ParagraphQuestionComponent from "../components/questions/ParagraphQuestionComponent"
-import RatingQuestionComponent from "../components/questions/RatingQuestionComponent"
 import SliderQuestionComponent from "../components/questions/SliderQuestionComponent"
 import SwitchQuestionComponent from "../components/questions/SwitchQuestionComponent"
 import TableQuestionComponent from "../components/questions/TableQuestionComponent"
@@ -90,16 +89,6 @@ const Questions: FC<
 					if (question instanceof SliderQuestion) {
 						return (
 							<SliderQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof RatingQuestion) {
-						return (
-							<RatingQuestionComponent
 								key={question.id}
 								question={question}
 								editable={editable}
