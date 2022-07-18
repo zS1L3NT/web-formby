@@ -67,7 +67,11 @@ const ChoiceQuestionComponent: FC<
 									<Text>{editable ? null : choice}</Text>
 								</Radio>
 							) : editable ? (
-								<Text mx={4}>{i + 1}</Text>
+								<Text
+									width="24px"
+									mx={4}>
+									{i + 1}
+								</Text>
 							) : null}
 
 							{editable ? (
@@ -122,12 +126,16 @@ const ChoiceQuestionComponent: FC<
 									isDisabled={true}
 								/>
 							) : (
-								<Text mx={4}>{choices.length + 1}</Text>
+								<Text
+									width="24px"
+									mx={4}>
+									{choices.length + 1}
+								</Text>
 							)}
 
 							<Input
 								defaultValue={""}
-								ml={2}
+								ml={question.choiceType === "dropdown" ? 0 : 2}
 								mr={12}
 								onFocus={() => {
 									const choiceRef = createRef<HTMLInputElement>()
