@@ -47,13 +47,8 @@ export default extendTheme({
 	components: {
 		Text: {
 			baseStyle: {
-				color: "gray.500",
 				fontWeight: "medium",
-				fontSize: {
-					base: "md",
-					sm: "lg",
-					md: "xl"
-				}
+				fontSize: "lg"
 			},
 			variants: {
 				inputError: {
