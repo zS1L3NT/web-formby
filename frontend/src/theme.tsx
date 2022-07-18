@@ -11,6 +11,15 @@ export default extendTheme({
 		min: "0%",
 		max: "100%"
 	},
+	semanticTokens: {
+		colors: {
+			primary: "blue.500",
+			primaryDark: "blue.400",
+			error: "red.500",
+			text: "gray.600",
+			highlight: "gray.100"
+		}
+	},
 	components: {
 		Text: {
 			baseStyle: {
@@ -24,7 +33,7 @@ export default extendTheme({
 			},
 			variants: {
 				inputError: {
-					color: "red.500",
+					color: "error",
 					fontSize: "sm"
 				}
 			}
@@ -32,10 +41,10 @@ export default extendTheme({
 		Button: {
 			variants: {
 				primary: {
-					bg: "blue.400",
+					bg: "primaryDark",
 					color: "white",
 					_hover: {
-						bg: "blue.500 !important"
+						bg: "primary !important"
 					}
 				}
 			}

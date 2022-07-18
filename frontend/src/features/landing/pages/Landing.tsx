@@ -21,7 +21,7 @@ const Landing: FC<PropsWithChildren<{}>> = props => {
 				lineHeight="1.25"
 				textAlign="center">
 				Create
-				<chakra.span color="blue.500"> professional </chakra.span>
+				<chakra.span color="primary"> professional </chakra.span>
 				forms on the web
 			</Heading>
 			<Box

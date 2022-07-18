@@ -59,10 +59,10 @@ const EditableText: FC<
 					rounded="lg"
 					outline="none"
 					borderWidth="2px"
-					borderColor={editing ? "blue.500" : "transparent"}
+					borderColor={editing ? "primary" : "transparent"}
 					transition="background-color 0.3s, border-color 0.3s"
 					_hover={{
-						bg: editing ? "white" : editable ? "gray.100" : "white",
+						bg: editing ? "white" : editable ? "primary" : "white",
 						cursor: editable ? "text" : "normal"
 					}}
 					onInput={e => setNewText(e.currentTarget.innerText)}

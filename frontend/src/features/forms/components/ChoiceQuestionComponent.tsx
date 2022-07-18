@@ -137,7 +137,7 @@ const ChoiceQuestionComponent: FC<
 									display: "none"
 								})
 							}}
-							colorScheme="blue.500"
+							colorScheme="primary"
 						/>
 					) : null}
 

@@ -90,7 +90,7 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 						spacing={3}>
 						<Button
 							hidden={!!token}
-							color="blue.500"
+							color="primary"
 							onClick={() => navigate("/login")}>
 							Login
 						</Button>

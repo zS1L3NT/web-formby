@@ -92,7 +92,7 @@ const Register: FC<PropsWithChildren<{}>> = props => {
 						align="center">
 						Already have an account?{" "}
 						<Link
-							color="blue.400"
+							color="primary"
 							onClick={() => navigate("/login")}>
 							Login
 						</Link>

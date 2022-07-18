@@ -163,7 +163,7 @@ const Login: FC<PropsWithChildren<{}>> = props => {
 						align="center">
 						Don't have an account yet?{" "}
 						<Link
-							color="blue.400"
+							color="primary"
 							onClick={() => navigate("/login")}>
 							Login
 						</Link>
