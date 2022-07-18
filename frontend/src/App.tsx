@@ -16,10 +16,11 @@ const App: FC<PropsWithChildren<{}>> = props => {
 		<Flex
 			w="max"
 			h="max"
-			bg="gray.50"
 			direction="column">
 			<Navigator />
-			<Flex flex="1">
+			<Flex
+				flex="1"
+				bg="background">
 				<Routes>
 					<Route
 						path="/"

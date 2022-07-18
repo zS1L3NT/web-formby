@@ -6,7 +6,7 @@ const Card: FC<BoxProps> = props => {
 	return (
 		<Box
 			p={4}
-			bg="white"
+			bg="card"
 			rounded="lg"
 			shadow="sm"
 			borderWidth="2px"

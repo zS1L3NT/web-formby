@@ -11,6 +11,39 @@ export default extendTheme({
 		min: "0%",
 		max: "100%"
 	},
+	semanticTokens: {
+		colors: {
+			primary: {
+				_light: "blue.400",
+				_dark: "blue.500"
+			},
+			primaryDark: {
+				_light: "blue.500",
+				_dark: "blue.600"
+			},
+			background: {
+				_light: "gray.100",
+				_dark: "gray.900"
+			},
+			card: {
+				_light: "white",
+				_dark: "gray.800"
+			},
+			error: "red.500",
+			bw: {
+				_light: "black",
+				_dark: "white"
+			},
+			text: {
+				_light: "gray.700",
+				_dark: "gray.200"
+			},
+			highlight: {
+				_light: "gray.100",
+				_dark: "gray.700"
+			}
+		}
+	},
 	components: {
 		Text: {
 			baseStyle: {
@@ -24,7 +57,7 @@ export default extendTheme({
 			},
 			variants: {
 				inputError: {
-					color: "red.500",
+					color: "error",
 					fontSize: "sm"
 				}
 			}
@@ -32,10 +65,10 @@ export default extendTheme({
 		Button: {
 			variants: {
 				primary: {
-					bg: "blue.400",
+					bg: "primary",
 					color: "white",
 					_hover: {
-						bg: "blue.500 !important"
+						bg: "primaryDark !important"
 					}
 				}
 			}

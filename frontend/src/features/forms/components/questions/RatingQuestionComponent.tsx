@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react"
 
-import Card from "../../../components/Card"
-import { RatingQuestion } from "../../../models/Question"
+import Card from "../../../../components/Card"
+import { RatingQuestion } from "../../../../models/Question"
 
 const RatingQuestionComponent: FC<
 	PropsWithChildren<{

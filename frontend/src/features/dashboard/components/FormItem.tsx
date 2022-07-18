@@ -18,7 +18,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 			w={{ base: "max", md: "20rem" }}
 			h="12rem"
 			p={4}
-			bg="white"
+			bg="card"
 			rounded="lg"
 			direction="column"
 			shadow="sm"
@@ -29,7 +29,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 			transition="box-shadow 0.3s, border-color 0.3s"
 			_hover={{
 				shadow: "lg",
-				borderColor: "blue.500",
+				borderColor: "primary",
 				cursor: "pointer"
 			}}
 			onClick={() => navigate("/forms/" + form.id)}>
@@ -37,7 +37,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 				<Text
 					fontSize="18"
 					fontWeight="bold"
-					color="black"
+					color="bw"
 					noOfLines={2}>
 					{form.name}
 				</Text>
@@ -68,25 +68,25 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 					{form.live ? (
 						<HiStatusOnline
 							size={20}
-							color="var(--chakra-colors-blue-300)"
+							color="var(--chakra-colors-primary)"
 						/>
 					) : (
 						<EditIcon
 							w={4}
 							h={4}
-							color="blue.300"
+							color="primary"
 						/>
 					)}
 					{form.requiresAuth ? (
 						<LockIcon
 							w={4}
 							h={4}
-							color="red.300"
+							color="error"
 						/>
 					) : (
 						<MdPublic
 							size={20}
-							color="var(--chakra-colors-green-300)"
+							color="var(--chakra-colors-error)"
 						/>
 					)}
 				</HStack>
@@ -96,7 +96,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 		<Center
 			w={{ base: "max", md: "20rem" }}
 			h="12rem"
-			bg="white"
+			bg="card"
 			rounded="lg"
 			shadow="sm"
 			borderWidth="2px"
@@ -104,7 +104,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 			transition="box-shadow 0.3s, border-color 0.3s"
 			_hover={{
 				shadow: "lg",
-				borderColor: "blue.500",
+				borderColor: "primary",
 				cursor: "pointer"
 			}}>
 			<AddIcon />

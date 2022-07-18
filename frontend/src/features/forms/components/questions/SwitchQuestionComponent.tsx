@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react"
 
-import Card from "../../../components/Card"
-import { SwitchQuestion } from "../../../models/Question"
+import Card from "../../../../components/Card"
+import { SwitchQuestion } from "../../../../models/Question"
 
 const SwitchQuestionComponent: FC<
 	PropsWithChildren<{

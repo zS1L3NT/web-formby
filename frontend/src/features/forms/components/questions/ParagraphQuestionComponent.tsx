@@ -2,9 +2,8 @@ import { FC, PropsWithChildren, useState } from "react"
 
 import { Textarea } from "@chakra-ui/react"
 
-import Card from "../../../components/Card"
-import EditableText from "../../../components/EditableText"
-import { ParagraphQuestion } from "../../../models/Question"
+import { ParagraphQuestion } from "../../../../models/Question"
+import QuestionComponent from "../QuestionComponent"
 
 const ParagraphQuestionComponent: FC<
 	PropsWithChildren<{
@@ -19,28 +18,16 @@ const ParagraphQuestionComponent: FC<
 	const [paragraph, setParagraph] = useState("")
 
 	return (
-		<Card>
-			<EditableText
-				editable={editable}
-				required={true}
-				variant="title"
-				text={title}
-				setText={setTitle}
-			/>
-			<EditableText
-				editable={editable}
-				variant="description"
-				text={description ?? ""}
-				setText={setDescription}
-			/>
+		<QuestionComponent
+			editable={editable}
+			question={question}>
 			<Textarea
-				mt={4}
 				value={paragraph}
 				onChange={e => setParagraph(e.target.value)}
 				placeholder="Paragraph answer"
 				disabled={editable}
 			/>
-		</Card>
+		</QuestionComponent>
 	)
 }
 

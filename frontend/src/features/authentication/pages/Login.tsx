@@ -80,7 +80,7 @@ const Login: FC<PropsWithChildren<{}>> = props => {
 			<Text align="center">to gain full access to Formby</Text>
 			<Stack
 				maxW="md"
-				bg="white"
+				bg="card"
 				rounded="lg"
 				boxShadow="lg"
 				mt={{
@@ -163,7 +163,7 @@ const Login: FC<PropsWithChildren<{}>> = props => {
 						align="center">
 						Don't have an account yet?{" "}
 						<Link
-							color="blue.400"
+							color="primary"
 							onClick={() => navigate("/login")}>
 							Login
 						</Link>

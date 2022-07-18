@@ -3,8 +3,8 @@ import { FC, PropsWithChildren, useState } from "react"
 import { Box } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
-import EditableText from "../../../components/EditableText"
 import Form from "../../../models/Form"
+import EditableText from "./EditableText"
 
 const FormHeader: FC<
 	PropsWithChildren<{
@@ -29,7 +29,6 @@ const FormHeader: FC<
 				text={name}
 				setText={setName}
 				fontSize="4xl"
-				color="black"
 				noOfLines={2}
 			/>
 			<Box
