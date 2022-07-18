@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react"
 import { Route, Routes } from "react-router-dom"
 
-import { Flex, useColorModeValue } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 
 import Navigator from "./components/Navigator"
 import Login from "./features/authentication/pages/Login"
@@ -16,7 +16,7 @@ const App: FC<PropsWithChildren<{}>> = props => {
 		<Flex
 			w="max"
 			h="max"
-			bg={useColorModeValue("gray.100", "gray.800")}
+			bg="background"
 			direction="column">
 			<Navigator />
 			<Flex flex="1">

@@ -1,16 +1,18 @@
 import { FC, PropsWithChildren, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons"
+import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons"
 import {
 	Avatar, Box, Button, Collapse, Flex, HStack, IconButton, Image, Link, Menu, MenuButton,
-	MenuDivider, MenuItem, MenuList, Stack, Text, useDisclosure, VStack
+	MenuDivider, MenuItem, MenuList, Stack, Text, useColorMode, useColorModeValue, useDisclosure,
+	VStack
 } from "@chakra-ui/react"
 
 import AuthContext from "../contexts/AuthContext"
 
 const Navigator: FC<PropsWithChildren<{}>> = props => {
 	const { token, user } = useContext(AuthContext)
+	const { toggleColorMode } = useColorMode()
 	const navigate = useNavigate()
 
 	const { isOpen, onToggle } = useDisclosure()
@@ -22,13 +24,15 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 			<Flex
 				h="60px"
 				p={2}
-				bg="white"
+				bg="card"
 				shadow="sm"
 				align="center">
 				<Flex
 					flex={{ base: 1, md: "auto" }}
 					display={{ base: "flex", md: "none" }}>
 					<IconButton
+						aria-label="Toggle Navigation"
+						variant="ghost"
 						onClick={onToggle}
 						icon={
 							isOpen ? (
@@ -43,8 +47,6 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 								/>
 							)
 						}
-						variant="ghost"
-						aria-label="Toggle Navigation"
 					/>
 				</Flex>
 
@@ -74,7 +76,7 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 								sm: "xl",
 								md: "2xl"
 							}}
-							color="gray.700"
+							color={useColorModeValue("gray.700", "gray.200")}
 							userSelect="none">
 							Formby
 						</Text>
@@ -106,55 +108,63 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 							onClick={() => navigate("/create")}>
 							Create Form
 						</Button>
-					</HStack>
-					{user ? (
-						<Menu>
-							<MenuButton
-								as={Button}
-								rounded="full"
-								variant="link"
-								cursor="pointer"
-								ml={4}>
-								<Avatar
-									w="40px"
-									h="40px"
-									src={user.photo}
-								/>
-							</MenuButton>
-							<MenuList alignItems="center">
-								<VStack
-									w="2xs"
-									px={4}>
+						{user ? (
+							<Menu>
+								<MenuButton
+									as={Button}
+									rounded="full"
+									variant="link"
+									cursor="pointer"
+									ml={4}>
 									<Avatar
-										size="xl"
+										w="40px"
+										h="40px"
 										src={user.photo}
 									/>
-									<Text
-										wordBreak="break-all"
-										textAlign="center">
-										{user.name}
-									</Text>
-									<Text
-										fontSize="sm"
-										wordBreak="break-all"
-										textAlign="center">
-										{user.email}
-									</Text>
-								</VStack>
-								<MenuDivider />
-								<MenuItem
-									onClick={() => navigate("/account")}
-									justifyContent="center">
-									Account Settings
-								</MenuItem>
-								<MenuItem
-									onClick={() => navigate("/logout")}
-									justifyContent="center">
-									Logout
-								</MenuItem>
-							</MenuList>
-						</Menu>
-					) : null}
+								</MenuButton>
+								<MenuList alignItems="center">
+									<VStack
+										w="2xs"
+										px={4}>
+										<Avatar
+											size="xl"
+											src={user.photo}
+										/>
+										<Text
+											wordBreak="break-all"
+											textAlign="center">
+											{user.name}
+										</Text>
+										<Text
+											fontSize="sm"
+											wordBreak="break-all"
+											textAlign="center">
+											{user.email}
+										</Text>
+									</VStack>
+									<MenuDivider />
+									<MenuItem
+										onClick={() => navigate("/account")}
+										justifyContent="center">
+										Account Settings
+									</MenuItem>
+									<MenuItem
+										onClick={() => navigate("/logout")}
+										justifyContent="center">
+										Logout
+									</MenuItem>
+								</MenuList>
+							</Menu>
+						) : null}
+					</HStack>
+					<IconButton
+						ml={4}
+						aria-label="color-mode-button"
+						icon={useColorModeValue(<SunIcon />, <MoonIcon />)}
+						color={useColorModeValue("gray.700", "gray.200")}
+						bg={useColorModeValue("gray.300", "gray.600")}
+						onClick={toggleColorMode}
+					/>
 				</Flex>
 			</Flex>
 
@@ -167,12 +177,16 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 					in={isOpen}
 					animateOpacity>
 					<Stack
-						bg="white"
+						bg="card"
 						p={4}
 						display={{ md: "none" }}>
 						{(
 							(token
-								? [["Create Form", "/create"]]
+								? [
+										["Create Form", "/create"],
+										["Account Settings", "/account"],
+										["Logout", "/logout"]
+								  ]
 								: [
 										["Login", "/login"],
 										["Register", "/register"]
@@ -191,7 +205,7 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 								}}>
 								<Text
 									fontWeight={600}
-									color="gray.600">
+									color="text">
 									{text}
 								</Text>
 							</Flex>

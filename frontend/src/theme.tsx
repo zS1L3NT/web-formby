@@ -13,10 +13,27 @@ export default extendTheme({
 	},
 	semanticTokens: {
 		colors: {
-			primary: "blue.500",
-			primaryDark: "blue.400",
+			primary: {
+				_light: "blue.500",
+				_dark: "blue.400"
+			},
+			primaryDark: {
+				_light: "blue.400",
+				_dark: "blue.300"
+			},
+			background: {
+				_light: "gray.100",
+				_dark: "gray.900"
+			},
+			card: {
+				_light: "white",
+				_dark: "gray.800"
+			},
 			error: "red.500",
-			text: "gray.600",
+			text: {
+				_light: "gray.700",
+				_dark: "gray.200"
+			},
 			highlight: "gray.100"
 		}
 	},
