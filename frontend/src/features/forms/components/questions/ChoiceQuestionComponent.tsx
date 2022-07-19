@@ -23,13 +23,14 @@ const ChoiceQuestionComponent: FC<
 
 	const listMaker = (
 		<ListMaker
+			editable={editable}
 			items={choices}
 			setItems={setChoices}
 			leading={(choice, i) =>
 				choice === null || i === null ? (
 					<Box
 						ml={{ base: 0, md: 2 }}
-						mr={2}
+						mr={{ base: 2, md: 4 }}
 						w="24px"></Box>
 				) : choiceType === "checkbox" ? (
 					<Checkbox
@@ -39,7 +40,7 @@ const ChoiceQuestionComponent: FC<
 						my="auto"
 						flex={editable ? 0 : 1}
 						isDisabled={editable}>
-						<Text>{editable ? null : choice}</Text>
+						<Text ml={{ md: 2 }}>{editable ? null : choice}</Text>
 					</Checkbox>
 				) : choiceType === "radio" ? (
 					<Radio
@@ -49,12 +50,12 @@ const ChoiceQuestionComponent: FC<
 						my="auto"
 						flex={editable ? 0 : 1}
 						isDisabled={editable}>
-						<Text>{editable ? null : choice}</Text>
+						<Text ml={{ md: 2 }}>{editable ? null : choice}</Text>
 					</Radio>
 				) : (
 					<Text
 						ml={{ base: 0, md: 2 }}
-						mr={2}
+						mr={4}
 						my="auto"
 						h="fit-content"
 						w="24px">
@@ -107,10 +108,10 @@ const ChoiceQuestionComponent: FC<
 				</RadioGroup>
 			) : null}
 
-			{question.choiceType === "dropdown" ? listMaker : null}
-
-			{!editable && choiceType === "dropdown" ? (
-				<Box mt={4}>
+			{question.choiceType === "dropdown" ? (
+				editable ? (
+					listMaker
+				) : (
 					<Dropdown
 						choices={choices}
 						selectedChoice={selectedChoices[0] ?? null}
@@ -120,7 +121,7 @@ const ChoiceQuestionComponent: FC<
 							}
 						}}
 					/>
-				</Box>
+				)
 			) : null}
 		</QuestionComponent>
 	)

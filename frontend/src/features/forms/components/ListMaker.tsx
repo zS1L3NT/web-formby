@@ -5,12 +5,13 @@ import { Flex, IconButton, Input } from "@chakra-ui/react"
 
 const ListMaker: FC<
 	PropsWithChildren<{
-		leading?: (item: string | null, i: number | null) => JSX.Element | null
+		editable: boolean
 		items: string[]
 		setItems: (items: string[]) => void
+		leading?: (item: string | null, i: number | null) => JSX.Element | null
 	}>
 > = props => {
-	const { leading, items, setItems } = props
+	const { editable, items, setItems, leading } = props
 
 	const [refs, setRefs] = useState(items.map<RefObject<HTMLInputElement>>(createRef))
 
@@ -34,22 +35,24 @@ const ListMaker: FC<
 					key={i}
 					my={4}>
 					{leading ? leading(item, i) : null}
-					<Input
-						ref={refs[i]}
-						flex={1}
-						mr={items.length === 1 ? 12 : 0}
-						defaultValue={item}
-						onBlur={e => {
-							const newItem = e.target.value.trim()
-							if (newItem !== "" && !items.includes(newItem)) {
-								setItems(items.map((c, j) => (i === j ? newItem : c)))
-							} else {
-								e.target.value = item
-							}
-						}}
-					/>
+					{editable ? (
+						<Input
+							ref={refs[i]}
+							flex={1}
+							mr={items.length === 1 ? 12 : 0}
+							defaultValue={item}
+							onBlur={e => {
+								const newItem = e.target.value.trim()
+								if (newItem !== "" && !items.includes(newItem)) {
+									setItems(items.map((c, j) => (i === j ? newItem : c)))
+								} else {
+									e.target.value = item
+								}
+							}}
+						/>
+					) : null}
 
-					{items.length > 1 ? (
+					{editable && items.length > 1 ? (
 						<IconButton
 							aria-label="close"
 							variant="ghost"
@@ -76,22 +79,24 @@ const ListMaker: FC<
 				</Flex>
 			))}
 
-			<Flex my={4}>
-				{leading && leading(null, null)}
-				<Input
-					flex={1}
-					mr={{ base: 10, md: 12 }}
-					onFocus={() => {
-						const ref = createRef<HTMLInputElement>()
-						setItems([...items, generateName()])
-						setRefs([...refs, ref])
-						setTimeout(() => {
-							ref.current!.focus()
-							ref.current!.setSelectionRange(0, -1)
-						}, 0)
-					}}
-				/>
-			</Flex>
+			{editable ? (
+				<Flex my={4}>
+					{leading && leading(null, null)}
+					<Input
+						flex={1}
+						mr={{ base: 10, md: 12 }}
+						onFocus={() => {
+							const ref = createRef<HTMLInputElement>()
+							setItems([...items, generateName()])
+							setRefs([...refs, ref])
+							setTimeout(() => {
+								ref.current!.focus()
+								ref.current!.setSelectionRange(0, -1)
+							}, 0)
+						}}
+					/>
+				</Flex>
+			) : null}
 		</>
 	)
 }

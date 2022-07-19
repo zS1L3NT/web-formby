@@ -33,7 +33,8 @@ const ColorQuestionComponent: FC<
 					<HexColorPicker
 						style={{
 							width: "100%",
-							height: "100%"
+							height: "100%",
+							cursor: "pointer"
 						}}
 						color={color}
 						onChange={setColor}

@@ -48,31 +48,35 @@ const TableQuestionComponent: FC<
 				</Flex>
 			) : null}
 
-			<Stack
-				justifyContent="space-evenly"
-				direction={{ base: "column", md: "row" }}
-				spacing={4}
-				py={4}>
-				<Box
-					px={{ md: 4 }}
-					w="max">
-					<Text textAlign="left">Rows</Text>
-					<ListMaker
-						items={tableRows}
-						setItems={setTableRows}
-					/>
-				</Box>
+			{editable ? (
+				<Stack
+					justifyContent="space-evenly"
+					direction={{ base: "column", md: "row" }}
+					spacing={4}
+					py={4}>
+					<Box
+						px={{ md: 4 }}
+						w="max">
+						<Text textAlign="left">Rows</Text>
+						<ListMaker
+							editable={editable}
+							items={tableRows}
+							setItems={setTableRows}
+						/>
+					</Box>
 
-				<Box
-					px={{ md: 4 }}
-					w="max">
-					<Text textAlign="left">Columns</Text>
-					<ListMaker
-						items={tableColumns}
-						setItems={setTableColumns}
-					/>
-				</Box>
-			</Stack>
+					<Box
+						px={{ md: 4 }}
+						w="max">
+						<Text textAlign="left">Columns</Text>
+						<ListMaker
+							editable={editable}
+							items={tableColumns}
+							setItems={setTableColumns}
+						/>
+					</Box>
+				</Stack>
+			) : null}
 
 			<TableContainer>
 				<Table>
