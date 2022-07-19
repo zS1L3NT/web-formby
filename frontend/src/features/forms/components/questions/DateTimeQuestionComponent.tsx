@@ -1,5 +1,7 @@
+import { DateTime } from "luxon"
 import { FC, PropsWithChildren, useState } from "react"
-import DatePicker from "react-datepicker"
+
+import { Input } from "@chakra-ui/react"
 
 import { DateTimeQuestion } from "../../../../models/Question"
 import QuestionComponent from "../QuestionComponent"
@@ -12,18 +14,17 @@ const DateTimeQuestionComponent: FC<
 > = props => {
 	const { question, editable } = props
 
-	const [date, setDate] = useState<Date | null>(new Date())
+	const [date, setDate] = useState<Date>(new Date())
 
 	return (
 		<QuestionComponent
 			editable={editable}
 			question={question}>
-			<DatePicker
-				selected={date}
-				onChange={setDate}
-				showTimeInput
-				timeInputLabel="Time:"
-				dateFormat="MMMM d yyyy h:mm aa"
+			<Input
+				isDisabled={editable}
+				type="datetime-local"
+				value={DateTime.fromJSDate(date).toFormat("yyyy-MM-dd'T'HH:mm''")}
+				onChange={e => setDate(new Date(e.target.value))}
 			/>
 		</QuestionComponent>
 	)
