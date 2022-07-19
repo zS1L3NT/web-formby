@@ -1,9 +1,11 @@
-import { Select } from "chakra-react-select"
 import { createRef, FC, PropsWithChildren, RefObject, useState } from "react"
 
 import { CloseIcon } from "@chakra-ui/icons"
-import { Checkbox, CheckboxGroup, Flex, Input, Radio, RadioGroup, Text } from "@chakra-ui/react"
+import {
+	Box, Checkbox, CheckboxGroup, Flex, Input, Radio, RadioGroup, Text
+} from "@chakra-ui/react"
 
+import Dropdown from "../../../../components/Dropdown"
 import { ChoiceQuestion } from "../../../../models/Question"
 import QuestionComponent from "../QuestionComponent"
 
@@ -17,6 +19,7 @@ const ChoiceQuestionComponent: FC<
 
 	const [title, setTitle] = useState(question.title)
 	const [description, setDescription] = useState(question.description)
+	const [choiceType, setChoiceType] = useState(question.choiceType)
 	const [choices, setChoices] = useState(question.choices)
 	const [choiceRefs, setChoiceRefs] = useState(
 		choices.map<RefObject<HTMLInputElement>>(createRef)
@@ -27,6 +30,23 @@ const ChoiceQuestionComponent: FC<
 		<QuestionComponent
 			editable={editable}
 			question={question}>
+			{editable ? (
+				<Flex alignItems="center">
+					<Text w="56px">Type:</Text>
+					<Box w="2xs">
+						<Dropdown
+							choices={["radio", "checkbox", "dropdown"]}
+							selectedChoice={choiceType}
+							setSelectedChoice={choice => {
+								if (choice !== null) {
+									setChoiceType(choice as "radio" | "checkbox" | "dropdown")
+								}
+							}}
+						/>
+					</Box>
+				</Flex>
+			) : null}
+
 			<CheckboxGroup
 				onChange={selected => setSelectedChoices(selected as string[])}
 				value={editable ? [] : selectedChoices}>
@@ -36,8 +56,8 @@ const ChoiceQuestionComponent: FC<
 					{choices.map((choice, i) => (
 						<Flex
 							key={i}
-							my={!editable && question.choiceType === "dropdown" ? 0 : 4}>
-							{question.choiceType === "checkbox" ? (
+							my={!editable && choiceType === "dropdown" ? 0 : 4}>
+							{choiceType === "checkbox" ? (
 								<Checkbox
 									value={choice}
 									mx={4}
@@ -46,7 +66,7 @@ const ChoiceQuestionComponent: FC<
 									isDisabled={editable}>
 									<Text>{editable ? null : choice}</Text>
 								</Checkbox>
-							) : question.choiceType === "radio" ? (
+							) : choiceType === "radio" ? (
 								<Radio
 									value={choice}
 									mx={4}
@@ -98,46 +118,29 @@ const ChoiceQuestionComponent: FC<
 						</Flex>
 					))}
 
-					{!editable && question.choiceType === "dropdown" ? (
-						<Select
-							onChange={option => {
-								if (option !== null) {
-									setSelectedChoices([option.value])
-								}
-							}}
-							options={choices.map(choice => ({ value: choice, label: choice }))}
-							placeholder="Select a choice"
-							className="chakra-react-select"
-							classNamePrefix="chakra-react-select"
-							chakraStyles={{
-								container: provided => ({
-									...provided,
-									mt: 4
-								}),
-								dropdownIndicator: provided => ({
-									...provided,
-									bg: "transparent",
-									px: 2,
-									cursor: "inherit"
-								}),
-								indicatorSeparator: provided => ({
-									...provided,
-									display: "none"
-								})
-							}}
-							colorScheme="primary"
-						/>
+					{!editable && choiceType === "dropdown" ? (
+						<Box mt={4}>
+							<Dropdown
+								choices={choices}
+								selectedChoice={selectedChoices[0] ?? null}
+								setSelectedChoice={choice => {
+									if (choice !== null) {
+										setSelectedChoices([choice])
+									}
+								}}
+							/>
+						</Box>
 					) : null}
 
 					{editable ? (
 						<Flex my={4}>
-							{question.choiceType === "checkbox" ? (
+							{choiceType === "checkbox" ? (
 								<Checkbox
 									mx={4}
 									my="auto"
 									isDisabled={true}
 								/>
-							) : question.choiceType === "radio" ? (
+							) : choiceType === "radio" ? (
 								<Radio
 									mx={4}
 									my="auto"
@@ -153,7 +156,7 @@ const ChoiceQuestionComponent: FC<
 
 							<Input
 								defaultValue={""}
-								ml={question.choiceType === "dropdown" ? 0 : 2}
+								ml={choiceType === "dropdown" ? 0 : 2}
 								mr={12}
 								onFocus={() => {
 									const choiceRef = createRef<HTMLInputElement>()
