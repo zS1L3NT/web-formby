@@ -87,17 +87,17 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 								<Tab>Settings</Tab>
 							</TabList>
 							<TabPanels>
-								<TabPanel>
+								<TabPanel p={0}>
 									<Questions
 										form={form}
 										questions={questions}
 										editable={true}
 									/>
 								</TabPanel>
-								<TabPanel>
+								<TabPanel p={0}>
 									<Responses />
 								</TabPanel>
-								<TabPanel>
+								<TabPanel p={0}>
 									<Settings />
 								</TabPanel>
 							</TabPanels>
