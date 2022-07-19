@@ -13,5 +13,23 @@ body,
 }
 
 ::-webkit-scrollbar {
-	width: 0
+	width: 6px;
+}
+
+::-webkit-scrollbar-track {
+	width: 8px;
+}
+
+::-webkit-scrollbar:horizontal {
+	height: 6px;
+}
+
+::-webkit-scrollbar-track:horizontal {
+	height: 8px;
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:horizontal {
+	background: var(--chakra-colors-primary);
+	border-radius: 24px;
 }
