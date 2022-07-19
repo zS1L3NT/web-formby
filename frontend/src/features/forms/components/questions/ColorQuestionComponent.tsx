@@ -63,8 +63,10 @@ const ColorQuestionComponent: FC<
 
 				<Box
 					pos="absolute"
-					w="max"
-					h="max"
+					left={-4}
+					w="calc(var(--chakra-sizes-max) + var(--chakra-space-8))"
+					h="calc(var(--chakra-sizes-max) + var(--chakra-space-8))"
+					bg="card"
 					zIndex={editable ? 5 : -1}
 					opacity={editable ? 0.5 : 0}
 					_hover={{

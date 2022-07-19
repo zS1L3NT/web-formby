@@ -51,6 +51,13 @@ const SliderQuestionComponent: FC<
 		setError(null)
 	}, [sliderMin, sliderMax, sliderStep])
 
+	const css = {
+		"& > input": {
+			"border-top-left-radius": 0,
+			"border-bottom-left-radius": 0
+		}
+	}
+
 	return (
 		<QuestionComponent
 			editable={editable}
@@ -67,6 +74,7 @@ const SliderQuestionComponent: FC<
 						<InputLeftAddon children="Min" />
 						<NumberInput
 							flex="1"
+							css={css}
 							value={isNaN(sliderMin) ? "" : sliderMin}
 							onChange={min => setSliderMin(parseInt(min))}>
 							<NumberInputField />
@@ -76,6 +84,7 @@ const SliderQuestionComponent: FC<
 						<InputLeftAddon children="Step" />
 						<NumberInput
 							flex="1"
+							css={css}
 							value={isNaN(sliderStep) ? "" : sliderStep}
 							onChange={step => setSliderStep(parseInt(step))}
 							min={1}>
@@ -86,6 +95,7 @@ const SliderQuestionComponent: FC<
 						<InputLeftAddon children="Max" />
 						<NumberInput
 							flex="1"
+							css={css}
 							value={isNaN(sliderMax) ? "" : sliderMax}
 							onChange={max => setSliderMax(parseInt(max))}>
 							<NumberInputField />

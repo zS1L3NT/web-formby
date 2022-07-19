@@ -1,8 +1,8 @@
 import { FC, PropsWithChildren, useState } from "react"
 
 import {
-	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Table, TableContainer, Tbody, Text, Th,
-	Thead, Tr
+	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
+	Text, Th, Thead, Tr
 } from "@chakra-ui/react"
 
 import Dropdown from "../../../../components/Dropdown"
@@ -48,11 +48,13 @@ const TableQuestionComponent: FC<
 				</Flex>
 			) : null}
 
-			<Flex
+			<Stack
 				justifyContent="space-evenly"
-				direction={{ base: "column", md: "row" }}>
+				direction={{ base: "column", md: "row" }}
+				spacing={4}
+				py={4}>
 				<Box
-					p={4}
+					px={{ md: 4 }}
 					w="max">
 					<Text textAlign="left">Rows</Text>
 					<ListMaker
@@ -62,7 +64,7 @@ const TableQuestionComponent: FC<
 				</Box>
 
 				<Box
-					p={4}
+					px={{ md: 4 }}
 					w="max">
 					<Text textAlign="left">Columns</Text>
 					<ListMaker
@@ -70,7 +72,7 @@ const TableQuestionComponent: FC<
 						setItems={setTableColumns}
 					/>
 				</Box>
-			</Flex>
+			</Stack>
 
 			<TableContainer>
 				<Table>

@@ -1,7 +1,7 @@
 import { createRef, FC, PropsWithChildren, RefObject, useState } from "react"
 
 import { CloseIcon } from "@chakra-ui/icons"
-import { Flex, Input } from "@chakra-ui/react"
+import { Flex, IconButton, Input } from "@chakra-ui/react"
 
 const ListMaker: FC<
 	PropsWithChildren<{
@@ -50,10 +50,14 @@ const ListMaker: FC<
 					/>
 
 					{items.length > 1 ? (
-						<CloseIcon
-							mx={4}
+						<IconButton
+							aria-label="close"
+							variant="ghost"
+							size="sm"
+							ml={2}
+							mr={{ base: 0, md: 2 }}
 							my="auto"
-							color="gray.300"
+							w={4}
 							onClick={() => {
 								const newItems = items.filter((_, j) => i !== j)
 								const newRefs = refs.filter((_, j) => i !== j)
@@ -65,8 +69,9 @@ const ListMaker: FC<
 
 								setItems(items.filter((_, j) => i !== j))
 								setRefs(newRefs)
-							}}
-						/>
+							}}>
+							<CloseIcon color="gray.300" />
+						</IconButton>
 					) : null}
 				</Flex>
 			))}
@@ -75,7 +80,7 @@ const ListMaker: FC<
 				{leading && leading(null, null)}
 				<Input
 					flex={1}
-					mr={12}
+					mr={{ base: 10, md: 12 }}
 					onFocus={() => {
 						const ref = createRef<HTMLInputElement>()
 						setItems([...items, generateName()])

@@ -28,12 +28,14 @@ const ChoiceQuestionComponent: FC<
 			leading={(choice, i) =>
 				choice === null || i === null ? (
 					<Box
-						mx={2}
+						ml={{ base: 0, md: 2 }}
+						mr={2}
 						w="24px"></Box>
 				) : choiceType === "checkbox" ? (
 					<Checkbox
 						value={choice}
-						mx={2}
+						ml={{ base: 0, md: 2 }}
+						mr={2}
 						my="auto"
 						flex={editable ? 0 : 1}
 						isDisabled={editable}>
@@ -42,7 +44,8 @@ const ChoiceQuestionComponent: FC<
 				) : choiceType === "radio" ? (
 					<Radio
 						value={choice}
-						mx={2}
+						ml={{ base: 0, md: 2 }}
+						mr={2}
 						my="auto"
 						flex={editable ? 0 : 1}
 						isDisabled={editable}>
@@ -50,7 +53,8 @@ const ChoiceQuestionComponent: FC<
 					</Radio>
 				) : (
 					<Text
-						mx={2}
+						ml={{ base: 0, md: 2 }}
+						mr={2}
 						my="auto"
 						h="fit-content"
 						w="24px">

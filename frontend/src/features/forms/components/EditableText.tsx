@@ -41,7 +41,7 @@ const EditableText: FC<
 					transition="background-color 0.3s, border-color 0.3s"
 					_hover={{
 						bg: !editing && editable ? "highlight" : "card",
-						cursor: editable ? "text" : "normal"
+						cursor: "text"
 					}}
 					onInput={e => setNewText(e.currentTarget.innerText)}
 					opacity={!editing && text === "" ? 0.5 : 1}
