@@ -2,21 +2,24 @@ import { FC, PropsWithChildren } from "react"
 
 import { Flex, Switch, Text, useBoolean } from "@chakra-ui/react"
 
+import { DraggableProvided } from "react-beautiful-dnd"
 import { SwitchQuestion } from "../../../../models/Question"
 import QuestionComponent from "../QuestionComponent"
 
 const SwitchQuestionComponent: FC<
 	PropsWithChildren<{
+		provided: DraggableProvided
 		question: SwitchQuestion
 		editable: boolean
 	}>
 > = props => {
-	const { question, editable } = props
+	const { provided, question, editable } = props
 
 	const [value, setValue] = useBoolean()
 
 	return (
 		<QuestionComponent
+			provided={provided}
 			editable={editable}
 			question={question}>
 			<Flex

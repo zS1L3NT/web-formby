@@ -1,4 +1,3 @@
-import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
 
@@ -9,7 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext"
 import theme from "./theme"
 
 createRoot(document.getElementById("root")!).render(
-	<StrictMode>
+	// <StrictMode>
 		<BrowserRouter>
 			<AuthProvider>
 				<ChakraProvider theme={theme}>
@@ -17,5 +16,5 @@ createRoot(document.getElementById("root")!).render(
 				</ChakraProvider>
 			</AuthProvider>
 		</BrowserRouter>
-	</StrictMode>
+	// </StrictMode>
 )

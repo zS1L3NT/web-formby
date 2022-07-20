@@ -19,6 +19,7 @@ const FormHeader: FC<
 
 	return (
 		<Card
+			my={4}
 			_hover={{
 				shadow: "lg"
 			}}>

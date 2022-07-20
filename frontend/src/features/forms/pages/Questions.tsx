@@ -1,11 +1,12 @@
 import { FC, PropsWithChildren } from "react"
+import { DragDropContext, Draggable, DraggableProvided, Droppable } from "react-beautiful-dnd"
 
-import { Center, Spinner, Stack } from "@chakra-ui/react"
+import { Box, Center, Spinner } from "@chakra-ui/react"
 
 import Form from "../../../models/Form"
 import {
-	ChoiceQuestion, ColorQuestion, DateTimeQuestion, ParagraphQuestion, Question,
-	SliderQuestion, SwitchQuestion, TableQuestion, TextQuestion
+	ChoiceQuestion, ColorQuestion, DateTimeQuestion, ParagraphQuestion, Question, SliderQuestion,
+	SwitchQuestion, TableQuestion, TextQuestion
 } from "../../../models/Question"
 import FormHeader from "../components/FormHeader"
 import ChoiceQuestionComponent from "../components/questions/ChoiceQuestionComponent"
@@ -17,6 +18,89 @@ import SwitchQuestionComponent from "../components/questions/SwitchQuestionCompo
 import TableQuestionComponent from "../components/questions/TableQuestionComponent"
 import TextQuestionComponent from "../components/questions/TextQuestionComponent"
 
+const QuestionSwitcher: FC<
+	PropsWithChildren<{
+		provided: DraggableProvided
+		question: Question
+		editable: boolean
+	}>
+> = props => {
+	const { provided, question, editable } = props
+
+	const componentProps = {
+		key: question.id,
+		editable,
+		provided
+	}
+
+	if (question instanceof TextQuestion) {
+		return (
+			<TextQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+	if (question instanceof ParagraphQuestion) {
+		return (
+			<ParagraphQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+	if (question instanceof SliderQuestion) {
+		return (
+			<SliderQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+	if (question instanceof SwitchQuestion) {
+		return (
+			<SwitchQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+	if (question instanceof ColorQuestion) {
+		return (
+			<ColorQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+	if (question instanceof DateTimeQuestion) {
+		return (
+			<DateTimeQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+	if (question instanceof ChoiceQuestion) {
+		return (
+			<ChoiceQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+	if (question instanceof TableQuestion) {
+		return (
+			<TableQuestionComponent
+				question={question}
+				{...componentProps}
+			/>
+		)
+	}
+
+	return <></>
+}
+
 const Questions: FC<
 	PropsWithChildren<{
 		form: Form
@@ -27,103 +111,44 @@ const Questions: FC<
 	const { form, questions, editable } = props
 
 	return (
-		<Stack
-			mt={4}
-			spacing={4}>
+		<>
 			<FormHeader
 				form={form}
 				editable={editable}
 			/>
-			{questions ? (
-				questions.map(question => {
-					if (question instanceof TextQuestion) {
-						return (
-							<TextQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof ParagraphQuestion) {
-						return (
-							<ParagraphQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof ColorQuestion) {
-						return (
-							<ColorQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof ChoiceQuestion) {
-						return (
-							<ChoiceQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof SwitchQuestion) {
-						return (
-							<SwitchQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof SliderQuestion) {
-						return (
-							<SliderQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof DateTimeQuestion) {
-						return (
-							<DateTimeQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					if (question instanceof TableQuestion) {
-						return (
-							<TableQuestionComponent
-								key={question.id}
-								question={question}
-								editable={editable}
-							/>
-						)
-					}
-
-					throw new Error("Unknown question type")
-				})
-			) : (
-				<Center>
-					<Spinner mt={4} />
-				</Center>
-			)}
-		</Stack>
+			<DragDropContext onDragEnd={console.log}>
+				<Droppable droppableId="questions">
+					{(provided, snapshot) => (
+						<Box
+							ref={provided.innerRef}
+							className="questions"
+							{...provided.droppableProps}>
+							{questions ? (
+								questions.map((question, i) => (
+									<Draggable
+										key={question.id}
+										index={i}
+										draggableId={question.id}>
+										{(provided, snapshot, rubric) => (
+											<QuestionSwitcher
+												provided={provided}
+												question={question}
+												editable={editable}
+											/>
+										)}
+									</Draggable>
+								))
+							) : (
+								<Center>
+									<Spinner mt={4} />
+								</Center>
+							)}
+							{provided.placeholder}
+						</Box>
+					)}
+				</Droppable>
+			</DragDropContext>
+		</>
 	)
 }
 

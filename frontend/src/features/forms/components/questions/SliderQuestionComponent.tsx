@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react"
+import { DraggableProvided } from "react-beautiful-dnd"
 import { ErrorBoundary } from "react-error-boundary"
 
 import {
@@ -11,11 +12,12 @@ import QuestionComponent from "../QuestionComponent"
 
 const SliderQuestionComponent: FC<
 	PropsWithChildren<{
+		provided: DraggableProvided
 		question: SliderQuestion
 		editable: boolean
 	}>
 > = props => {
-	const { question, editable } = props
+	const { provided, question, editable } = props
 
 	const [sliderMin, setSliderMin] = useState(question.sliderMin)
 	const [sliderStep, setSliderStep] = useState(question.sliderStep)
@@ -53,13 +55,14 @@ const SliderQuestionComponent: FC<
 
 	const css = {
 		"& > input": {
-			"border-top-left-radius": 0,
-			"border-bottom-left-radius": 0
+			"borderTopLeftRadius": 0,
+			"borderBottomLeftRadius": 0
 		}
 	}
 
 	return (
 		<QuestionComponent
+			provided={provided}
 			editable={editable}
 			question={question}>
 			{editable ? (

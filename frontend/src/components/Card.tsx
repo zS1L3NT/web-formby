@@ -1,10 +1,14 @@
 import { FC } from "react"
+import { DraggableProvided } from "react-beautiful-dnd"
 
 import { Box, BoxProps } from "@chakra-ui/react"
 
-const Card: FC<BoxProps> = props => {
+const Card: FC<BoxProps & { provided?: DraggableProvided }> = props => {
+	const { provided } = props
+
 	return (
 		<Box
+			ref={provided?.innerRef}
 			p={4}
 			bg="card"
 			rounded="lg"
@@ -16,7 +20,9 @@ const Card: FC<BoxProps> = props => {
 				shadow: "lg",
 				cursor: "pointer"
 			}}
-			{...props}>
+			{...props}
+			{...provided?.draggableProps}
+			{...provided?.dragHandleProps}>
 			{props.children}
 		</Box>
 	)

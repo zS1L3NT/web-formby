@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren, useState } from "react"
+import { DraggableProvided } from "react-beautiful-dnd"
 
 import {
 	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
@@ -12,11 +13,12 @@ import QuestionComponent from "../QuestionComponent"
 
 const TableQuestionComponent: FC<
 	PropsWithChildren<{
+		provided: DraggableProvided
 		question: TableQuestion
 		editable: boolean
 	}>
 > = props => {
-	const { question, editable } = props
+	const { provided, question, editable } = props
 
 	const [tableType, setTableType] = useState(question.tableType)
 	const [tableRows, setTableRows] = useState(question.tableRows)
@@ -24,6 +26,7 @@ const TableQuestionComponent: FC<
 
 	return (
 		<QuestionComponent
+			provided={provided}
 			editable={editable}
 			question={question}>
 			{editable ? (

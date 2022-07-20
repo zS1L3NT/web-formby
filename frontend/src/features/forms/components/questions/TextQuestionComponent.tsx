@@ -2,16 +2,18 @@ import { FC, PropsWithChildren, useState } from "react"
 
 import { Input } from "@chakra-ui/react"
 
+import { DraggableProvided } from "react-beautiful-dnd"
 import { TextQuestion } from "../../../../models/Question"
 import QuestionComponent from "../QuestionComponent"
 
 const TextQuestionComponent: FC<
 	PropsWithChildren<{
+		provided: DraggableProvided
 		question: TextQuestion
 		editable: boolean
 	}>
 > = props => {
-	const { question, editable } = props
+	const { provided, question, editable } = props
 
 	const [title, setTitle] = useState(question.title)
 	const [description, setDescription] = useState(question.description)
@@ -19,6 +21,7 @@ const TextQuestionComponent: FC<
 
 	return (
 		<QuestionComponent
+			provided={provided}
 			editable={editable}
 			question={question}>
 			<Input

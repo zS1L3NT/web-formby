@@ -2,6 +2,7 @@ import { FC, PropsWithChildren, useState } from "react"
 
 import { Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Text } from "@chakra-ui/react"
 
+import { DraggableProvided } from "react-beautiful-dnd"
 import Dropdown from "../../../../components/Dropdown"
 import { ChoiceQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
@@ -9,11 +10,12 @@ import QuestionComponent from "../QuestionComponent"
 
 const ChoiceQuestionComponent: FC<
 	PropsWithChildren<{
+		provided: DraggableProvided
 		question: ChoiceQuestion
 		editable: boolean
 	}>
 > = props => {
-	const { question, editable } = props
+	const { provided, question, editable } = props
 
 	const [title, setTitle] = useState(question.title)
 	const [description, setDescription] = useState(question.description)
@@ -68,6 +70,7 @@ const ChoiceQuestionComponent: FC<
 
 	return (
 		<QuestionComponent
+			provided={provided}
 			editable={editable}
 			question={question}>
 			{editable ? (

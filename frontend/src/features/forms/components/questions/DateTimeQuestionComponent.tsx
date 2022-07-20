@@ -3,21 +3,24 @@ import { FC, PropsWithChildren, useState } from "react"
 
 import { Input } from "@chakra-ui/react"
 
+import { DraggableProvided } from "react-beautiful-dnd"
 import { DateTimeQuestion } from "../../../../models/Question"
 import QuestionComponent from "../QuestionComponent"
 
 const DateTimeQuestionComponent: FC<
 	PropsWithChildren<{
+		provided: DraggableProvided
 		question: DateTimeQuestion
 		editable: boolean
 	}>
 > = props => {
-	const { question, editable } = props
+	const { provided, question, editable } = props
 
 	const [date, setDate] = useState<Date>(new Date())
 
 	return (
 		<QuestionComponent
+			provided={provided}
 			editable={editable}
 			question={question}>
 			<Input

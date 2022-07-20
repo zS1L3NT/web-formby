@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren, useState } from "react"
+import { DraggableProvided } from "react-beautiful-dnd"
 import { HexColorPicker } from "react-colorful"
 
 import { Box, Flex, Input } from "@chakra-ui/react"
@@ -8,11 +9,12 @@ import QuestionComponent from "../QuestionComponent"
 
 const ColorQuestionComponent: FC<
 	PropsWithChildren<{
+		provided: DraggableProvided
 		question: ColorQuestion
 		editable: boolean
 	}>
 > = props => {
-	const { question, editable } = props
+	const { provided, question, editable } = props
 
 	const [title, setTitle] = useState(question.title)
 	const [description, setDescription] = useState(question.description)
@@ -20,6 +22,7 @@ const ColorQuestionComponent: FC<
 
 	return (
 		<QuestionComponent
+			provided={provided}
 			editable={editable}
 			question={question}>
 			<Flex
