@@ -118,7 +118,7 @@ const Questions: FC<
 			/>
 			<DragDropContext onDragEnd={console.log}>
 				<Droppable droppableId="questions">
-					{(provided, snapshot) => (
+					{provided => (
 						<Box
 							ref={provided.innerRef}
 							className="questions"
@@ -129,7 +129,7 @@ const Questions: FC<
 										key={question.id}
 										index={i}
 										draggableId={question.id}>
-										{(provided, snapshot, rubric) => (
+										{provided => (
 											<QuestionSwitcher
 												provided={provided}
 												question={question}

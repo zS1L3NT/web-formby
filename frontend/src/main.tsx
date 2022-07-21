@@ -8,13 +8,11 @@ import { AuthProvider } from "./contexts/AuthContext"
 import theme from "./theme"
 
 createRoot(document.getElementById("root")!).render(
-	// <StrictMode>
-		<BrowserRouter>
-			<AuthProvider>
-				<ChakraProvider theme={theme}>
-					<App />
-				</ChakraProvider>
-			</AuthProvider>
-		</BrowserRouter>
-	// </StrictMode>
+	<BrowserRouter>
+		<AuthProvider>
+			<ChakraProvider theme={theme}>
+				<App />
+			</ChakraProvider>
+		</AuthProvider>
+	</BrowserRouter>
 )

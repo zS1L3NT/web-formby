@@ -1,7 +1,8 @@
 import { FC, PropsWithChildren, useState } from "react"
 import { DraggableProvided } from "react-beautiful-dnd"
 
-import { Box } from "@chakra-ui/react"
+import { DragHandleIcon, SettingsIcon } from "@chakra-ui/icons"
+import { Box, IconButton } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
 import { Question } from "../../../models/Question"
@@ -22,7 +23,26 @@ const QuestionComponent: FC<
 	return (
 		<Card
 			mb={4}
+			pos="relative"
 			provided={provided}>
+			<IconButton
+				hidden={!editable}
+				aria-label="Drag Handle"
+				icon={<DragHandleIcon />}
+				pos="absolute"
+				right="-20px"
+				minW={6}
+				{...provided.dragHandleProps}
+			/>
+			<IconButton
+				hidden={!editable}
+				aria-label="Menu"
+				icon={<SettingsIcon />}
+				pos="absolute"
+				right="-20px"
+				mt={12}
+				minW={6}
+			/>
 			<EditableText
 				editable={editable}
 				required={true}
