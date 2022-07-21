@@ -21,8 +21,7 @@ const Card: FC<BoxProps & { provided?: DraggableProvided }> = props => {
 				cursor: "pointer"
 			}}
 			{...props}
-			{...provided?.draggableProps}
-			{...provided?.dragHandleProps}>
+			{...provided?.draggableProps}>
 			{props.children}
 		</Box>
 	)

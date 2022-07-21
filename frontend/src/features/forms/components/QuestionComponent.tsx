@@ -1,6 +1,5 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { createRef, FC, PropsWithChildren, useState } from "react"
 import { DraggableProvided } from "react-beautiful-dnd"
-import { FaEllipsisV } from "react-icons/fa"
 
 import { ArrowDownIcon, ArrowUpIcon, CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
@@ -20,6 +19,7 @@ const QuestionComponent: FC<
 	}>
 > = props => {
 	const { provided, editable, question } = props
+	const menuRef = createRef<HTMLButtonElement>()
 
 	const [title, setTitle] = useState(question.title)
 	const [description, setDescription] = useState(question.description)
@@ -28,27 +28,28 @@ const QuestionComponent: FC<
 		<Card
 			mb={4}
 			pos="relative"
-			provided={provided}>
+			provided={editable ? provided : undefined}>
 			<IconButton
 				hidden={!editable}
 				icon={<DragHandleIcon />}
 				aria-label="Options"
 				pos="absolute"
-				right="-14px"
+				right={4}
 				minW={6}
-				{...provided.dragHandleProps}
+				onClick={() => menuRef.current?.click()}
+				{...(editable ? provided.dragHandleProps : {})}
 			/>
-			<Menu>
+			<Menu closeOnSelect={false}>
 				<MenuButton
+					ref={menuRef}
 					as={IconButton}
 					hidden={!editable}
 					aria-label="Options"
 					pos="absolute"
-					right="-14px"
-					mt={12}
-					minW={6}>
-					<FaEllipsisV />
-				</MenuButton>
+					right={4}
+					zIndex={-1}
+					minW={6}
+				/>
 				<MenuList zIndex={10}>
 					<MenuOptionGroup
 						defaultValue={question.type}
@@ -65,6 +66,11 @@ const QuestionComponent: FC<
 						<MenuItemOption value="table">Table</MenuItemOption>
 					</MenuOptionGroup>
 					<MenuDivider />
+					<MenuOptionGroup
+						defaultChecked={question.required}
+						type="checkbox">
+						<MenuItemOption value="required">Required</MenuItemOption>
+					</MenuOptionGroup>
 					<MenuItem icon={<ArrowUpIcon />}>Add question above</MenuItem>
 					<MenuItem icon={<ArrowDownIcon />}>Add question below</MenuItem>
 					<MenuItem icon={<CopyIcon />}>Duplicate</MenuItem>
@@ -72,15 +78,17 @@ const QuestionComponent: FC<
 				</MenuList>
 			</Menu>
 
-			<EditableText
-				editable={editable}
-				required={true}
-				text={title}
-				setText={setTitle}
-				placeholder="Add a title"
-				fontSize="2xl"
-				noOfLines={2}
-			/>
+			<Box mr={editable ? 8 : 0}>
+				<EditableText
+					editable={editable}
+					required={true}
+					text={title}
+					setText={setTitle}
+					placeholder="Add a title"
+					fontSize="2xl"
+					noOfLines={2}
+				/>
+			</Box>
 			<EditableText
 				editable={editable}
 				text={description ?? ""}
