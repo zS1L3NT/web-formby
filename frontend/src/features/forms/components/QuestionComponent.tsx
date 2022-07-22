@@ -1,10 +1,10 @@
-import { createRef, FC, PropsWithChildren, useState } from "react"
+import { FC, PropsWithChildren, useState } from "react"
 import { DraggableProvided } from "react-beautiful-dnd"
 
 import { ArrowDownIcon, ArrowUpIcon, CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
 	Box, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuItemOption, MenuList,
-	MenuOptionGroup
+	MenuOptionGroup, useBoolean
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
@@ -19,8 +19,8 @@ const QuestionComponent: FC<
 	}>
 > = props => {
 	const { provided, editable, question } = props
-	const menuRef = createRef<HTMLButtonElement>()
 
+	const [isMenuOpen, setIsMenuOpen] = useBoolean()
 	const [title, setTitle] = useState(question.title)
 	const [description, setDescription] = useState(question.description)
 
@@ -36,12 +36,13 @@ const QuestionComponent: FC<
 				pos="absolute"
 				right={4}
 				minW={6}
-				onClick={() => menuRef.current?.click()}
+				onClick={setIsMenuOpen.toggle}
 				{...(editable ? provided.dragHandleProps : {})}
 			/>
-			<Menu closeOnSelect={false}>
+			<Menu
+				closeOnSelect={false}
+				isOpen={isMenuOpen}>
 				<MenuButton
-					ref={menuRef}
 					as={IconButton}
 					hidden={!editable}
 					aria-label="Options"
