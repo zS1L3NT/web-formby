@@ -112,7 +112,7 @@ class DatabaseSeeder extends Seeder
 				"type" => "slider",
 				"slider_min" => 0,
 				"slider_max" => 100,
-				"slider_step" => 1
+				"slider_step" => 10
 			]);
 
 			$prev_qn = Question::create([
