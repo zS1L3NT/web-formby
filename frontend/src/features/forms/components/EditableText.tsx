@@ -1,8 +1,7 @@
-import { FC, PropsWithChildren, useRef, useState } from "react"
+import { FC, PropsWithChildren, useState } from "react"
 
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons"
 import {
-	Box, ButtonGroup, Collapse, IconButton, Text, TextProps, useBoolean
+	Box, Text, TextProps, useBoolean
 } from "@chakra-ui/react"
 
 const EditableText: FC<
@@ -19,7 +18,6 @@ const EditableText: FC<
 > = props => {
 	const { editable, required, text, setText, placeholder, variant, ...style } = props
 
-	const textRef = useRef<any>()
 	const [editing, setEditing] = useBoolean()
 	const [newText, setNewText] = useState(text)
 
@@ -27,11 +25,11 @@ const EditableText: FC<
 		<Box pos="relative">
 			{!editable && text === "" ? null : (
 				<Text
-					ref={textRef}
 					suppressContentEditableWarning={true}
 					textAlign="left"
 					contentEditable={editable}
 					onFocus={setEditing.on}
+					onBlur={setEditing.off}
 					color="text"
 					// Delay so the collapse buttons still have the click event before unmounting
 					rounded="lg"
@@ -62,40 +60,6 @@ const EditableText: FC<
 					{placeholder}
 				</Text>
 			) : null}
-
-			<Collapse
-				in={editing}
-				animate>
-				<ButtonGroup
-					justifyContent="end"
-					size="sm"
-					w="full"
-					spacing={2}
-					mt={2}>
-					<IconButton
-						aria-label="close"
-						icon={<CloseIcon boxSize={3} />}
-						onClick={() => {
-							setNewText(text)
-							textRef.current!.innerText = text
-							setEditing.off()
-						}}
-					/>
-					<IconButton
-						aria-label="check"
-						icon={<CheckIcon />}
-						onClick={() => {
-							if (required && newText === "") {
-								setNewText(text)
-								textRef.current!.innerText = text
-							} else {
-								setText(newText)
-							}
-							setEditing.off()
-						}}
-					/>
-				</ButtonGroup>
-			</Collapse>
 		</Box>
 	)
 }
