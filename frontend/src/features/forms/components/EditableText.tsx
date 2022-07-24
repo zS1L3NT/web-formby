@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { FC, PropsWithChildren, useEffect, useState } from "react"
 
 import {
 	Box, Text, TextProps, useBoolean
@@ -20,6 +20,12 @@ const EditableText: FC<
 
 	const [editing, setEditing] = useBoolean()
 	const [newText, setNewText] = useState(text)
+
+	useEffect(() => {
+		if (!editing && text !== newText) {
+			setText(newText)
+		}
+	}, [text, setText, editing, newText])
 
 	return (
 		<Box pos="relative">
