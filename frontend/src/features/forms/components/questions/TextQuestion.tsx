@@ -2,10 +2,10 @@ import { FC, useState } from "react"
 
 import { Input } from "@chakra-ui/react"
 
-import { TextQuestion } from "../../../../models/Question"
-import { QuestionComponentProps } from "../QuestionComponent"
+import { iTextQuestion } from "../../../../models/Question"
+import { QuestionProps } from "../Question"
 
-const TextQuestionComponent: FC<QuestionComponentProps<TextQuestion>> = props => {
+const TextQuestion: FC<QuestionProps<iTextQuestion>> = props => {
 	const { editable } = props
 
 	const [text, setText] = useState("")
@@ -20,4 +20,4 @@ const TextQuestionComponent: FC<QuestionComponentProps<TextQuestion>> = props =>
 	)
 }
 
-export default TextQuestionComponent
+export default TextQuestion

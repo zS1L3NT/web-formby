@@ -6,19 +6,17 @@ import {
 	SliderMark, SliderThumb, SliderTrack, Text
 } from "@chakra-ui/react"
 
-import { SliderQuestion } from "../../../../models/Question"
-import { QuestionComponentProps } from "../QuestionComponent"
+import { iSliderQuestion } from "../../../../models/Question"
+import { QuestionProps } from "../Question"
 
-const SliderQuestionComponent: FC<QuestionComponentProps<SliderQuestion>> = props => {
-	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
+const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
+	const { editable, dirtyQuestion, setDirtyQuestion } = props
+	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = dirtyQuestion
 
-	const [sliderMin, setSliderMin] = useState(question.sliderMin)
-	const [sliderStep, setSliderStep] = useState(question.sliderStep)
-	const [sliderMax, setSliderMax] = useState(question.sliderMax)
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
-		if (isNaN(sliderMin) || isNaN(sliderMax) || isNaN(sliderStep)) {
+		if (isNaN(sliderMin) || isNaN(sliderStep) || isNaN(sliderMax)) {
 			return setError("Please enter valid numbers")
 		}
 
@@ -69,7 +67,12 @@ const SliderQuestionComponent: FC<QuestionComponentProps<SliderQuestion>> = prop
 							flex="1"
 							css={css}
 							value={isNaN(sliderMin) ? "" : sliderMin}
-							onChange={min => setSliderMin(parseInt(min))}>
+							onChange={(_, slider_min) =>
+								setDirtyQuestion({
+									...dirtyQuestion,
+									slider_min
+								})
+							}>
 							<NumberInputField />
 						</NumberInput>
 					</InputGroup>
@@ -79,7 +82,12 @@ const SliderQuestionComponent: FC<QuestionComponentProps<SliderQuestion>> = prop
 							flex="1"
 							css={css}
 							value={isNaN(sliderStep) ? "" : sliderStep}
-							onChange={step => setSliderStep(parseInt(step))}
+							onChange={(_, slider_step) =>
+								setDirtyQuestion({
+									...dirtyQuestion,
+									slider_step
+								})
+							}
 							min={1}>
 							<NumberInputField />
 						</NumberInput>
@@ -90,7 +98,12 @@ const SliderQuestionComponent: FC<QuestionComponentProps<SliderQuestion>> = prop
 							flex="1"
 							css={css}
 							value={isNaN(sliderMax) ? "" : sliderMax}
-							onChange={max => setSliderMax(parseInt(max))}>
+							onChange={(_, slider_max) =>
+								setDirtyQuestion({
+									...dirtyQuestion,
+									slider_max
+								})
+							}>
 							<NumberInputField />
 						</NumberInput>
 					</InputGroup>
@@ -135,4 +148,4 @@ const SliderQuestionComponent: FC<QuestionComponentProps<SliderQuestion>> = prop
 	)
 }
 
-export default SliderQuestionComponent
+export default SliderQuestion

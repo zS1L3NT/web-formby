@@ -3,11 +3,11 @@ import { FC, useState } from "react"
 
 import { Input } from "@chakra-ui/react"
 
-import { DateTimeQuestion } from "../../../../models/Question"
-import { QuestionComponentProps } from "../QuestionComponent"
+import { iDateTimeQuestion } from "../../../../models/Question"
+import { QuestionProps } from "../Question"
 
-const DateTimeQuestionComponent: FC<QuestionComponentProps<DateTimeQuestion>> = props => {
-	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
+const DateTimeQuestion: FC<QuestionProps<iDateTimeQuestion>> = props => {
+	const { editable } = props
 
 	const [date, setDate] = useState<Date>(new Date())
 
@@ -21,4 +21,4 @@ const DateTimeQuestionComponent: FC<QuestionComponentProps<DateTimeQuestion>> = 
 	)
 }
 
-export default DateTimeQuestionComponent
+export default DateTimeQuestion

@@ -2,11 +2,11 @@ import { FC } from "react"
 
 import { Flex, Switch, Text, useBoolean } from "@chakra-ui/react"
 
-import { SwitchQuestion } from "../../../../models/Question"
-import { QuestionComponentProps } from "../QuestionComponent"
+import { iSwitchQuestion } from "../../../../models/Question"
+import { QuestionProps } from "../Question"
 
-const SwitchQuestionComponent: FC<QuestionComponentProps<SwitchQuestion>> = props => {
-	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
+const SwitchQuestion: FC<QuestionProps<iSwitchQuestion>> = props => {
+	const { editable } = props
 
 	const [value, setValue] = useBoolean()
 
@@ -34,4 +34,4 @@ const SwitchQuestionComponent: FC<QuestionComponentProps<SwitchQuestion>> = prop
 	)
 }
 
-export default SwitchQuestionComponent
+export default SwitchQuestion

@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { FC } from "react"
 
 import {
 	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
@@ -6,16 +6,17 @@ import {
 } from "@chakra-ui/react"
 
 import Dropdown from "../../../../components/Dropdown"
-import { TableQuestion } from "../../../../models/Question"
+import { iTableQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
-import { QuestionComponentProps } from "../QuestionComponent"
+import { QuestionProps } from "../Question"
 
-const TableQuestionComponent: FC<QuestionComponentProps<TableQuestion>> = props => {
-	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
-
-	const [tableType, setTableType] = useState(question.tableType)
-	const [tableRows, setTableRows] = useState(question.tableRows)
-	const [tableColumns, setTableColumns] = useState(question.tableColumns)
+const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
+	const { editable, dirtyQuestion, setDirtyQuestion } = props
+	const {
+		table_rows: tableRows,
+		table_columns: tableColumns,
+		table_type: tableType
+	} = dirtyQuestion
 
 	return (
 		<>
@@ -31,9 +32,12 @@ const TableQuestionComponent: FC<QuestionComponentProps<TableQuestion>> = props 
 						<Dropdown
 							choices={["radio", "checkbox"]}
 							selectedChoice={tableType}
-							setSelectedChoice={choice => {
-								if (choice !== null) {
-									setTableType(choice as "radio" | "checkbox")
+							setSelectedChoice={table_type => {
+								if (table_type !== null) {
+									setDirtyQuestion({
+										...dirtyQuestion,
+										table_type
+									})
 								}
 							}}
 						/>
@@ -54,7 +58,9 @@ const TableQuestionComponent: FC<QuestionComponentProps<TableQuestion>> = props 
 						<ListMaker
 							editable={editable}
 							items={tableRows}
-							setItems={setTableRows}
+							setItems={table_rows =>
+								setDirtyQuestion({ ...dirtyQuestion, table_rows })
+							}
 						/>
 					</Box>
 
@@ -65,7 +71,9 @@ const TableQuestionComponent: FC<QuestionComponentProps<TableQuestion>> = props 
 						<ListMaker
 							editable={editable}
 							items={tableColumns}
-							setItems={setTableColumns}
+							setItems={table_columns =>
+								setDirtyQuestion({ ...dirtyQuestion, table_columns })
+							}
 						/>
 					</Box>
 				</Stack>
@@ -116,4 +124,4 @@ const TableQuestionComponent: FC<QuestionComponentProps<TableQuestion>> = props 
 	)
 }
 
-export default TableQuestionComponent
+export default TableQuestion

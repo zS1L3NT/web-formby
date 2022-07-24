@@ -3,10 +3,10 @@ import { HexColorPicker } from "react-colorful"
 
 import { Box, Flex, Input } from "@chakra-ui/react"
 
-import { ColorQuestion } from "../../../../models/Question"
-import { QuestionComponentProps } from "../QuestionComponent"
+import { iColorQuestion } from "../../../../models/Question"
+import { QuestionProps } from "../Question"
 
-const ColorQuestionComponent: FC<QuestionComponentProps<ColorQuestion>> = props => {
+const ColorQuestion: FC<QuestionProps<iColorQuestion>> = props => {
 	const { editable } = props
 
 	const [color, setColor] = useState("#000000")
@@ -68,4 +68,4 @@ const ColorQuestionComponent: FC<QuestionComponentProps<ColorQuestion>> = props 
 	)
 }
 
-export default ColorQuestionComponent
+export default ColorQuestion

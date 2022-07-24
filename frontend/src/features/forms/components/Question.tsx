@@ -1,4 +1,4 @@
-import { createRef, PropsWithChildren, useState } from "react"
+import { createRef, Dispatch, PropsWithChildren, SetStateAction, useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 
 import { ArrowDownIcon, ArrowUpIcon, CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
@@ -8,43 +8,45 @@ import {
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
-import { Question } from "../../../models/Question"
+import {
+	iChoiceQuestion, iColorQuestion, iDateTimeQuestion, iParagraphQuestion, iQuestion,
+	iSliderQuestion, iSwitchQuestion, iTableQuestion, iTextQuestion
+} from "../../../models/Question"
 import EditableText from "./EditableText"
-import ChoiceQuestionComponent from "./questions/ChoiceQuestionComponent"
-import ColorQuestionComponent from "./questions/ColorQuestionComponent"
-import DateTimeQuestionComponent from "./questions/DateTimeQuestionComponent"
-import ParagraphQuestionComponent from "./questions/ParagraphQuestionComponent"
-import SliderQuestionComponent from "./questions/SliderQuestionComponent"
-import SwitchQuestionComponent from "./questions/SwitchQuestionComponent"
-import TableQuestionComponent from "./questions/TableQuestionComponent"
-import TextQuestionComponent from "./questions/TextQuestionComponent"
+import ChoiceQuestion from "./questions/ChoiceQuestion"
+import ColorQuestion from "./questions/ColorQuestion"
+import DateTimeQuestion from "./questions/DateTimeQuestion"
+import ParagraphQuestion from "./questions/ParagraphQuestion"
+import SliderQuestion from "./questions/SliderQuestion"
+import SwitchQuestion from "./questions/SwitchQuestion"
+import TableQuestion from "./questions/TableQuestion"
+import TextQuestion from "./questions/TextQuestion"
 
-export type QuestionComponentProps<Q extends Question> = PropsWithChildren<{
+export type QuestionProps<iQ extends iQuestion> = PropsWithChildren<{
 	editable: boolean
-	dirtyQuestion: Q
-	setDirtyQuestion: React.Dispatch<React.SetStateAction<Q>>
-	question: Question
+	dirtyQuestion: iQ
+	setDirtyQuestion: Dispatch<SetStateAction<iQ>>
 }>
 
-const QuestionComponent = <Q extends Question>(
+const Question = (
 	props: PropsWithChildren<{
 		index: number
 		editable: boolean
-		question: Question
+		question: iQuestion
 	}>
 ) => {
 	const { index, editable, question } = props
 
 	const menuRef = createRef<HTMLButtonElement>()
 
-	const [dirtyQuestion, setDirtyQuestion] = useState(question as Q)
+	const [dirtyQuestion, setDirtyQuestion] = useState(question)
 
 	const componentProps = {
 		editable,
 		dirtyQuestion,
 		setDirtyQuestion,
 		question
-	} as QuestionComponentProps<Q>
+	}
 
 	return (
 		<Draggable
@@ -109,9 +111,7 @@ const QuestionComponent = <Q extends Question>(
 							editable={editable}
 							required={true}
 							text={dirtyQuestion.title}
-							setText={title =>
-								setDirtyQuestion(((dirtyQuestion.title = title), dirtyQuestion))
-							}
+							setText={title => setDirtyQuestion({ ...dirtyQuestion, title })}
 							placeholder="Add a title"
 							fontSize="2xl"
 							noOfLines={2}
@@ -120,11 +120,7 @@ const QuestionComponent = <Q extends Question>(
 					<EditableText
 						editable={editable}
 						text={dirtyQuestion.description ?? ""}
-						setText={description =>
-							setDirtyQuestion(
-								((dirtyQuestion.description = description), dirtyQuestion)
-							)
-						}
+						setText={description => setDirtyQuestion({ ...dirtyQuestion, description })}
 						placeholder="Add a description"
 						fontSize="lg"
 						mt={2}
@@ -133,70 +129,39 @@ const QuestionComponent = <Q extends Question>(
 					<Box h={4} />
 
 					{dirtyQuestion.type === "text" ? (
-						<TextQuestionComponent {...componentProps} />
+						<TextQuestion {...(componentProps as QuestionProps<iTextQuestion>)} />
 					) : null}
 
 					{dirtyQuestion.type === "paragraph" ? (
-						<ParagraphQuestionComponent
-							editable={editable}
-							dirtyQuestion={dirtyQuestion}
-							setDirtyQuestion={setDirtyQuestion}
-							question={question}
+						<ParagraphQuestion
+							{...(componentProps as QuestionProps<iParagraphQuestion>)}
 						/>
 					) : null}
 
 					{dirtyQuestion.type === "color" ? (
-						<ColorQuestionComponent
-							editable={editable}
-							dirtyQuestion={dirtyQuestion}
-							setDirtyQuestion={setDirtyQuestion}
-							question={question}
-						/>
+						<ColorQuestion {...(componentProps as QuestionProps<iColorQuestion>)} />
 					) : null}
 
 					{dirtyQuestion.type === "choice" ? (
-						<ChoiceQuestionComponent
-							editable={editable}
-							dirtyQuestion={dirtyQuestion}
-							setDirtyQuestion={setDirtyQuestion}
-							question={question}
-						/>
+						<ChoiceQuestion {...(componentProps as QuestionProps<iChoiceQuestion>)} />
 					) : null}
 
 					{dirtyQuestion.type === "switch" ? (
-						<SwitchQuestionComponent
-							editable={editable}
-							dirtyQuestion={dirtyQuestion}
-							setDirtyQuestion={setDirtyQuestion}
-							question={question}
-						/>
+						<SwitchQuestion {...(componentProps as QuestionProps<iSwitchQuestion>)} />
 					) : null}
 
 					{dirtyQuestion.type === "slider" ? (
-						<SliderQuestionComponent
-							editable={editable}
-							dirtyQuestion={dirtyQuestion}
-							setDirtyQuestion={setDirtyQuestion}
-							question={question}
-						/>
+						<SliderQuestion {...(componentProps as QuestionProps<iSliderQuestion>)} />
 					) : null}
 
 					{dirtyQuestion.type === "datetime" ? (
-						<DateTimeQuestionComponent
-							editable={editable}
-							dirtyQuestion={dirtyQuestion}
-							setDirtyQuestion={setDirtyQuestion}
-							question={question}
+						<DateTimeQuestion
+							{...(componentProps as QuestionProps<iDateTimeQuestion>)}
 						/>
 					) : null}
 
 					{dirtyQuestion.type === "table" ? (
-						<TableQuestionComponent
-							editable={editable}
-							dirtyQuestion={dirtyQuestion}
-							setDirtyQuestion={setDirtyQuestion}
-							question={question}
-						/>
+						<TableQuestion {...(componentProps as QuestionProps<iTableQuestion>)} />
 					) : null}
 				</Card>
 			)}
@@ -204,4 +169,4 @@ const QuestionComponent = <Q extends Question>(
 	)
 }
 
-export default QuestionComponent
+export default Question

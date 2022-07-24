@@ -2,10 +2,10 @@ import { FC, useState } from "react"
 
 import { Textarea } from "@chakra-ui/react"
 
-import { ParagraphQuestion } from "../../../../models/Question"
-import { QuestionComponentProps } from "../QuestionComponent"
+import { iParagraphQuestion } from "../../../../models/Question"
+import { QuestionProps } from "../Question"
 
-const ParagraphQuestionComponent: FC<QuestionComponentProps<ParagraphQuestion>> = props => {
+const ParagraphQuestion: FC<QuestionProps<iParagraphQuestion>> = props => {
 	const { editable } = props
 
 	const [paragraph, setParagraph] = useState("")
@@ -20,4 +20,4 @@ const ParagraphQuestionComponent: FC<QuestionComponentProps<ParagraphQuestion>> 
 	)
 }
 
-export default ParagraphQuestionComponent
+export default ParagraphQuestion
