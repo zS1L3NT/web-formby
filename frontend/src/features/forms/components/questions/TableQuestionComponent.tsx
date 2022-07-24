@@ -1,5 +1,4 @@
-import { FC, PropsWithChildren, useState } from "react"
-import { DraggableProvided } from "react-beautiful-dnd"
+import { FC, useState } from "react"
 
 import {
 	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
@@ -9,26 +8,17 @@ import {
 import Dropdown from "../../../../components/Dropdown"
 import { TableQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
-import QuestionComponent from "../QuestionComponent"
+import { QuestionComponentProps } from "../QuestionComponent"
 
-const TableQuestionComponent: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: TableQuestion
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
+const TableQuestionComponent: FC<QuestionComponentProps<TableQuestion>> = props => {
+	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
 
 	const [tableType, setTableType] = useState(question.tableType)
 	const [tableRows, setTableRows] = useState(question.tableRows)
 	const [tableColumns, setTableColumns] = useState(question.tableColumns)
 
 	return (
-		<QuestionComponent
-			provided={provided}
-			editable={editable}
-			question={question}>
+		<>
 			{editable ? (
 				<Flex
 					alignItems="center"
@@ -122,7 +112,7 @@ const TableQuestionComponent: FC<
 					</Tbody>
 				</Table>
 			</TableContainer>
-		</QuestionComponent>
+		</>
 	)
 }
 

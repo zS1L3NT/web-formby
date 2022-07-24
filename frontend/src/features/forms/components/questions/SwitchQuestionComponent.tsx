@@ -1,48 +1,36 @@
-import { FC, PropsWithChildren } from "react"
+import { FC } from "react"
 
 import { Flex, Switch, Text, useBoolean } from "@chakra-ui/react"
 
-import { DraggableProvided } from "react-beautiful-dnd"
 import { SwitchQuestion } from "../../../../models/Question"
-import QuestionComponent from "../QuestionComponent"
+import { QuestionComponentProps } from "../QuestionComponent"
 
-const SwitchQuestionComponent: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: SwitchQuestion
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
+const SwitchQuestionComponent: FC<QuestionComponentProps<SwitchQuestion>> = props => {
+	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
 
 	const [value, setValue] = useBoolean()
 
 	return (
-		<QuestionComponent
-			provided={provided}
-			editable={editable}
-			question={question}>
-			<Flex
-				alignItems="center"
-				justifyContent={{
-					base: "space-between",
-					sm: "start"
-				}}>
-				<Text
-					width={24}
-					pl={1}
-					textAlign="start">
-					{value ? "Enabled" : "Disabled"}
-				</Text>
-				<Switch
-					size="lg"
-					isChecked={value}
-					isDisabled={editable}
-					onChange={setValue.toggle}
-					mx={4}
-				/>
-			</Flex>
-		</QuestionComponent>
+		<Flex
+			alignItems="center"
+			justifyContent={{
+				base: "space-between",
+				sm: "start"
+			}}>
+			<Text
+				width={24}
+				pl={1}
+				textAlign="start">
+				{value ? "Enabled" : "Disabled"}
+			</Text>
+			<Switch
+				size="lg"
+				isChecked={value}
+				isDisabled={editable}
+				onChange={setValue.toggle}
+				mx={4}
+			/>
+		</Flex>
 	)
 }
 

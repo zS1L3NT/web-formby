@@ -1,40 +1,33 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { FC, useState } from "react"
 
 import { Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Text } from "@chakra-ui/react"
 
-import { DraggableProvided } from "react-beautiful-dnd"
 import Dropdown from "../../../../components/Dropdown"
 import { ChoiceQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
-import QuestionComponent from "../QuestionComponent"
+import { QuestionComponentProps } from "../QuestionComponent"
 
-const ChoiceQuestionComponent: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: ChoiceQuestion
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
+const ChoiceQuestionComponent: FC<QuestionComponentProps<ChoiceQuestion>> = props => {
+	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
 
-	const [title, setTitle] = useState(question.title)
-	const [description, setDescription] = useState(question.description)
-	const [choiceType, setChoiceType] = useState(question.choiceType)
-	const [choices, setChoices] = useState(question.choices)
 	const [selectedChoices, setSelectedChoices] = useState<string[]>([])
 
 	const listMaker = (
 		<ListMaker
 			editable={editable}
-			items={choices}
-			setItems={setChoices}
+			items={dirtyQuestion.choices}
+			setItems={choices =>
+				setDirtyQuestion(
+					dirtyQuestion => ((dirtyQuestion.choices = choices), dirtyQuestion)
+				)
+			}
 			leading={(choice, i) =>
 				choice === null || i === null ? (
 					<Box
 						ml={{ base: 0, md: 2 }}
 						mr={{ base: 2, md: 4 }}
 						w="24px"></Box>
-				) : choiceType === "checkbox" ? (
+				) : dirtyQuestion.choiceType === "checkbox" ? (
 					<Checkbox
 						value={choice}
 						ml={{ base: 0, md: 2 }}
@@ -44,7 +37,7 @@ const ChoiceQuestionComponent: FC<
 						isDisabled={editable}>
 						<Text ml={{ md: 2 }}>{editable ? null : choice}</Text>
 					</Checkbox>
-				) : choiceType === "radio" ? (
+				) : dirtyQuestion.choiceType === "radio" ? (
 					<Radio
 						value={choice}
 						ml={{ base: 0, md: 2 }}
@@ -69,10 +62,7 @@ const ChoiceQuestionComponent: FC<
 	)
 
 	return (
-		<QuestionComponent
-			provided={provided}
-			editable={editable}
-			question={question}>
+		<>
 			{editable ? (
 				<Flex
 					alignItems="center"
@@ -84,10 +74,14 @@ const ChoiceQuestionComponent: FC<
 						w="2xs">
 						<Dropdown
 							choices={["radio", "checkbox", "dropdown"]}
-							selectedChoice={choiceType}
+							selectedChoice={dirtyQuestion.choiceType}
 							setSelectedChoice={choice => {
 								if (choice !== null) {
-									setChoiceType(choice as "radio" | "checkbox" | "dropdown")
+									setDirtyQuestion(
+										dirtyQuestion => (
+											(dirtyQuestion.choiceType = choice), dirtyQuestion
+										)
+									)
 								}
 							}}
 						/>
@@ -95,28 +89,28 @@ const ChoiceQuestionComponent: FC<
 				</Flex>
 			) : null}
 
-			{question.choiceType === "checkbox" ? (
+			{dirtyQuestion.choiceType === "checkbox" ? (
 				<CheckboxGroup
-					onChange={selected => setSelectedChoices(selected as string[])}
-					value={editable ? [] : selectedChoices}>
+					value={editable ? [] : selectedChoices}
+					onChange={selected => setSelectedChoices(selected as string[])}>
 					{listMaker}
 				</CheckboxGroup>
 			) : null}
 
-			{question.choiceType === "radio" ? (
+			{dirtyQuestion.choiceType === "radio" ? (
 				<RadioGroup
-					onChange={e => setSelectedChoices([e])}
-					value={editable ? 0 : selectedChoices[0]}>
+					value={editable ? 0 : selectedChoices[0]}
+					onChange={e => setSelectedChoices([e])}>
 					{listMaker}
 				</RadioGroup>
 			) : null}
 
-			{question.choiceType === "dropdown" ? (
+			{dirtyQuestion.choiceType === "dropdown" ? (
 				editable ? (
 					listMaker
 				) : (
 					<Dropdown
-						choices={choices}
+						choices={dirtyQuestion.choices}
 						selectedChoice={selectedChoices[0] ?? null}
 						setSelectedChoice={choice => {
 							if (choice !== null) {
@@ -126,7 +120,7 @@ const ChoiceQuestionComponent: FC<
 					/>
 				)
 			) : null}
-		</QuestionComponent>
+		</>
 	)
 }
 

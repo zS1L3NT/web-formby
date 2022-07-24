@@ -1,5 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useState } from "react"
-import { DraggableProvided } from "react-beautiful-dnd"
+import { FC, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 
 import {
@@ -8,16 +7,10 @@ import {
 } from "@chakra-ui/react"
 
 import { SliderQuestion } from "../../../../models/Question"
-import QuestionComponent from "../QuestionComponent"
+import { QuestionComponentProps } from "../QuestionComponent"
 
-const SliderQuestionComponent: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: SliderQuestion
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
+const SliderQuestionComponent: FC<QuestionComponentProps<SliderQuestion>> = props => {
+	const { editable, dirtyQuestion, setDirtyQuestion, question } = props
 
 	const [sliderMin, setSliderMin] = useState(question.sliderMin)
 	const [sliderStep, setSliderStep] = useState(question.sliderStep)
@@ -55,16 +48,13 @@ const SliderQuestionComponent: FC<
 
 	const css = {
 		"& > input": {
-			"borderTopLeftRadius": 0,
-			"borderBottomLeftRadius": 0
+			borderTopLeftRadius: 0,
+			borderBottomLeftRadius: 0
 		}
 	}
 
 	return (
-		<QuestionComponent
-			provided={provided}
-			editable={editable}
-			question={question}>
+		<>
 			{editable ? (
 				<Flex
 					w="max"
@@ -141,7 +131,7 @@ const SliderQuestionComponent: FC<
 					</Slider>
 				</ErrorBoundary>
 			</Box>
-		</QuestionComponent>
+		</>
 	)
 }
 
