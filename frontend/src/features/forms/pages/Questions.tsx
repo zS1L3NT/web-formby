@@ -3,15 +3,15 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
 import { Box, Center, Spinner } from "@chakra-ui/react"
 
-import Form from "../../../models/Form"
-import { Question } from "../../../models/Question"
+import { iForm } from "../../../models/Form"
+import { iQuestion } from "../../../models/Question"
 import FormHeader from "../components/FormHeader"
-import QuestionComponent from "../components/QuestionComponent"
+import Question from "../components/Question"
 
 const Questions: FC<
 	PropsWithChildren<{
-		form: Form
-		questions: Question[] | null
+		form: iForm
+		questions: iQuestion[] | null
 		editable: boolean
 	}>
 > = props => {
@@ -32,7 +32,7 @@ const Questions: FC<
 							{...provided.droppableProps}>
 							{questions ? (
 								questions.map((question, i) => (
-									<QuestionComponent
+									<Question
 										key={question.id}
 										index={i}
 										editable={editable}

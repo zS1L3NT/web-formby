@@ -16,7 +16,7 @@ import { iUser } from "../models/User"
 type Routes = {
 	"/answers": {
 		POST: {
-			body: Omit<iAnswer<any>, "id" | "user_id">[]
+			body: Omit<iAnswer, "id" | "user_id">[]
 			response: {
 				message: string
 			}
@@ -61,18 +61,18 @@ type Routes = {
 		GET: {
 			authentication: true
 			parameters: ["form_id"]
-			response: WithTimestamps<iAnswer<any>>[]
+			response: WithTimestamps<iAnswer>[]
 		}
 	}
 	"/forms/{form_id}/questions": {
 		GET: {
 			parameters: ["form_id"]
-			response: WithTimestamps<iQuestion<any>>[]
+			response: WithTimestamps<iQuestion>[]
 		}
 		POST: {
 			authentication: true
 			parameters: ["form_id"]
-			body: Omit<iQuestion<any>, "id" | "form_id">
+			body: Omit<iQuestion, "id" | "form_id">
 			response: {
 				message: string
 			}
@@ -81,12 +81,12 @@ type Routes = {
 	"/forms/{form_id}/questions/{question_id}": {
 		GET: {
 			parameters: ["form_id", "question_id"]
-			response: WithTimestamps<iQuestion<any>>
+			response: WithTimestamps<iQuestion>
 		}
 		PUT: {
 			authentication: true
 			parameters: ["form_id", "question_id"]
-			body: Partial<Omit<iQuestion<any>, "id" | "form_id" | "previous_question_id">>
+			body: Partial<Omit<iQuestion, "id" | "form_id" | "previous_question_id">>
 			response: {
 				message: string
 			}

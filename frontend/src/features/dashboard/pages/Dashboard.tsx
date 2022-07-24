@@ -5,14 +5,15 @@ import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 import AuthContext from "../../../contexts/AuthContext"
 import useFetcher from "../../../hooks/useFetcher"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
-import Form from "../../../models/Form"
+import { WithTimestamps } from "../../../models"
+import { iForm } from "../../../models/Form"
 import FormItem from "../components/FormItem"
 
 const Dashboard: FC<PropsWithChildren<{}>> = props => {
 	const { token } = useContext(AuthContext)
 	const fetcher = useFetcher()
 
-	const [forms, setForms] = useState<Form[] | null>(null)
+	const [forms, setForms] = useState<WithTimestamps<iForm>[] | null>(null)
 
 	useOnlyAuthenticated()
 
@@ -28,7 +29,7 @@ const Dashboard: FC<PropsWithChildren<{}>> = props => {
 			token
 		}).then(({ data }) => {
 			if (data) {
-				setForms(data.map(Form.fromJson))
+				setForms(data)
 			}
 		})
 	}, [token])

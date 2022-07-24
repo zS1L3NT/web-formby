@@ -8,8 +8,8 @@ import {
 
 import AuthContext from "../../../contexts/AuthContext"
 import useFetcher from "../../../hooks/useFetcher"
-import Form from "../../../models/Form"
-import { Question } from "../../../models/Question"
+import { iForm } from "../../../models/Form"
+import { iQuestion } from "../../../models/Question"
 import Questions from "./Questions"
 import Respond from "./Respond"
 import Responses from "./Responses"
@@ -21,8 +21,8 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 	const navigate = useNavigate()
 	const params = useParams()
 
-	const [form, setForm] = useState<Form | null>()
-	const [questions, setQuestions] = useState<Question[] | null>(null)
+	const [form, setForm] = useState<iForm | null>()
+	const [questions, setQuestions] = useState<iQuestion[] | null>(null)
 
 	useEffect(() => {
 		const form_id = params["id"] ?? ""
@@ -40,7 +40,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			{ toast: false, redirect: false }
 		).then(({ data }) => {
 			if (data) {
-				setForm(Form.fromJson(data))
+				setForm(data)
 			}
 		})
 	}, [params])
@@ -56,11 +56,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			},
 			token
 		}).then(({ data }) => {
-			if (data) {
-				setQuestions(data.map(Question.fromJson))
-			} else {
-				setQuestions(null)
-			}
+			setQuestions(data)
 		})
 	}, [form])
 
@@ -70,7 +66,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			maxW="4xl">
 			{form !== undefined ? (
 				form !== null ? (
-					!user || user.id !== form.userId ? (
+					!user || user.id !== form.user_id ? (
 						<Respond
 							form={form}
 							questions={questions}
