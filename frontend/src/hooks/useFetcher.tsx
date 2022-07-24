@@ -8,15 +8,15 @@ import { useToast } from "@chakra-ui/react"
 
 import AuthContext from "../contexts/AuthContext"
 import { WithTimestamps } from "../models"
-import { iAnswerData } from "../models/Answer"
-import { iFormData } from "../models/Form"
-import { iQuestionData } from "../models/Question"
-import { iUserData } from "../models/User"
+import { iAnswer } from "../models/Answer"
+import { iForm } from "../models/Form"
+import { iQuestion } from "../models/Question"
+import { iUser } from "../models/User"
 
 type Routes = {
 	"/answers": {
 		POST: {
-			body: Omit<iAnswerData<any>, "id" | "user_id">[]
+			body: Omit<iAnswer<any>, "id" | "user_id">[]
 			response: {
 				message: string
 			}
@@ -26,11 +26,11 @@ type Routes = {
 		GET: {
 			authentication: true
 			query: ["page"]
-			response: WithTimestamps<iFormData>[]
+			response: WithTimestamps<iForm>[]
 		}
 		POST: {
 			authentication: true
-			body: Omit<iFormData, "id" | "user_id">
+			body: Omit<iForm, "id" | "user_id">
 			response: {
 				message: string
 			}
@@ -39,12 +39,12 @@ type Routes = {
 	"/forms/{form_id}": {
 		GET: {
 			parameters: ["form_id"]
-			response: WithTimestamps<iFormData>
+			response: WithTimestamps<iForm>
 		}
 		PUT: {
 			authentication: true
 			parameters: ["form_id"]
-			body: Partial<Omit<iFormData, "id" | "user_id">>
+			body: Partial<Omit<iForm, "id" | "user_id">>
 			response: {
 				message: string
 			}
@@ -61,18 +61,18 @@ type Routes = {
 		GET: {
 			authentication: true
 			parameters: ["form_id"]
-			response: WithTimestamps<iAnswerData<any>>[]
+			response: WithTimestamps<iAnswer<any>>[]
 		}
 	}
 	"/forms/{form_id}/questions": {
 		GET: {
 			parameters: ["form_id"]
-			response: WithTimestamps<iQuestionData<any>>[]
+			response: WithTimestamps<iQuestion<any>>[]
 		}
 		POST: {
 			authentication: true
 			parameters: ["form_id"]
-			body: Omit<iQuestionData<any>, "id" | "form_id">
+			body: Omit<iQuestion<any>, "id" | "form_id">
 			response: {
 				message: string
 			}
@@ -81,12 +81,12 @@ type Routes = {
 	"/forms/{form_id}/questions/{question_id}": {
 		GET: {
 			parameters: ["form_id", "question_id"]
-			response: WithTimestamps<iQuestionData<any>>
+			response: WithTimestamps<iQuestion<any>>
 		}
 		PUT: {
 			authentication: true
 			parameters: ["form_id", "question_id"]
-			body: Partial<Omit<iQuestionData<any>, "id" | "form_id" | "previous_question_id">>
+			body: Partial<Omit<iQuestion<any>, "id" | "form_id" | "previous_question_id">>
 			response: {
 				message: string
 			}
@@ -102,11 +102,11 @@ type Routes = {
 	"/register": {
 		POST: {
 			authentication: false
-			body: Partial<Omit<iUserData, "id"> & { password: string }>
+			body: Partial<Omit<iUser, "id"> & { password: string }>
 			response: {
 				message: string
 				token: string
-				user: WithTimestamps<iUserData>
+				user: WithTimestamps<iUser>
 			}
 		}
 	}
@@ -120,7 +120,7 @@ type Routes = {
 			response: {
 				message: string
 				token: string
-				user: WithTimestamps<iUserData>
+				user: WithTimestamps<iUser>
 			}
 		}
 	}
@@ -135,14 +135,14 @@ type Routes = {
 	"/user": {
 		GET: {
 			authentication: true
-			response: WithTimestamps<iUserData>
+			response: WithTimestamps<iUser>
 		}
 		PUT: {
 			authentication: true
-			body: Partial<Omit<iUserData, "id"> & { password: string }>
+			body: Partial<Omit<iUser, "id"> & { password: string }>
 			response: {
 				message: string
-				user: WithTimestamps<iUserData>
+				user: WithTimestamps<iUser>
 			}
 		}
 	}
