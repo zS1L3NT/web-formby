@@ -1,13 +1,13 @@
 import { Select } from "chakra-react-select"
-import { FC, PropsWithChildren } from "react"
+import { PropsWithChildren } from "react"
 
-const Dropdown: FC<
-	PropsWithChildren<{
-		choices: string[]
-		selectedChoice: string | null
-		setSelectedChoice: (choice: string | null) => void
+const Dropdown = <T extends string>(
+	props: PropsWithChildren<{
+		choices: T[]
+		selectedChoice: T | null
+		setSelectedChoice: (choice: T | null) => void
 	}>
-> = props => {
+) => {
 	const { choices, selectedChoice, setSelectedChoice } = props
 
 	return (
