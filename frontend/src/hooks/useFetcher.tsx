@@ -89,6 +89,7 @@ type Routes = {
 			body: Partial<Omit<iQuestion, "id" | "form_id" | "previous_question_id">>
 			response: {
 				message: string
+				question: WithTimestamps<iQuestion>
 			}
 		}
 		DELETE: {
