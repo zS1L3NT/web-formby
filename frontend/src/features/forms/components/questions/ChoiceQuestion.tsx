@@ -16,7 +16,7 @@ const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
 	const listMaker = (
 		<ListMaker
 			editable={editable}
-			items={choices}
+			items={choices ?? []}
 			setItems={choices => setDirtyQuestion({ ...dirtyQuestion, choices })}
 			leading={(choice, i) =>
 				choice === null || i === null ? (

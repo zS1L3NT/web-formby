@@ -57,7 +57,7 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 						<Text textAlign="left">Rows</Text>
 						<ListMaker
 							editable={editable}
-							items={tableRows}
+							items={tableRows ?? []}
 							setItems={table_rows =>
 								setDirtyQuestion({ ...dirtyQuestion, table_rows })
 							}
@@ -70,7 +70,7 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 						<Text textAlign="left">Columns</Text>
 						<ListMaker
 							editable={editable}
-							items={tableColumns}
+							items={tableColumns ?? []}
 							setItems={table_columns =>
 								setDirtyQuestion({ ...dirtyQuestion, table_columns })
 							}
@@ -84,19 +84,19 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 					<Thead>
 						<Tr>
 							<Th />
-							{tableColumns.map(row => (
+							{tableColumns?.map(row => (
 								<Th key={row}>{row}</Th>
 							))}
 						</Tr>
 					</Thead>
 					<Tbody>
 						{[
-							tableRows.map(column =>
+							tableRows?.map(column =>
 								tableType === "checkbox" ? (
 									<Tr key={column}>
 										<CheckboxGroup>
 											<Th>{column}</Th>
-											{tableColumns.map(row => (
+											{tableColumns?.map(row => (
 												<Th key={column + "-" + row}>
 													<Checkbox isDisabled={editable} />
 												</Th>
@@ -108,7 +108,7 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 										key={column}
 										as={Tr}>
 										<Th>{column}</Th>
-										{tableColumns.map(row => (
+										{tableColumns?.map(row => (
 											<Th key={column + "-" + row}>
 												<Radio isDisabled={editable} />
 											</Th>

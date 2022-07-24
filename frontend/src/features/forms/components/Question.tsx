@@ -75,18 +75,18 @@ const Question = (
 
 			switch (dq.type) {
 				case "choice":
-					difference.choices = dq.choices
-					difference.choice_type = dq.choice_type
+					difference.choices = dq.choices ?? []
+					difference.choice_type = dq.choice_type ?? "radio"
 					break
 				case "slider":
-					difference.slider_min = dq.slider_min
-					difference.slider_step = dq.slider_step
-					difference.slider_max = dq.slider_max
+					difference.slider_min = dq.slider_min ?? 0
+					difference.slider_step = dq.slider_step ?? 10
+					difference.slider_max = dq.slider_max ?? 100
 					break
 				case "table":
-					difference.table_columns = dq.table_columns
-					difference.table_rows = dq.table_rows
-					difference.table_type = dq.table_type
+					difference.table_columns = dq.table_columns ?? []
+					difference.table_rows = dq.table_rows ?? []
+					difference.table_type = dq.table_type ?? "radio"
 					break
 			}
 		} else {
@@ -94,7 +94,7 @@ const Question = (
 				case "choice":
 					const cdq = pdq as iChoiceQuestion
 
-					if (Object.keys(diff(dq.choices, cdq.choices)).length > 0) {
+					if (Object.keys(diff(dq.choices ?? {}, cdq.choices ?? {})).length) {
 						difference.choices = dq.choices
 					}
 
@@ -120,11 +120,11 @@ const Question = (
 				case "table":
 					const tdq = pdq as iTableQuestion
 
-					if (Object.keys(diff(dq.table_columns, tdq.table_columns)).length > 0) {
+					if (Object.keys(diff(dq.table_columns ?? {}, tdq.table_columns ?? {})).length) {
 						difference.table_columns = dq.table_columns
 					}
 
-					if (Object.keys(diff(dq.table_rows, tdq.table_rows)).length > 0) {
+					if (Object.keys(diff(dq.table_rows ?? {}, tdq.table_rows ?? {})).length) {
 						difference.table_rows = dq.table_rows
 					}
 
@@ -150,7 +150,11 @@ const Question = (
 				{
 					toast: false
 				}
-			).then(({ data, error }) => {})
+			).then(({ data }) => {
+				if (data) {
+					setDirtyQuestion(data.question)
+				}
+			})
 		}
 	}, [dirtyQuestion, token])
 
@@ -193,6 +197,13 @@ const Question = (
 						<MenuList zIndex={10}>
 							<MenuOptionGroup
 								defaultValue={question.type}
+								onChange={type =>
+									setDirtyQuestion({
+										...dirtyQuestion,
+										// @ts-ignore
+										type
+									})
+								}
 								title="Question Type"
 								type="radio"
 								textAlign="start">
@@ -207,7 +218,13 @@ const Question = (
 							</MenuOptionGroup>
 							<MenuDivider />
 							<MenuOptionGroup
-								defaultChecked={question.required}
+								defaultValue={question.required ? ["required"] : []}
+								onChange={value =>
+									setDirtyQuestion({
+										...dirtyQuestion,
+										required: value.includes("required")
+									})
+								}
 								type="checkbox">
 								<MenuItemOption value="required">Required</MenuItemOption>
 							</MenuOptionGroup>

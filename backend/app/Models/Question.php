@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Question extends Model
 {
@@ -41,7 +42,7 @@ class Question extends Model
 
 	public function setChoicesAttribute(array|NULL $choices)
 	{
-		$this->attributes['choices'] = $choices == NULL ? NULL : json_encode($choices);
+		$this->attributes['choices'] = $choices === NULL ? NULL : json_encode($choices);
 	}
 
 	public function getTableColumnsAttribute($table)
@@ -51,7 +52,7 @@ class Question extends Model
 
 	public function setTableColumnsAttribute(array|NULL $table)
 	{
-		$this->attributes['table_columns'] = $table == NULL ? NULL : json_encode($table);
+		$this->attributes['table_columns'] = $table === NULL ? NULL : json_encode($table);
 	}
 
 	public function getTableRowsAttribute($table)
@@ -61,6 +62,6 @@ class Question extends Model
 
 	public function setTableRowsAttribute(array|NULL $table)
 	{
-		$this->attributes['table_rows'] = $table == NULL ? NULL : json_encode($table);
+		$this->attributes['table_rows'] = $table === NULL ? NULL : json_encode($table);
 	}
 }
