@@ -1,12 +1,11 @@
 import { createRef, PropsWithChildren, useContext, useEffect, useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 
-import { AddIcon, CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
+import { CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
 	AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter,
 	AlertDialogHeader, AlertDialogOverlay, Box, Button, IconButton, Menu, MenuButton, MenuDivider,
-	MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Spinner, useBoolean, useDisclosure,
-	usePrevious
+	MenuItem, MenuItemOption, MenuList, MenuOptionGroup, useDisclosure, usePrevious
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
@@ -18,6 +17,7 @@ import {
 } from "../../../models/Question"
 import getQuestionDifference from "../../../utils/getQuestionDifference"
 import EditableText from "./EditableText"
+import NewQuestionButton from "./NewQuestionButton"
 import ChoiceQuestion from "./questions/ChoiceQuestion"
 import ColorQuestion from "./questions/ColorQuestion"
 import DateTimeQuestion from "./questions/DateTimeQuestion"
@@ -37,22 +37,17 @@ const Question = (
 	props: PropsWithChildren<{
 		index: number
 		editable: boolean
-		handleCreate: (
-			index: number,
-			setIsCreating: ReturnType<typeof useBoolean>[1]
-		) => Promise<void>
 		parentQuestion: iQuestion
 		setParentQuestion: (question: iQuestion | null) => void
 	}>
 ) => {
-	const { index, editable, handleCreate, parentQuestion, setParentQuestion } = props
+	const { index, editable, parentQuestion, setParentQuestion } = props
 
 	const { token } = useContext(AuthContext)
 	const fetcher = useFetcher()
 	const menuRef = createRef<HTMLButtonElement>()
 	const alertCancelRef = createRef<any>()
 
-	const [isCreating, setIsCreating] = useBoolean()
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [question, setQuestion] = useState(parentQuestion)
 	const prevQuestion = usePrevious(question)
@@ -260,27 +255,7 @@ const Question = (
 							) : null}
 						</Card>
 
-						<IconButton
-							aria-label="Add Question"
-							isDisabled={isCreating}
-							icon={
-								isCreating ? (
-									<Spinner
-										w={3}
-										h={3}
-									/>
-								) : (
-									<AddIcon
-										w={3}
-										h={3}
-									/>
-								)
-							}
-							h={8}
-							w="max"
-							mb={4}
-							onClick={() => handleCreate(index + 1, setIsCreating)}
-						/>
+						<NewQuestionButton index={index + 1} />
 					</Box>
 				)}
 			</Draggable>

@@ -1,16 +1,14 @@
-import { FC, PropsWithChildren, useContext, useEffect, useState } from "react"
+import { FC, PropsWithChildren, useContext, useEffect } from "react"
 import { MdBlock } from "react-icons/md"
 import { useNavigate, useParams } from "react-router-dom"
-import { Updater, useImmer } from "use-immer"
 
 import {
 	Box, Button, Center, Container, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text
 } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
-import { iForm } from "../../../models/Form"
-import { iQuestion } from "../../../models/Question"
 import Questions from "./Questions"
 import Respond from "./Respond"
 import Responses from "./Responses"
@@ -18,12 +16,10 @@ import Settings from "./Settings"
 
 const FormPage: FC<PropsWithChildren<{}>> = props => {
 	const { token, user } = useContext(AuthContext)
+	const { form, setForm, setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
 	const navigate = useNavigate()
 	const params = useParams()
-
-	const [form, setForm] = useState<iForm | null>()
-	const [questions, setQuestions] = useImmer<iQuestion[] | null>(null)
 
 	useEffect(() => {
 		const form_id = params["id"] ?? ""
@@ -57,7 +53,9 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			},
 			token
 		}).then(({ data }) => {
-			setQuestions(data)
+			if (data) {
+				setQuestions(data)
+			}
 		})
 	}, [form])
 
@@ -68,10 +66,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			{form !== undefined ? (
 				form !== null ? (
 					!user || user.id !== form.user_id ? (
-						<Respond
-							form={form}
-							questions={questions}
-						/>
+						<Respond />
 					) : (
 						<Tabs
 							variant="soft-rounded"
@@ -85,12 +80,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 							</TabList>
 							<TabPanels>
 								<TabPanel p={0}>
-									<Questions
-										editable={true}
-										form={form}
-										questions={questions}
-										setQuestions={setQuestions as Updater<iQuestion[]>}
-									/>
+									<Questions editable={!form.live} />
 								</TabPanel>
 								<TabPanel p={0}>
 									<Responses />

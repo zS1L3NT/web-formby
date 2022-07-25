@@ -3,7 +3,7 @@ import { createContext, FC, PropsWithChildren, useEffect, useState } from "react
 import useFetcher from "../hooks/useFetcher"
 import { iUser } from "../models/User"
 
-const context = createContext<{
+const AuthContext = createContext<{
 	token: string | null
 	setToken: (token: string | null) => void
 	user: iUser | null
@@ -51,7 +51,7 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 	}
 
 	return (
-		<context.Provider
+		<AuthContext.Provider
 			value={{
 				token,
 				setToken: setTokenAndLocalStorage,
@@ -59,8 +59,8 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 				setUser
 			}}>
 			{props.children}
-		</context.Provider>
+		</AuthContext.Provider>
 	)
 }
 
-export default context
+export default AuthContext

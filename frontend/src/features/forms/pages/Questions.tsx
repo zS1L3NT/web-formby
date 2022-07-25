@@ -1,32 +1,26 @@
 import { FC, PropsWithChildren, useContext, useEffect } from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
-import { Updater } from "use-immer"
 
-import { AddIcon } from "@chakra-ui/icons"
-import { Box, Center, IconButton, Spinner, useBoolean } from "@chakra-ui/react"
+import { Box, Center, Spinner } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
-import { iForm } from "../../../models/Form"
-import { iQuestion, iTextQuestion } from "../../../models/Question"
 import assertLinkedQuestions from "../../../utils/assertLinkedQuestions"
 import FormHeader from "../components/FormHeader"
+import NewQuestionButton from "../components/NewQuestionButton"
 import Question from "../components/Question"
 
 const Questions: FC<
 	PropsWithChildren<{
 		editable: boolean
-		form: iForm
-		questions: iQuestion[] | null
-		setQuestions: Updater<iQuestion[]>
 	}>
 > = props => {
-	const { editable, form, questions, setQuestions } = props
+	const { editable } = props
 
 	const { token } = useContext(AuthContext)
+	const { form, questions, setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
-
-	const [isCreating, setIsCreating] = useBoolean()
 
 	useEffect(() => {
 		if (!questions) return
@@ -67,7 +61,7 @@ const Questions: FC<
 						url: "/forms/{form_id}/questions/{question_id}",
 						method: "PUT",
 						parameters: {
-							form_id: form.id,
+							form_id: form!.id,
 							question_id: question.id
 						},
 						body: {
@@ -78,42 +72,6 @@ const Questions: FC<
 				}
 			}
 		})
-	}
-
-	const handleCreate = async (index: number, setIsCreating: ReturnType<typeof useBoolean>[1]) => {
-		if (questions === null || token === null) return
-
-		const question: Omit<iTextQuestion, "id" | "form_id"> = {
-			previous_question_id: questions[index - 1]?.id ?? null,
-			title: "New Question",
-			description: "",
-			photo: "",
-			type: "text",
-			required: false
-		}
-
-		setIsCreating.on()
-		const { data } = await fetcher({
-			url: "/forms/{form_id}/questions",
-			method: "POST",
-			parameters: {
-				form_id: form.id
-			},
-			body: question,
-			token
-		})
-
-		if (data) {
-			setQuestions(questions => {
-				questions.splice(index, 0, data.question)
-
-				if (questions.length !== index) {
-					questions.at(index + 1)!.previous_question_id = data.question.id
-				}
-			})
-		}
-
-		setIsCreating.off()
 	}
 
 	return (
@@ -130,27 +88,7 @@ const Questions: FC<
 							ref={provided.innerRef}
 							className="questions"
 							{...provided.droppableProps}>
-							<IconButton
-								aria-label="Add Question"
-								isDisabled={isCreating}
-								icon={
-									isCreating ? (
-										<Spinner
-											w={3}
-											h={3}
-										/>
-									) : (
-										<AddIcon
-											w={3}
-											h={3}
-										/>
-									)
-								}
-								h={8}
-								w="max"
-								mb={4}
-								onClick={() => handleCreate(0, setIsCreating)}
-							/>
+							<NewQuestionButton index={0} />
 
 							{questions ? (
 								questions.map((question, i) => (
@@ -158,7 +96,6 @@ const Questions: FC<
 										key={question.id}
 										index={i}
 										editable={editable}
-										handleCreate={handleCreate}
 										parentQuestion={question}
 										setParentQuestion={question => {
 											if (question) {
