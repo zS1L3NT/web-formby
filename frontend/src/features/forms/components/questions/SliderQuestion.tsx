@@ -2,16 +2,16 @@ import { FC, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 
 import {
-	Box, Flex, InputGroup, InputLeftAddon, NumberInput, NumberInputField, Slider, SliderFilledTrack,
-	SliderMark, SliderThumb, SliderTrack, Text
+    Box, Flex, InputGroup, InputLeftAddon, NumberInput, NumberInputField, Slider, SliderFilledTrack,
+    SliderMark, SliderThumb, SliderTrack, Text
 } from "@chakra-ui/react"
 
 import { iSliderQuestion } from "../../../../models/Question"
 import { QuestionProps } from "../Question"
 
 const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
-	const { editable, dirtyQuestion, setDirtyQuestion } = props
-	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = dirtyQuestion
+	const { editable, question, setQuestion } = props
+	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = question
 
 	const [error, setError] = useState<string | null>(null)
 
@@ -68,8 +68,8 @@ const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
 							css={css}
 							value={isNaN(sliderMin) ? "" : sliderMin}
 							onChange={(_, slider_min) =>
-								setDirtyQuestion({
-									...dirtyQuestion,
+								setQuestion({
+									...question,
 									slider_min
 								})
 							}>
@@ -83,8 +83,8 @@ const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
 							css={css}
 							value={isNaN(sliderStep) ? "" : sliderStep}
 							onChange={(_, slider_step) =>
-								setDirtyQuestion({
-									...dirtyQuestion,
+								setQuestion({
+									...question,
 									slider_step
 								})
 							}
@@ -99,8 +99,8 @@ const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
 							css={css}
 							value={isNaN(sliderMax) ? "" : sliderMax}
 							onChange={(_, slider_max) =>
-								setDirtyQuestion({
-									...dirtyQuestion,
+								setQuestion({
+									...question,
 									slider_max
 								})
 							}>

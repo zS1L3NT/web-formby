@@ -1,4 +1,3 @@
-import { diff } from "deep-object-diff"
 import { createRef, PropsWithChildren, useContext, useEffect, useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 
@@ -16,6 +15,7 @@ import {
 	iChoiceQuestion, iColorQuestion, iDateTimeQuestion, iParagraphQuestion, iQuestion,
 	iSliderQuestion, iSwitchQuestion, iTableQuestion, iTextQuestion
 } from "../../../models/Question"
+import getQuestionDifference from "../../../utils/getQuestionDifference"
 import EditableText from "./EditableText"
 import ChoiceQuestion from "./questions/ChoiceQuestion"
 import ColorQuestion from "./questions/ColorQuestion"
@@ -28,19 +28,19 @@ import TextQuestion from "./questions/TextQuestion"
 
 export type QuestionProps<iQ extends iQuestion> = PropsWithChildren<{
 	editable: boolean
-	dirtyQuestion: iQ
-	setDirtyQuestion: (dirtyQuestion: iQ) => void
+	question: iQ
+	setQuestion: (question: iQ) => void
 }>
 
 const Question = (
 	props: PropsWithChildren<{
 		index: number
 		editable: boolean
-		question: iQuestion
-		setQuestion: (question: iQuestion | null) => void
+		parentQuestion: iQuestion
+		setParentQuestion: (question: iQuestion | null) => void
 	}>
 ) => {
-	const { index, editable, question, setQuestion } = props
+	const { index, editable, parentQuestion, setParentQuestion } = props
 
 	const { token } = useContext(AuthContext)
 	const fetcher = useFetcher()
@@ -48,105 +48,21 @@ const Question = (
 	const alertCancelRef = createRef<any>()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
-	const [dirtyQuestion, setDirtyQuestion] = useState(question)
-	const prevDirtyQuestion = usePrevious(dirtyQuestion)
+	const [question, setQuestion] = useState(parentQuestion)
+	const prevQuestion = usePrevious(question)
 
 	useEffect(() => {
-		if (!token || !prevDirtyQuestion) return
+		if (!token || !prevQuestion) return
 
-		const dq = dirtyQuestion
-		const pdq = prevDirtyQuestion
-		const difference: Record<string, any> = {}
-
-		if (dq.title !== pdq.title) {
-			difference.title = dq.title
-		}
-
-		if (dq.description !== pdq.description) {
-			difference.description = dq.description
-		}
-
-		if (dq.photo !== pdq.photo) {
-			difference.photo = dq.photo
-		}
-
-		if (dq.required !== pdq.required) {
-			difference.required = dq.required
-		}
-
-		if (dq.type !== pdq.type) {
-			difference.type = dq.type
-
-			switch (dq.type) {
-				case "choice":
-					difference.choices = dq.choices ?? []
-					difference.choice_type = dq.choice_type ?? "radio"
-					break
-				case "slider":
-					difference.slider_min = dq.slider_min ?? 0
-					difference.slider_step = dq.slider_step ?? 10
-					difference.slider_max = dq.slider_max ?? 100
-					break
-				case "table":
-					difference.table_columns = dq.table_columns ?? []
-					difference.table_rows = dq.table_rows ?? []
-					difference.table_type = dq.table_type ?? "radio"
-					break
-			}
-		} else {
-			switch (dq.type) {
-				case "choice":
-					const cdq = pdq as iChoiceQuestion
-
-					if (Object.keys(diff(dq.choices ?? {}, cdq.choices ?? {})).length) {
-						difference.choices = dq.choices
-					}
-
-					if (dq.choice_type !== cdq.choice_type) {
-						difference.choice_type = dq.choice_type
-					}
-					break
-				case "slider":
-					const sdq = pdq as iSliderQuestion
-
-					if (dq.slider_min !== sdq.slider_min) {
-						difference.slider_min = dq.slider_min
-					}
-
-					if (dq.slider_step !== sdq.slider_step) {
-						difference.slider_step = dq.slider_step
-					}
-
-					if (dq.slider_max !== sdq.slider_max) {
-						difference.slider_max = dq.slider_max
-					}
-					break
-				case "table":
-					const tdq = pdq as iTableQuestion
-
-					if (Object.keys(diff(dq.table_columns ?? {}, tdq.table_columns ?? {})).length) {
-						difference.table_columns = dq.table_columns
-					}
-
-					if (Object.keys(diff(dq.table_rows ?? {}, tdq.table_rows ?? {})).length) {
-						difference.table_rows = dq.table_rows
-					}
-
-					if (dq.table_type !== tdq.table_type) {
-						difference.table_type = dq.table_type
-					}
-					break
-			}
-		}
-
+		const difference = getQuestionDifference(prevQuestion, question)
 		if (Object.keys(difference).length > 0) {
 			fetcher(
 				{
 					url: "/forms/{form_id}/questions/{question_id}",
 					method: "PUT",
 					parameters: {
-						form_id: dirtyQuestion.form_id,
-						question_id: dirtyQuestion.id
+						form_id: question.form_id,
+						question_id: question.id
 					},
 					body: difference,
 					token
@@ -156,12 +72,12 @@ const Question = (
 				}
 			).then(({ data }) => {
 				if (data) {
+					setParentQuestion(data.question)
 					setQuestion(data.question)
-					setDirtyQuestion(data.question)
 				}
 			})
 		}
-	}, [dirtyQuestion, token])
+	}, [question, token])
 
 	const handleDeleteQuestion = () => {
 		if (!token) return
@@ -171,8 +87,8 @@ const Question = (
 				url: "/forms/{form_id}/questions/{question_id}",
 				method: "DELETE",
 				parameters: {
-					form_id: dirtyQuestion.form_id,
-					question_id: dirtyQuestion.id
+					form_id: question.form_id,
+					question_id: question.id
 				},
 				token
 			},
@@ -181,22 +97,22 @@ const Question = (
 			}
 		).then(({ data }) => {
 			if (data) {
-				setQuestion(null)
+				setParentQuestion(null)
 			}
 		})
 	}
 
 	const componentProps = {
 		editable,
-		dirtyQuestion,
-		setDirtyQuestion
+		question,
+		setQuestion
 	}
 
 	return (
 		<>
 			<Draggable
 				index={index}
-				draggableId={question.id}>
+				draggableId={parentQuestion.id}>
 				{provided => (
 					<Card
 						mb={4}
@@ -225,10 +141,10 @@ const Question = (
 							/>
 							<MenuList zIndex={10}>
 								<MenuOptionGroup
-									defaultValue={question.type}
+									defaultValue={parentQuestion.type}
 									onChange={type =>
-										setDirtyQuestion({
-											...dirtyQuestion,
+										setQuestion({
+											...question,
 											// @ts-ignore
 											type
 										})
@@ -247,10 +163,10 @@ const Question = (
 								</MenuOptionGroup>
 								<MenuDivider />
 								<MenuOptionGroup
-									defaultValue={question.required ? ["required"] : []}
+									defaultValue={parentQuestion.required ? ["required"] : []}
 									onChange={value =>
-										setDirtyQuestion({
-											...dirtyQuestion,
+										setQuestion({
+											...question,
 											required: value.includes("required")
 										})
 									}
@@ -272,8 +188,8 @@ const Question = (
 							<EditableText
 								editable={editable}
 								required={true}
-								text={dirtyQuestion.title}
-								setText={title => setDirtyQuestion({ ...dirtyQuestion, title })}
+								text={question.title}
+								setText={title => setQuestion({ ...question, title })}
 								placeholder="Add a title"
 								fontSize="2xl"
 								noOfLines={2}
@@ -281,10 +197,8 @@ const Question = (
 						</Box>
 						<EditableText
 							editable={editable}
-							text={dirtyQuestion.description ?? ""}
-							setText={description =>
-								setDirtyQuestion({ ...dirtyQuestion, description })
-							}
+							text={question.description ?? ""}
+							setText={description => setQuestion({ ...question, description })}
 							placeholder="Add a description"
 							fontSize="lg"
 							mt={2}
@@ -292,45 +206,45 @@ const Question = (
 						/>
 						<Box h={4} />
 
-						{dirtyQuestion.type === "text" ? (
+						{question.type === "text" ? (
 							<TextQuestion {...(componentProps as QuestionProps<iTextQuestion>)} />
 						) : null}
 
-						{dirtyQuestion.type === "paragraph" ? (
+						{question.type === "paragraph" ? (
 							<ParagraphQuestion
 								{...(componentProps as QuestionProps<iParagraphQuestion>)}
 							/>
 						) : null}
 
-						{dirtyQuestion.type === "color" ? (
+						{question.type === "color" ? (
 							<ColorQuestion {...(componentProps as QuestionProps<iColorQuestion>)} />
 						) : null}
 
-						{dirtyQuestion.type === "choice" ? (
+						{question.type === "choice" ? (
 							<ChoiceQuestion
 								{...(componentProps as QuestionProps<iChoiceQuestion>)}
 							/>
 						) : null}
 
-						{dirtyQuestion.type === "switch" ? (
+						{question.type === "switch" ? (
 							<SwitchQuestion
 								{...(componentProps as QuestionProps<iSwitchQuestion>)}
 							/>
 						) : null}
 
-						{dirtyQuestion.type === "slider" ? (
+						{question.type === "slider" ? (
 							<SliderQuestion
 								{...(componentProps as QuestionProps<iSliderQuestion>)}
 							/>
 						) : null}
 
-						{dirtyQuestion.type === "datetime" ? (
+						{question.type === "datetime" ? (
 							<DateTimeQuestion
 								{...(componentProps as QuestionProps<iDateTimeQuestion>)}
 							/>
 						) : null}
 
-						{dirtyQuestion.type === "table" ? (
+						{question.type === "table" ? (
 							<TableQuestion {...(componentProps as QuestionProps<iTableQuestion>)} />
 						) : null}
 					</Card>

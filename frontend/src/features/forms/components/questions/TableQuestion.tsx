@@ -1,8 +1,8 @@
 import { FC } from "react"
 
 import {
-	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
-	Text, Th, Thead, Tr
+    Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
+    Text, Th, Thead, Tr
 } from "@chakra-ui/react"
 
 import Dropdown from "../../../../components/Dropdown"
@@ -11,12 +11,12 @@ import ListMaker from "../ListMaker"
 import { QuestionProps } from "../Question"
 
 const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
-	const { editable, dirtyQuestion, setDirtyQuestion } = props
+	const { editable, question, setQuestion } = props
 	const {
 		table_rows: tableRows,
 		table_columns: tableColumns,
 		table_type: tableType
-	} = dirtyQuestion
+	} = question
 
 	return (
 		<>
@@ -34,8 +34,8 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 							selectedChoice={tableType}
 							setSelectedChoice={table_type => {
 								if (table_type !== null) {
-									setDirtyQuestion({
-										...dirtyQuestion,
+									setQuestion({
+										...question,
 										table_type
 									})
 								}
@@ -59,7 +59,7 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 							editable={editable}
 							items={tableRows ?? []}
 							setItems={table_rows =>
-								setDirtyQuestion({ ...dirtyQuestion, table_rows })
+								setQuestion({ ...question, table_rows })
 							}
 						/>
 					</Box>
@@ -72,7 +72,7 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 							editable={editable}
 							items={tableColumns ?? []}
 							setItems={table_columns =>
-								setDirtyQuestion({ ...dirtyQuestion, table_columns })
+								setQuestion({ ...question, table_columns })
 							}
 						/>
 					</Box>

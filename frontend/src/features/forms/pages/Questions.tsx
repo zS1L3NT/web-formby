@@ -37,8 +37,8 @@ const Questions: FC<
 										key={question.id}
 										index={i}
 										editable={editable}
-										question={question}
-										setQuestion={question => {
+										parentQuestion={question}
+										setParentQuestion={question => {
 											if (question) {
 												setQuestions(
 													questions.map((q, j) =>

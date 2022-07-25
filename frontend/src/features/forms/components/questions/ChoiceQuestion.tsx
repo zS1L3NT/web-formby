@@ -8,8 +8,8 @@ import ListMaker from "../ListMaker"
 import { QuestionProps } from "../Question"
 
 const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
-	const { editable, dirtyQuestion, setDirtyQuestion } = props
-	const { choices, choice_type: choiceType } = dirtyQuestion
+	const { editable, question, setQuestion } = props
+	const { choices, choice_type: choiceType } = question
 
 	const [selectedChoices, setSelectedChoices] = useState<string[]>([])
 
@@ -17,7 +17,7 @@ const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
 		<ListMaker
 			editable={editable}
 			items={choices ?? []}
-			setItems={choices => setDirtyQuestion({ ...dirtyQuestion, choices })}
+			setItems={choices => setQuestion({ ...question, choices })}
 			leading={(choice, i) =>
 				choice === null || i === null ? (
 					<Box
@@ -74,8 +74,8 @@ const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
 							selectedChoice={choiceType}
 							setSelectedChoice={choice_type => {
 								if (choice_type !== null) {
-									setDirtyQuestion({
-										...dirtyQuestion,
+									setQuestion({
+										...question,
 										choice_type
 									})
 								}
