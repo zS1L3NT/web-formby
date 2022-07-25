@@ -4,8 +4,9 @@ import { Draggable } from "react-beautiful-dnd"
 
 import { ArrowDownIcon, ArrowUpIcon, CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Box, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuItemOption, MenuList,
-	MenuOptionGroup, usePrevious
+	AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter,
+	AlertDialogHeader, AlertDialogOverlay, Box, Button, IconButton, Menu, MenuButton, MenuDivider,
+	MenuItem, MenuItemOption, MenuList, MenuOptionGroup, useDisclosure, usePrevious
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
@@ -43,7 +44,9 @@ const Question = (
 	const { token } = useContext(AuthContext)
 	const fetcher = useFetcher()
 	const menuRef = createRef<HTMLButtonElement>()
+	const alertCancelRef = createRef<any>()
 
+	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [dirtyQuestion, setDirtyQuestion] = useState(question)
 	const prevDirtyQuestion = usePrevious(dirtyQuestion)
 
@@ -158,6 +161,25 @@ const Question = (
 		}
 	}, [dirtyQuestion, token])
 
+	const handleDeleteQuestion = () => {
+		if (!token) return
+
+		fetcher(
+			{
+				url: "/forms/{form_id}/questions/{question_id}",
+				method: "DELETE",
+				parameters: {
+					form_id: dirtyQuestion.form_id,
+					question_id: dirtyQuestion.id
+				},
+				token
+			},
+			{
+				toast: false
+			}
+		)
+	}
+
 	const componentProps = {
 		editable,
 		dirtyQuestion,
@@ -165,136 +187,180 @@ const Question = (
 	}
 
 	return (
-		<Draggable
-			index={index}
-			draggableId={question.id}>
-			{provided => (
-				<Card
-					mb={4}
-					pos="relative"
-					provided={editable ? provided : undefined}>
-					<IconButton
-						hidden={!editable}
-						icon={<DragHandleIcon />}
-						aria-label="Options"
-						pos="absolute"
-						right={4}
-						minW={6}
-						onClick={() => menuRef.current?.click()}
-						{...(editable ? provided.dragHandleProps : {})}
-					/>
-					<Menu closeOnSelect={false}>
-						<MenuButton
-							ref={menuRef}
-							as={IconButton}
+		<>
+			<Draggable
+				index={index}
+				draggableId={question.id}>
+				{provided => (
+					<Card
+						mb={4}
+						pos="relative"
+						provided={editable ? provided : undefined}>
+						<IconButton
 							hidden={!editable}
+							icon={<DragHandleIcon />}
 							aria-label="Options"
 							pos="absolute"
 							right={4}
-							zIndex={-1}
 							minW={6}
+							onClick={() => menuRef.current?.click()}
+							{...(editable ? provided.dragHandleProps : {})}
 						/>
-						<MenuList zIndex={10}>
-							<MenuOptionGroup
-								defaultValue={question.type}
-								onChange={type =>
-									setDirtyQuestion({
-										...dirtyQuestion,
-										// @ts-ignore
-										type
-									})
-								}
-								title="Question Type"
-								type="radio"
-								textAlign="start">
-								<MenuItemOption value="text">Text</MenuItemOption>
-								<MenuItemOption value="paragraph">Paragraph</MenuItemOption>
-								<MenuItemOption value="color">Color</MenuItemOption>
-								<MenuItemOption value="choice">Choice</MenuItemOption>
-								<MenuItemOption value="switch">Switch</MenuItemOption>
-								<MenuItemOption value="slider">Slider</MenuItemOption>
-								<MenuItemOption value="datetime">DateTime</MenuItemOption>
-								<MenuItemOption value="table">Table</MenuItemOption>
-							</MenuOptionGroup>
-							<MenuDivider />
-							<MenuOptionGroup
-								defaultValue={question.required ? ["required"] : []}
-								onChange={value =>
-									setDirtyQuestion({
-										...dirtyQuestion,
-										required: value.includes("required")
-									})
-								}
-								type="checkbox">
-								<MenuItemOption value="required">Required</MenuItemOption>
-							</MenuOptionGroup>
-							<MenuItem icon={<ArrowUpIcon />}>Add question above</MenuItem>
-							<MenuItem icon={<ArrowDownIcon />}>Add question below</MenuItem>
-							<MenuItem icon={<CopyIcon />}>Duplicate</MenuItem>
-							<MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
-						</MenuList>
-					</Menu>
+						<Menu closeOnSelect={false}>
+							<MenuButton
+								ref={menuRef}
+								as={IconButton}
+								hidden={!editable}
+								aria-label="Options"
+								pos="absolute"
+								right={4}
+								zIndex={-1}
+								minW={6}
+							/>
+							<MenuList zIndex={10}>
+								<MenuOptionGroup
+									defaultValue={question.type}
+									onChange={type =>
+										setDirtyQuestion({
+											...dirtyQuestion,
+											// @ts-ignore
+											type
+										})
+									}
+									title="Question Type"
+									type="radio"
+									textAlign="start">
+									<MenuItemOption value="text">Text</MenuItemOption>
+									<MenuItemOption value="paragraph">Paragraph</MenuItemOption>
+									<MenuItemOption value="color">Color</MenuItemOption>
+									<MenuItemOption value="choice">Choice</MenuItemOption>
+									<MenuItemOption value="switch">Switch</MenuItemOption>
+									<MenuItemOption value="slider">Slider</MenuItemOption>
+									<MenuItemOption value="datetime">DateTime</MenuItemOption>
+									<MenuItemOption value="table">Table</MenuItemOption>
+								</MenuOptionGroup>
+								<MenuDivider />
+								<MenuOptionGroup
+									defaultValue={question.required ? ["required"] : []}
+									onChange={value =>
+										setDirtyQuestion({
+											...dirtyQuestion,
+											required: value.includes("required")
+										})
+									}
+									type="checkbox">
+									<MenuItemOption value="required">Required</MenuItemOption>
+								</MenuOptionGroup>
+								<MenuItem icon={<ArrowUpIcon />}>Add question above</MenuItem>
+								<MenuItem icon={<ArrowDownIcon />}>Add question below</MenuItem>
+								<MenuItem icon={<CopyIcon />}>Duplicate</MenuItem>
+								<MenuItem
+									icon={<DeleteIcon />}
+									onClick={onOpen}>
+									Delete
+								</MenuItem>
+							</MenuList>
+						</Menu>
 
-					<Box mr={editable ? 8 : 0}>
+						<Box mr={editable ? 8 : 0}>
+							<EditableText
+								editable={editable}
+								required={true}
+								text={dirtyQuestion.title}
+								setText={title => setDirtyQuestion({ ...dirtyQuestion, title })}
+								placeholder="Add a title"
+								fontSize="2xl"
+								noOfLines={2}
+							/>
+						</Box>
 						<EditableText
 							editable={editable}
-							required={true}
-							text={dirtyQuestion.title}
-							setText={title => setDirtyQuestion({ ...dirtyQuestion, title })}
-							placeholder="Add a title"
-							fontSize="2xl"
+							text={dirtyQuestion.description ?? ""}
+							setText={description =>
+								setDirtyQuestion({ ...dirtyQuestion, description })
+							}
+							placeholder="Add a description"
+							fontSize="lg"
+							mt={2}
 							noOfLines={2}
 						/>
-					</Box>
-					<EditableText
-						editable={editable}
-						text={dirtyQuestion.description ?? ""}
-						setText={description => setDirtyQuestion({ ...dirtyQuestion, description })}
-						placeholder="Add a description"
-						fontSize="lg"
-						mt={2}
-						noOfLines={2}
-					/>
-					<Box h={4} />
+						<Box h={4} />
 
-					{dirtyQuestion.type === "text" ? (
-						<TextQuestion {...(componentProps as QuestionProps<iTextQuestion>)} />
-					) : null}
+						{dirtyQuestion.type === "text" ? (
+							<TextQuestion {...(componentProps as QuestionProps<iTextQuestion>)} />
+						) : null}
 
-					{dirtyQuestion.type === "paragraph" ? (
-						<ParagraphQuestion
-							{...(componentProps as QuestionProps<iParagraphQuestion>)}
-						/>
-					) : null}
+						{dirtyQuestion.type === "paragraph" ? (
+							<ParagraphQuestion
+								{...(componentProps as QuestionProps<iParagraphQuestion>)}
+							/>
+						) : null}
 
-					{dirtyQuestion.type === "color" ? (
-						<ColorQuestion {...(componentProps as QuestionProps<iColorQuestion>)} />
-					) : null}
+						{dirtyQuestion.type === "color" ? (
+							<ColorQuestion {...(componentProps as QuestionProps<iColorQuestion>)} />
+						) : null}
 
-					{dirtyQuestion.type === "choice" ? (
-						<ChoiceQuestion {...(componentProps as QuestionProps<iChoiceQuestion>)} />
-					) : null}
+						{dirtyQuestion.type === "choice" ? (
+							<ChoiceQuestion
+								{...(componentProps as QuestionProps<iChoiceQuestion>)}
+							/>
+						) : null}
 
-					{dirtyQuestion.type === "switch" ? (
-						<SwitchQuestion {...(componentProps as QuestionProps<iSwitchQuestion>)} />
-					) : null}
+						{dirtyQuestion.type === "switch" ? (
+							<SwitchQuestion
+								{...(componentProps as QuestionProps<iSwitchQuestion>)}
+							/>
+						) : null}
 
-					{dirtyQuestion.type === "slider" ? (
-						<SliderQuestion {...(componentProps as QuestionProps<iSliderQuestion>)} />
-					) : null}
+						{dirtyQuestion.type === "slider" ? (
+							<SliderQuestion
+								{...(componentProps as QuestionProps<iSliderQuestion>)}
+							/>
+						) : null}
 
-					{dirtyQuestion.type === "datetime" ? (
-						<DateTimeQuestion
-							{...(componentProps as QuestionProps<iDateTimeQuestion>)}
-						/>
-					) : null}
+						{dirtyQuestion.type === "datetime" ? (
+							<DateTimeQuestion
+								{...(componentProps as QuestionProps<iDateTimeQuestion>)}
+							/>
+						) : null}
 
-					{dirtyQuestion.type === "table" ? (
-						<TableQuestion {...(componentProps as QuestionProps<iTableQuestion>)} />
-					) : null}
-				</Card>
-			)}
-		</Draggable>
+						{dirtyQuestion.type === "table" ? (
+							<TableQuestion {...(componentProps as QuestionProps<iTableQuestion>)} />
+						) : null}
+					</Card>
+				)}
+			</Draggable>
+
+			<AlertDialog
+				motionPreset="slideInBottom"
+				leastDestructiveRef={alertCancelRef}
+				onClose={onClose}
+				isOpen={isOpen}
+				isCentered>
+				<AlertDialogOverlay />
+
+				<AlertDialogContent>
+					<AlertDialogHeader>Delete Question?</AlertDialogHeader>
+					<AlertDialogCloseButton />
+					<AlertDialogBody>
+						Are you sure you want to delete this Question? This action is irreversable!
+					</AlertDialogBody>
+					<AlertDialogFooter>
+						<Button
+							ref={alertCancelRef}
+							onClick={onClose}>
+							Cancel
+						</Button>
+						<Button
+							colorScheme="red"
+							onClick={handleDeleteQuestion}
+							ml={3}>
+							Delete
+						</Button>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		</>
 	)
 }
 
