@@ -34,6 +34,7 @@ class FormQuestionController extends Controller
 		]);
 
 		$this->validate("update", [
+			"previous_question_id" => ["nullable", "uuid"],
 			"title" => ["max:255", "string"],
 			"description" => ["max:255", "string"],
 			"photo" => ["max:255", "url"],

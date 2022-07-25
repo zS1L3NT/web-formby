@@ -86,7 +86,7 @@ type Routes = {
 		PUT: {
 			authentication: true
 			parameters: ["form_id", "question_id"]
-			body: Partial<Omit<iQuestion, "id" | "form_id" | "previous_question_id">>
+			body: Partial<Omit<iQuestion, "id" | "form_id">>
 			response: {
 				message: string
 				question: WithTimestamps<iQuestion>

@@ -1,10 +1,12 @@
-import { FC, PropsWithChildren, useEffect } from "react"
+import { FC, PropsWithChildren, useContext, useEffect } from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { Updater } from "use-immer"
 
 import { AddIcon } from "@chakra-ui/icons"
 import { Box, Center, IconButton, Spinner } from "@chakra-ui/react"
 
+import AuthContext from "../../../contexts/AuthContext"
+import useFetcher from "../../../hooks/useFetcher"
 import { iForm } from "../../../models/Form"
 import { iQuestion } from "../../../models/Question"
 import assertLinkedQuestions from "../../../utils/assertLinkedQuestions"
@@ -21,6 +23,9 @@ const Questions: FC<
 > = props => {
 	const { editable, form, questions, setQuestions } = props
 
+	const { token } = useContext(AuthContext)
+	const fetcher = useFetcher()
+
 	useEffect(() => {
 		if (!questions) return
 
@@ -28,9 +33,18 @@ const Questions: FC<
 	}, [questions])
 
 	const handleReorder = (oldIndex: number, newIndex?: number) => {
-		if (oldIndex === newIndex || newIndex === undefined || questions === null) return
+		if (
+			oldIndex === newIndex ||
+			newIndex === undefined ||
+			questions === null ||
+			token === null
+		) {
+			return
+		}
 
 		setQuestions(questions => {
+			const __questions = [...questions.map(question => ({ ...question }))]
+
 			questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
 
 			questions.at(oldIndex)!.previous_question_id = questions[oldIndex - 1]?.id ?? null
@@ -41,6 +55,25 @@ const Questions: FC<
 			questions.at(newIndex)!.previous_question_id = questions[newIndex - 1]?.id ?? null
 			if (questions.at(newIndex + 1)) {
 				questions.at(newIndex + 1)!.previous_question_id = questions.at(newIndex)!.id
+			}
+
+			for (const __question of __questions) {
+				const question = questions.find(question => question.id === __question.id)!
+
+				if (__question.previous_question_id !== question.previous_question_id) {
+					fetcher({
+						url: "/forms/{form_id}/questions/{question_id}",
+						method: "PUT",
+						parameters: {
+							form_id: form.id,
+							question_id: question.id
+						},
+						body: {
+							previous_question_id: question.previous_question_id
+						},
+						token
+					})
+				}
 			}
 		})
 	}
