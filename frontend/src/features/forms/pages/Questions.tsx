@@ -3,12 +3,12 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { Updater } from "use-immer"
 
 import { AddIcon } from "@chakra-ui/icons"
-import { Box, Center, IconButton, Spinner } from "@chakra-ui/react"
+import { Box, Center, IconButton, Spinner, useBoolean } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
 import useFetcher from "../../../hooks/useFetcher"
 import { iForm } from "../../../models/Form"
-import { iQuestion } from "../../../models/Question"
+import { iQuestion, iTextQuestion } from "../../../models/Question"
 import assertLinkedQuestions from "../../../utils/assertLinkedQuestions"
 import FormHeader from "../components/FormHeader"
 import Question from "../components/Question"
@@ -25,6 +25,8 @@ const Questions: FC<
 
 	const { token } = useContext(AuthContext)
 	const fetcher = useFetcher()
+
+	const [isCreating, setIsCreating] = useBoolean()
 
 	useEffect(() => {
 		if (!questions) return
@@ -78,6 +80,42 @@ const Questions: FC<
 		})
 	}
 
+	const handleCreate = async (index: number, setIsCreating: ReturnType<typeof useBoolean>[1]) => {
+		if (questions === null || token === null) return
+
+		const question: Omit<iTextQuestion, "id" | "form_id"> = {
+			previous_question_id: questions[index - 1]?.id ?? null,
+			title: "New Question",
+			description: "",
+			photo: "",
+			type: "text",
+			required: false
+		}
+
+		setIsCreating.on()
+		const { data } = await fetcher({
+			url: "/forms/{form_id}/questions",
+			method: "POST",
+			parameters: {
+				form_id: form.id
+			},
+			body: question,
+			token
+		})
+
+		if (data) {
+			setQuestions(questions => {
+				questions.splice(index, 0, data.question)
+
+				if (questions.length !== index) {
+					questions.at(index + 1)!.previous_question_id = data.question.id
+				}
+			})
+		}
+
+		setIsCreating.off()
+	}
+
 	return (
 		<>
 			<FormHeader
@@ -94,15 +132,24 @@ const Questions: FC<
 							{...provided.droppableProps}>
 							<IconButton
 								aria-label="Add Question"
+								isDisabled={isCreating}
 								icon={
-									<AddIcon
-										w={3}
-										h={3}
-									/>
+									isCreating ? (
+										<Spinner
+											w={3}
+											h={3}
+										/>
+									) : (
+										<AddIcon
+											w={3}
+											h={3}
+										/>
+									)
 								}
 								h={8}
 								w="max"
 								mb={4}
+								onClick={() => handleCreate(0, setIsCreating)}
 							/>
 
 							{questions ? (
@@ -111,6 +158,7 @@ const Questions: FC<
 										key={question.id}
 										index={i}
 										editable={editable}
+										handleCreate={handleCreate}
 										parentQuestion={question}
 										setParentQuestion={question => {
 											if (question) {

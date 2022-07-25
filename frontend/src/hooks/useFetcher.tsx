@@ -75,6 +75,7 @@ type Routes = {
 			body: Omit<iQuestion, "id" | "form_id">
 			response: {
 				message: string
+				question: WithTimestamps<iQuestion>
 			}
 		}
 	}

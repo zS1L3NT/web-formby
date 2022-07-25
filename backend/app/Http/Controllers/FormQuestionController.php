@@ -104,7 +104,8 @@ class FormQuestionController extends Controller
 			->update(["previous_question_id" => $question->id]);
 
 		return [
-			"message" => "Question created successfully!"
+			"message" => "Question created successfully!",
+			"question" => $question
 		];
 	}
 
