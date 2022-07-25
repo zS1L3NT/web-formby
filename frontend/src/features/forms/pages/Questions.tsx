@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react"
+import { FC, PropsWithChildren, useEffect } from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { Updater } from "use-immer"
 
@@ -7,7 +7,7 @@ import { Box, Center, IconButton, Spinner } from "@chakra-ui/react"
 
 import { iForm } from "../../../models/Form"
 import { iQuestion } from "../../../models/Question"
-import assertLinkedList from "../../../utils/assertLinkedList"
+import assertLinkedQuestions from "../../../utils/assertLinkedQuestions"
 import FormHeader from "../components/FormHeader"
 import Question from "../components/Question"
 
@@ -21,74 +21,28 @@ const Questions: FC<
 > = props => {
 	const { editable, form, questions, setQuestions } = props
 
+	useEffect(() => {
+		if (!questions) return
+
+		assertLinkedQuestions(questions)
+	}, [questions])
+
 	const handleReorder = (oldIndex: number, newIndex?: number) => {
 		if (oldIndex === newIndex || newIndex === undefined || questions === null) return
 
-		if (oldIndex === 0) {
-			if (newIndex === questions.length - 1) {
-				// F -> L (2)
-				setQuestions(questions => {
-					questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
-					questions.at(oldIndex)!.previous_question_id = null
-					questions.at(newIndex)!.previous_question_id = questions.at(newIndex - 1)!.id
-					assertLinkedList(questions)
-				})
-			} else {
-				// F -> M (3)
-				setQuestions(questions => {
-					questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
-					questions.at(oldIndex)!.previous_question_id = null
-					questions.at(newIndex)!.previous_question_id = questions.at(newIndex - 1)!.id
-					questions.at(newIndex + 1)!.previous_question_id = questions.at(newIndex)!.id
-					assertLinkedList(questions)
-				})
-			}
-		} else if (oldIndex === questions.length - 1) {
-			if (newIndex === 0) {
-				// L -> F (2)
-				setQuestions(questions => {
-					questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
-					questions.at(newIndex)!.previous_question_id = null
-					questions.at(newIndex + 1)!.previous_question_id = questions.at(newIndex)!.id
-					assertLinkedList(questions)
-				})
-			} else {
-				// L -> M (2)
-				setQuestions(questions => {
-					questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
-					questions.at(newIndex)!.previous_question_id = questions.at(newIndex - 1)!.id
-					questions.at(newIndex + 1)!.previous_question_id = questions.at(newIndex)!.id
-					assertLinkedList(questions)
-				})
-			}
-		} else if (newIndex === 0) {
-			// M -> F (3)
-			setQuestions(questions => {
-				questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
-				questions.at(newIndex)!.previous_question_id = null
-				questions.at(newIndex + 1)!.previous_question_id = questions.at(newIndex)!.id
+		setQuestions(questions => {
+			questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
+
+			questions.at(oldIndex)!.previous_question_id = questions[oldIndex - 1]?.id ?? null
+			if (questions.at(oldIndex + 1)) {
 				questions.at(oldIndex + 1)!.previous_question_id = questions.at(oldIndex)!.id
-				assertLinkedList(questions)
-			})
-		} else if (newIndex === questions.length - 1) {
-			// M -> L (2)
-			setQuestions(questions => {
-				questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
-				questions.at(oldIndex)!.previous_question_id = questions.at(oldIndex - 1)!.id
-				questions.at(newIndex)!.previous_question_id = questions.at(newIndex)!.id
-				assertLinkedList(questions)
-			})
-		} else {
-			// M -> M (3)
-			setQuestions(questions => {
-				questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
-				questions.at(oldIndex)!.previous_question_id = questions.at(oldIndex - 1)!.id
-				questions.at(oldIndex + 1)!.previous_question_id = questions.at(oldIndex)!.id
-				questions.at(newIndex)!.previous_question_id = questions.at(newIndex - 1)!.id
+			}
+
+			questions.at(newIndex)!.previous_question_id = questions[newIndex - 1]?.id ?? null
+			if (questions.at(newIndex + 1)) {
 				questions.at(newIndex + 1)!.previous_question_id = questions.at(newIndex)!.id
-				assertLinkedList(questions)
-			})
-		}
+			}
+		})
 	}
 
 	return (
