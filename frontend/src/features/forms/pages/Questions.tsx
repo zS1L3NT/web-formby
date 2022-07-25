@@ -1,8 +1,9 @@
 import { Dispatch, FC, PropsWithChildren, SetStateAction } from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
-import { Box, Center, Spinner } from "@chakra-ui/react"
+import { Box, Center, IconButton, Spinner } from "@chakra-ui/react"
 
+import { AddIcon } from "@chakra-ui/icons"
 import { iForm } from "../../../models/Form"
 import { iQuestion } from "../../../models/Question"
 import FormHeader from "../components/FormHeader"
@@ -31,6 +32,19 @@ const Questions: FC<
 							ref={provided.innerRef}
 							className="questions"
 							{...provided.droppableProps}>
+							<IconButton
+								aria-label="Add Question"
+								icon={
+									<AddIcon
+										w={3}
+										h={3}
+									/>
+								}
+								h={8}
+								w="max"
+								mb={4}
+							/>
+							
 							{questions ? (
 								questions.map((question, i) => (
 									<Question

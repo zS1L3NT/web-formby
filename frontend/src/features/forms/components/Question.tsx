@@ -1,7 +1,7 @@
 import { createRef, PropsWithChildren, useContext, useEffect, useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 
-import { ArrowDownIcon, ArrowUpIcon, CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
+import { AddIcon, CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
 	AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter,
 	AlertDialogHeader, AlertDialogOverlay, Box, Button, IconButton, Menu, MenuButton, MenuDivider,
@@ -111,142 +111,157 @@ const Question = (
 				index={index}
 				draggableId={parentQuestion.id}>
 				{provided => (
-					<Card
-						mb={4}
-						pos="relative"
-						provided={editable ? provided : undefined}>
-						<IconButton
-							hidden={!editable}
-							icon={<DragHandleIcon />}
-							aria-label="Options"
-							pos="absolute"
-							right={4}
-							minW={6}
-							onClick={() => menuRef.current?.click()}
-							{...(editable ? provided.dragHandleProps : {})}
-						/>
-						<Menu>
-							<MenuButton
-								ref={menuRef}
-								as={IconButton}
+					<Box
+						ref={editable ? provided.innerRef : null}
+						{...(editable ? provided.draggableProps : {})}>
+						<Card
+							mb={4}
+							pos="relative">
+							<IconButton
 								hidden={!editable}
+								icon={<DragHandleIcon />}
 								aria-label="Options"
 								pos="absolute"
 								right={4}
-								zIndex={-1}
 								minW={6}
+								onClick={() => menuRef.current?.click()}
+								{...(editable ? provided.dragHandleProps : {})}
 							/>
-							<MenuList
-								bg="hsl(220, 26%, 18%)"
-								zIndex={10}>
-								<MenuOptionGroup
-									defaultValue={parentQuestion.type}
-									onChange={type =>
-										setQuestion({
-											...question,
-											// @ts-ignore
-											type
-										})
-									}
-									title="Question Type"
-									type="radio"
-									textAlign="start">
-									<MenuItemOption value="text">Text</MenuItemOption>
-									<MenuItemOption value="paragraph">Paragraph</MenuItemOption>
-									<MenuItemOption value="color">Color</MenuItemOption>
-									<MenuItemOption value="choice">Choice</MenuItemOption>
-									<MenuItemOption value="switch">Switch</MenuItemOption>
-									<MenuItemOption value="slider">Slider</MenuItemOption>
-									<MenuItemOption value="datetime">DateTime</MenuItemOption>
-									<MenuItemOption value="table">Table</MenuItemOption>
-								</MenuOptionGroup>
-								<MenuDivider />
-								<MenuOptionGroup
-									defaultValue={parentQuestion.required ? ["required"] : []}
-									onChange={value =>
-										setQuestion({
-											...question,
-											required: value.includes("required")
-										})
-									}
-									type="checkbox">
-									<MenuItemOption value="required">Required</MenuItemOption>
-								</MenuOptionGroup>
-								<MenuItem icon={<ArrowUpIcon />}>Add question above</MenuItem>
-								<MenuItem icon={<ArrowDownIcon />}>Add question below</MenuItem>
-								<MenuItem icon={<CopyIcon />}>Duplicate</MenuItem>
-								<MenuItem
-									icon={<DeleteIcon />}
-									onClick={onOpen}>
-									Delete
-								</MenuItem>
-							</MenuList>
-						</Menu>
+							<Menu>
+								<MenuButton
+									ref={menuRef}
+									as={IconButton}
+									hidden={!editable}
+									aria-label="Options"
+									pos="absolute"
+									right={4}
+									zIndex={-1}
+									minW={6}
+								/>
+								<MenuList
+									bg="hsl(220, 26%, 18%)"
+									zIndex={10}>
+									<MenuOptionGroup
+										defaultValue={parentQuestion.type}
+										onChange={type =>
+											setQuestion({
+												...question,
+												// @ts-ignore
+												type
+											})
+										}
+										title="Question Type"
+										type="radio"
+										textAlign="start">
+										<MenuItemOption value="text">Text</MenuItemOption>
+										<MenuItemOption value="paragraph">Paragraph</MenuItemOption>
+										<MenuItemOption value="color">Color</MenuItemOption>
+										<MenuItemOption value="choice">Choice</MenuItemOption>
+										<MenuItemOption value="switch">Switch</MenuItemOption>
+										<MenuItemOption value="slider">Slider</MenuItemOption>
+										<MenuItemOption value="datetime">DateTime</MenuItemOption>
+										<MenuItemOption value="table">Table</MenuItemOption>
+									</MenuOptionGroup>
+									<MenuDivider />
+									<MenuOptionGroup
+										defaultValue={parentQuestion.required ? ["required"] : []}
+										onChange={value =>
+											setQuestion({
+												...question,
+												required: value.includes("required")
+											})
+										}
+										type="checkbox">
+										<MenuItemOption value="required">Required</MenuItemOption>
+									</MenuOptionGroup>
+									<MenuItem icon={<CopyIcon />}>Duplicate</MenuItem>
+									<MenuItem
+										icon={<DeleteIcon />}
+										onClick={onOpen}>
+										Delete
+									</MenuItem>
+								</MenuList>
+							</Menu>
 
-						<Box mr={editable ? 8 : 0}>
+							<Box mr={editable ? 8 : 0}>
+								<EditableText
+									editable={editable}
+									required={true}
+									text={question.title}
+									setText={title => setQuestion({ ...question, title })}
+									placeholder="Add a title"
+									fontSize="2xl"
+									noOfLines={2}
+								/>
+							</Box>
 							<EditableText
 								editable={editable}
-								required={true}
-								text={question.title}
-								setText={title => setQuestion({ ...question, title })}
-								placeholder="Add a title"
-								fontSize="2xl"
+								text={question.description ?? ""}
+								setText={description => setQuestion({ ...question, description })}
+								placeholder="Add a description"
+								fontSize="lg"
+								mt={2}
 								noOfLines={2}
 							/>
-						</Box>
-						<EditableText
-							editable={editable}
-							text={question.description ?? ""}
-							setText={description => setQuestion({ ...question, description })}
-							placeholder="Add a description"
-							fontSize="lg"
-							mt={2}
-							noOfLines={2}
+							<Box h={4} />
+
+							{question.type === "text" ? (
+								<TextQuestion
+									{...(componentProps as QuestionProps<iTextQuestion>)}
+								/>
+							) : null}
+
+							{question.type === "paragraph" ? (
+								<ParagraphQuestion
+									{...(componentProps as QuestionProps<iParagraphQuestion>)}
+								/>
+							) : null}
+
+							{question.type === "color" ? (
+								<ColorQuestion
+									{...(componentProps as QuestionProps<iColorQuestion>)}
+								/>
+							) : null}
+
+							{question.type === "choice" ? (
+								<ChoiceQuestion
+									{...(componentProps as QuestionProps<iChoiceQuestion>)}
+								/>
+							) : null}
+
+							{question.type === "switch" ? (
+								<SwitchQuestion
+									{...(componentProps as QuestionProps<iSwitchQuestion>)}
+								/>
+							) : null}
+
+							{question.type === "slider" ? (
+								<SliderQuestion
+									{...(componentProps as QuestionProps<iSliderQuestion>)}
+								/>
+							) : null}
+
+							{question.type === "datetime" ? (
+								<DateTimeQuestion
+									{...(componentProps as QuestionProps<iDateTimeQuestion>)}
+								/>
+							) : null}
+
+							{question.type === "table" ? (
+								<TableQuestion
+									{...(componentProps as QuestionProps<iTableQuestion>)}
+								/>
+							) : null}
+						</Card>
+
+						<IconButton
+							aria-label="Add Question"
+							icon={<AddIcon w={3} h={3} />}
+							h={8}
+							w="max"
+							mb={4}
 						/>
-						<Box h={4} />
-
-						{question.type === "text" ? (
-							<TextQuestion {...(componentProps as QuestionProps<iTextQuestion>)} />
-						) : null}
-
-						{question.type === "paragraph" ? (
-							<ParagraphQuestion
-								{...(componentProps as QuestionProps<iParagraphQuestion>)}
-							/>
-						) : null}
-
-						{question.type === "color" ? (
-							<ColorQuestion {...(componentProps as QuestionProps<iColorQuestion>)} />
-						) : null}
-
-						{question.type === "choice" ? (
-							<ChoiceQuestion
-								{...(componentProps as QuestionProps<iChoiceQuestion>)}
-							/>
-						) : null}
-
-						{question.type === "switch" ? (
-							<SwitchQuestion
-								{...(componentProps as QuestionProps<iSwitchQuestion>)}
-							/>
-						) : null}
-
-						{question.type === "slider" ? (
-							<SliderQuestion
-								{...(componentProps as QuestionProps<iSliderQuestion>)}
-							/>
-						) : null}
-
-						{question.type === "datetime" ? (
-							<DateTimeQuestion
-								{...(componentProps as QuestionProps<iDateTimeQuestion>)}
-							/>
-						) : null}
-
-						{question.type === "table" ? (
-							<TableQuestion {...(componentProps as QuestionProps<iTableQuestion>)} />
-						) : null}
-					</Card>
+					</Box>
 				)}
 			</Draggable>
 
