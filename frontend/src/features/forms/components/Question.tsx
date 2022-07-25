@@ -82,6 +82,7 @@ const Question = (
 	const handleDeleteQuestion = () => {
 		if (!token) return
 
+		setParentQuestion(null)
 		fetcher(
 			{
 				url: "/forms/{form_id}/questions/{question_id}",
@@ -95,11 +96,7 @@ const Question = (
 			{
 				toast: false
 			}
-		).then(({ data }) => {
-			if (data) {
-				setParentQuestion(null)
-			}
-		})
+		)
 	}
 
 	const componentProps = {
@@ -128,7 +125,7 @@ const Question = (
 							onClick={() => menuRef.current?.click()}
 							{...(editable ? provided.dragHandleProps : {})}
 						/>
-						<Menu closeOnSelect={false}>
+						<Menu>
 							<MenuButton
 								ref={menuRef}
 								as={IconButton}
@@ -139,7 +136,9 @@ const Question = (
 								zIndex={-1}
 								minW={6}
 							/>
-							<MenuList zIndex={10}>
+							<MenuList
+								bg="hsl(220, 26%, 18%)"
+								zIndex={10}>
 								<MenuOptionGroup
 									defaultValue={parentQuestion.type}
 									onChange={type =>
