@@ -1,8 +1,7 @@
-import {
-	Dispatch, FC, PropsWithChildren, SetStateAction, useContext, useEffect, useState
-} from "react"
+import { FC, PropsWithChildren, useContext, useEffect, useState } from "react"
 import { MdBlock } from "react-icons/md"
 import { useNavigate, useParams } from "react-router-dom"
+import { Updater, useImmer } from "use-immer"
 
 import {
 	Box, Button, Center, Container, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text
@@ -24,7 +23,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 	const params = useParams()
 
 	const [form, setForm] = useState<iForm | null>()
-	const [questions, setQuestions] = useState<iQuestion[] | null>(null)
+	const [questions, setQuestions] = useImmer<iQuestion[] | null>(null)
 
 	useEffect(() => {
 		const form_id = params["id"] ?? ""
@@ -90,9 +89,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 										editable={true}
 										form={form}
 										questions={questions}
-										setQuestions={
-											setQuestions as Dispatch<SetStateAction<iQuestion[]>>
-										}
+										setQuestions={setQuestions as Updater<iQuestion[]>}
 									/>
 								</TabPanel>
 								<TabPanel p={0}>
