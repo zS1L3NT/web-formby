@@ -1,4 +1,6 @@
-import { FC, PropsWithChildren, useContext, useEffect, useState } from "react"
+import {
+	Dispatch, FC, PropsWithChildren, SetStateAction, useContext, useEffect, useState
+} from "react"
 import { MdBlock } from "react-icons/md"
 import { useNavigate, useParams } from "react-router-dom"
 
@@ -85,9 +87,12 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 							<TabPanels>
 								<TabPanel p={0}>
 									<Questions
+										editable={true}
 										form={form}
 										questions={questions}
-										editable={true}
+										setQuestions={
+											setQuestions as Dispatch<SetStateAction<iQuestion[]>>
+										}
 									/>
 								</TabPanel>
 								<TabPanel p={0}>

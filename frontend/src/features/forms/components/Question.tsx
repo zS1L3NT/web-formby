@@ -37,9 +37,10 @@ const Question = (
 		index: number
 		editable: boolean
 		question: iQuestion
+		setQuestion: (question: iQuestion | null) => void
 	}>
 ) => {
-	const { index, editable, question } = props
+	const { index, editable, question, setQuestion } = props
 
 	const { token } = useContext(AuthContext)
 	const fetcher = useFetcher()
@@ -155,6 +156,7 @@ const Question = (
 				}
 			).then(({ data }) => {
 				if (data) {
+					setQuestion(data.question)
 					setDirtyQuestion(data.question)
 				}
 			})
@@ -177,7 +179,11 @@ const Question = (
 			{
 				toast: false
 			}
-		)
+		).then(({ data }) => {
+			if (data) {
+				setQuestion(null)
+			}
+		})
 	}
 
 	const componentProps = {

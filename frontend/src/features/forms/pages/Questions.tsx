@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react"
+import { Dispatch, FC, PropsWithChildren, SetStateAction } from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
 import { Box, Center, Spinner } from "@chakra-ui/react"
@@ -10,12 +10,13 @@ import Question from "../components/Question"
 
 const Questions: FC<
 	PropsWithChildren<{
+		editable: boolean
 		form: iForm
 		questions: iQuestion[] | null
-		editable: boolean
+		setQuestions: Dispatch<SetStateAction<iQuestion[]>>
 	}>
 > = props => {
-	const { form, questions, editable } = props
+	const { editable, form, questions, setQuestions } = props
 
 	return (
 		<>
@@ -37,6 +38,17 @@ const Questions: FC<
 										index={i}
 										editable={editable}
 										question={question}
+										setQuestion={question => {
+											if (question) {
+												setQuestions(
+													questions.map((q, j) =>
+														j === i ? question : q
+													)
+												)
+											} else {
+												setQuestions(questions.filter((_, j) => j !== i))
+											}
+										}}
 									/>
 								))
 							) : (
