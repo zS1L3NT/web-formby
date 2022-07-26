@@ -33,6 +33,7 @@ type Routes = {
 			body: Omit<iForm, "id" | "user_id">
 			response: {
 				message: string
+				form: WithTimestamps<iForm>
 			}
 		}
 	}
@@ -47,6 +48,7 @@ type Routes = {
 			body: Partial<Omit<iForm, "id" | "user_id">>
 			response: {
 				message: string
+				form: WithTimestamps<iForm>
 			}
 		}
 		DELETE: {

@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, useContext, useEffect } from "react"
-import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
 import { Box, Center, Spinner } from "@chakra-ui/react"
 
@@ -11,13 +11,7 @@ import FormHeader from "../components/FormHeader"
 import NewQuestionButton from "../components/NewQuestionButton"
 import Question from "../components/Question"
 
-const Questions: FC<
-	PropsWithChildren<{
-		editable: boolean
-	}>
-> = props => {
-	const { editable } = props
-
+const Questions: FC<PropsWithChildren<{}>> = props => {
 	const { token } = useContext(AuthContext)
 	const { form, questions, setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
@@ -75,8 +69,12 @@ const Questions: FC<
 	}
 
 	return (
-		<>
-			<FormHeader editable={editable} />
+		<Box
+			pos="relative"
+			mt={form!.live ? 4 : 0}
+			py={form!.live ? 1 : 0}
+			px={form!.live ? 4 : 0}>
+			<FormHeader editable={!form!.live} />
 			<DragDropContext
 				onDragEnd={result => handleReorder(result.source.index, result.destination?.index)}>
 				<Droppable droppableId="questions">
@@ -86,18 +84,25 @@ const Questions: FC<
 							className="questions"
 							{...provided.droppableProps}>
 							<NewQuestionButton
-								editable={editable}
+								editable={!form!.live}
 								index={0}
 							/>
 
 							{questions ? (
 								questions.map((question, i) => (
-									<Question
-										key={question.id}
+									<Draggable
 										index={i}
-										editable={editable}
-										parentQuestion={question}
-									/>
+										draggableId={question.id}>
+										{provided => (
+											<Question
+												key={question.id}
+												index={i}
+												provided={provided}
+												editable={!form!.live}
+												parentQuestion={question}
+											/>
+										)}
+									</Draggable>
 								))
 							) : (
 								<Center>
@@ -110,7 +115,19 @@ const Questions: FC<
 					)}
 				</Droppable>
 			</DragDropContext>
-		</>
+			<Box
+				w="max"
+				h="calc(var(--chakra-sizes-max) - var(--chakra-sizes-16))"
+				pos="absolute"
+				top={0}
+				left={0}
+				opacity={0.4}
+				bg="black"
+				borderRadius="lg"
+				zIndex={form!.live ? 1 : -1}
+				cursor="not-allowed"
+			/>
+		</Box>
 	)
 }
 

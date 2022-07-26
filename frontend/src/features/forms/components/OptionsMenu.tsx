@@ -99,7 +99,7 @@ const OptionsMenu = (
 	}
 
 	return (
-		<Menu>
+		<Menu isLazy>
 			<MenuButton
 				ref={menuRef}
 				as={IconButton}

@@ -1,5 +1,5 @@
 import { createRef, PropsWithChildren, useContext, useEffect } from "react"
-import { Draggable } from "react-beautiful-dnd"
+import { DraggableProvided } from "react-beautiful-dnd"
 import { useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
@@ -38,11 +38,12 @@ export type QuestionProps<iQ extends iQuestion> = PropsWithChildren<{
 const Question = (
 	props: PropsWithChildren<{
 		index: number
+		provided?: DraggableProvided
 		editable: boolean
 		parentQuestion: iQuestion
 	}>
 ) => {
-	const { index, editable, parentQuestion } = props
+	const { index, provided, editable, parentQuestion } = props
 
 	const { token } = useContext(AuthContext)
 	const { setQuestions } = useContext(FormContext)
@@ -133,168 +134,148 @@ const Question = (
 
 	return (
 		<>
-			<Draggable
-				index={index}
-				draggableId={parentQuestion.id}>
-				{provided => (
-					<Box
-						ref={editable ? provided.innerRef : null}
-						{...(editable ? provided.draggableProps : {})}>
-						<Card
-							mb={4}
-							pos="relative">
-							<IconButton
-								hidden={!editable}
-								icon={<DragHandleIcon />}
-								aria-label="Options"
-								pos="absolute"
-								right={4}
-								minW={6}
-								onClick={() => menuRef.current?.click()}
-								{...(editable ? provided.dragHandleProps : {})}
-							/>
+			<Box
+				ref={editable ? provided?.innerRef : null}
+				{...(editable ? provided?.draggableProps : {})}>
+				<Card
+					mb={4}
+					pos="relative">
+					<IconButton
+						hidden={!editable}
+						icon={<DragHandleIcon />}
+						aria-label="Options"
+						pos="absolute"
+						right={4}
+						minW={6}
+						onClick={() => menuRef.current?.click()}
+						{...(editable ? provided?.dragHandleProps : {})}
+					/>
 
-							<OptionsMenu
-								editable={editable}
-								index={index}
-								menuRef={menuRef}
-								onDelete={onOpen}
-								question={question}
-								setQuestion={setQuestion}
-							/>
+					<OptionsMenu
+						editable={editable}
+						index={index}
+						menuRef={menuRef}
+						onDelete={onOpen}
+						question={question}
+						setQuestion={setQuestion}
+					/>
 
-							<Box mr={editable ? 8 : 0}>
-								<EditableText
-									editable={editable}
-									required={true}
-									text={question.title}
-									setText={title => setQuestion({ ...question, title })}
-									placeholder="Add a title"
-									fontSize="2xl"
-									noOfLines={2}
-								/>
-							</Box>
-							<EditableText
-								editable={editable}
-								text={question.description ?? ""}
-								setText={description => setQuestion({ ...question, description })}
-								placeholder="Add a description"
-								fontSize="lg"
-								mt={2}
-								noOfLines={2}
-							/>
-
-							{question.photo ? (
-								<Box
-									pos="relative"
-									w="fit-content"
-									maxH={56}>
-									<Image
-										src={question.photo}
-										mt={2}
-										maxH={56}
-									/>
-									{editable ? (
-										<Center
-											w="max"
-											h="max"
-											pos="absolute"
-											top={0}
-											left={0}
-											bg="black"
-											zIndex={1}
-											transition="opacity 0.3s"
-											opacity={0}
-											_hover={{
-												opacity: 0.8
-											}}>
-											<IconButton
-												aria-label="Delete photo"
-												icon={<DeleteIcon />}
-												onClick={() => handleFileChange(null)}
-											/>
-										</Center>
-									) : null}
-								</Box>
-							) : editable ? (
-								<Box>
-									<Button
-										display="block"
-										mt={2}
-										mr="auto"
-										onClick={() => photoInputRef.current?.click()}>
-										Select Photo
-									</Button>
-									<Input
-										hidden={true}
-										ref={photoInputRef}
-										type="file"
-										accept="image/*"
-										onChange={e =>
-											handleFileChange(e.target.files?.[0] ?? null)
-										}
-									/>
-								</Box>
-							) : null}
-							
-							<Box h={4} />
-
-							{question.type === "text" ? (
-								<TextQuestion
-									{...(componentProps as QuestionProps<iTextQuestion>)}
-								/>
-							) : null}
-
-							{question.type === "paragraph" ? (
-								<ParagraphQuestion
-									{...(componentProps as QuestionProps<iParagraphQuestion>)}
-								/>
-							) : null}
-
-							{question.type === "color" ? (
-								<ColorQuestion
-									{...(componentProps as QuestionProps<iColorQuestion>)}
-								/>
-							) : null}
-
-							{question.type === "choice" ? (
-								<ChoiceQuestion
-									{...(componentProps as QuestionProps<iChoiceQuestion>)}
-								/>
-							) : null}
-
-							{question.type === "switch" ? (
-								<SwitchQuestion
-									{...(componentProps as QuestionProps<iSwitchQuestion>)}
-								/>
-							) : null}
-
-							{question.type === "slider" ? (
-								<SliderQuestion
-									{...(componentProps as QuestionProps<iSliderQuestion>)}
-								/>
-							) : null}
-
-							{question.type === "datetime" ? (
-								<DateTimeQuestion
-									{...(componentProps as QuestionProps<iDateTimeQuestion>)}
-								/>
-							) : null}
-
-							{question.type === "table" ? (
-								<TableQuestion
-									{...(componentProps as QuestionProps<iTableQuestion>)}
-								/>
-							) : null}
-						</Card>
-
-						<NewQuestionButton
+					<Box mr={editable ? 8 : 0}>
+						<EditableText
 							editable={editable}
-							index={index + 1}
+							required={true}
+							text={question.title}
+							setText={title => setQuestion({ ...question, title })}
+							placeholder="Add a title"
+							fontSize="2xl"
+							noOfLines={2}
 						/>
 					</Box>
-				)}
-			</Draggable>
+					<EditableText
+						editable={editable}
+						text={question.description ?? ""}
+						setText={description => setQuestion({ ...question, description })}
+						placeholder="Add a description"
+						fontSize="lg"
+						mt={2}
+						noOfLines={2}
+					/>
+
+					{question.photo ? (
+						<Box
+							pos="relative"
+							w="fit-content"
+							maxH={56}>
+							<Image
+								src={question.photo}
+								mt={2}
+								maxH={56}
+							/>
+							{editable ? (
+								<Center
+									w="max"
+									h="max"
+									pos="absolute"
+									top={0}
+									left={0}
+									bg="black"
+									zIndex={1}
+									transition="opacity 0.3s"
+									opacity={0}
+									_hover={{
+										opacity: 0.8
+									}}>
+									<IconButton
+										aria-label="Delete photo"
+										icon={<DeleteIcon />}
+										onClick={() => handleFileChange(null)}
+									/>
+								</Center>
+							) : null}
+						</Box>
+					) : editable ? (
+						<Box>
+							<Button
+								display="block"
+								mt={2}
+								mr="auto"
+								onClick={() => photoInputRef.current?.click()}>
+								Select Photo
+							</Button>
+							<Input
+								hidden={true}
+								ref={photoInputRef}
+								type="file"
+								accept="image/*"
+								onChange={e => handleFileChange(e.target.files?.[0] ?? null)}
+							/>
+						</Box>
+					) : null}
+
+					<Box h={4} />
+
+					{question.type === "text" ? (
+						<TextQuestion {...(componentProps as QuestionProps<iTextQuestion>)} />
+					) : null}
+
+					{question.type === "paragraph" ? (
+						<ParagraphQuestion
+							{...(componentProps as QuestionProps<iParagraphQuestion>)}
+						/>
+					) : null}
+
+					{question.type === "color" ? (
+						<ColorQuestion {...(componentProps as QuestionProps<iColorQuestion>)} />
+					) : null}
+
+					{question.type === "choice" ? (
+						<ChoiceQuestion {...(componentProps as QuestionProps<iChoiceQuestion>)} />
+					) : null}
+
+					{question.type === "switch" ? (
+						<SwitchQuestion {...(componentProps as QuestionProps<iSwitchQuestion>)} />
+					) : null}
+
+					{question.type === "slider" ? (
+						<SliderQuestion {...(componentProps as QuestionProps<iSliderQuestion>)} />
+					) : null}
+
+					{question.type === "datetime" ? (
+						<DateTimeQuestion
+							{...(componentProps as QuestionProps<iDateTimeQuestion>)}
+						/>
+					) : null}
+
+					{question.type === "table" ? (
+						<TableQuestion {...(componentProps as QuestionProps<iTableQuestion>)} />
+					) : null}
+				</Card>
+
+				<NewQuestionButton
+					editable={editable}
+					index={index + 1}
+				/>
+			</Box>
 
 			<QuestionDeleteAlert
 				isOpen={isOpen}

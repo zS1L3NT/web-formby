@@ -80,7 +80,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 							</TabList>
 							<TabPanels>
 								<TabPanel p={0}>
-									<Questions editable={!form.live} />
+									<Questions />
 								</TabPanel>
 								<TabPanel p={0}>
 									<Responses />
