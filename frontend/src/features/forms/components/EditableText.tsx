@@ -1,8 +1,6 @@
-import { FC, PropsWithChildren, useEffect, useState } from "react"
+import { createRef, FC, PropsWithChildren, useEffect, useState } from "react"
 
-import {
-	Box, Text, TextProps, useBoolean
-} from "@chakra-ui/react"
+import { Box, Text, TextProps, useBoolean } from "@chakra-ui/react"
 
 const EditableText: FC<
 	PropsWithChildren<
@@ -18,19 +16,27 @@ const EditableText: FC<
 > = props => {
 	const { editable, required, text, setText, placeholder, variant, ...style } = props
 
+	const textRef = createRef<HTMLParagraphElement>()
+
 	const [editing, setEditing] = useBoolean()
 	const [newText, setNewText] = useState(text)
 
 	useEffect(() => {
-		if (!editing && text !== newText) {
-			setText(newText)
+		if (textRef.current && !editing && text !== newText) {
+			if (newText === "") {
+				setNewText(text)
+				textRef.current!.innerText = text
+			} else {
+				setText(newText)
+			}
 		}
-	}, [text, setText, editing, newText])
+	}, [textRef, text, setText, editing, newText])
 
 	return (
 		<Box pos="relative">
 			{!editable && text === "" ? null : (
 				<Text
+					ref={textRef}
 					suppressContentEditableWarning={true}
 					textAlign="left"
 					contentEditable={editable}
