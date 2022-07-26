@@ -3,7 +3,7 @@ import { Draggable } from "react-beautiful-dnd"
 import { useImmer } from "use-immer"
 
 import { DragHandleIcon } from "@chakra-ui/icons"
-import { Box, IconButton, Image, useDisclosure, usePrevious } from "@chakra-ui/react"
+import { Box, Button, IconButton, Image, Input, useDisclosure, usePrevious } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
 import AuthContext from "../../../contexts/AuthContext"
@@ -80,6 +80,29 @@ const Question = (
 		}
 	}, [question, token])
 
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0]
+		if (!file) {
+			setQuestion(question => {
+				question.photo = null
+			})
+			return
+		}
+
+		if (!file.type.startsWith("image/")) {
+			e.target.value = ""
+			return
+		}
+
+		const reader = new FileReader()
+		reader.onload = () => {
+			setQuestion(question => {
+				question.photo = reader.result as string
+			})
+		}
+		reader.readAsDataURL(file)
+	}
+
 	const componentProps = {
 		editable,
 		question,
@@ -138,13 +161,27 @@ const Question = (
 								mt={2}
 								noOfLines={2}
 							/>
+
 							{question.photo ? (
-								<Image
-									src={question.photo}
-									mt={4}
-									maxH={56}
+								<>
+								<Button mt={2}>Remove Image</Button>
+									<Image
+										src={question.photo}
+										mt={2}
+										maxH={56}
+									/>
+								</>
+							) : (
+								<Input
+									type="file"
+									px={1}
+									py={1}
+									mt={2}
+									accept="image/*"
+									placeholder="Basic usage"
+									onChange={handleFileChange}
 								/>
-							) : null}
+							)}
 							<Box h={4} />
 
 							{question.type === "text" ? (
