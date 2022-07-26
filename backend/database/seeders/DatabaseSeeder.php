@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
 				"previous_question_id" => $prev_qn ? $prev_qn->id : NULL,
 				"title" => $faker->sentence(),
 				"description" => $faker->randomDigit() >= 5 ? $faker->sentences(3, true) : NULL,
-				"photo" => $faker->randomDigit() >= 5 ? $faker->sentences(3, true) : NULL
+				"photo" => $faker->randomDigit() >= 5 ? $faker->imageUrl() : NULL
 			];
 
 			$prev_qn = Question::create([

@@ -28,8 +28,8 @@ const NewQuestionButton = (
 		const question: Omit<iTextQuestion, "id" | "form_id"> = {
 			previous_question_id: questions[index - 1]?.id ?? null,
 			title: "New Question",
-			description: "",
-			photo: "",
+			description: null,
+			photo: null,
 			type: "text",
 			required: false
 		}
@@ -49,7 +49,7 @@ const NewQuestionButton = (
 			setQuestions(questions => {
 				questions.splice(index, 0, data.question)
 
-				if (questions.length !== index) {
+				if (index !== (questions.length - 1)) {
 					questions.at(index + 1)!.previous_question_id = data.question.id
 				}
 			})

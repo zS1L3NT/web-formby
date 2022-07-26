@@ -5,7 +5,8 @@ import { CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
 	AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter,
 	AlertDialogHeader, AlertDialogOverlay, Box, Button, IconButton, Menu, MenuButton, MenuDivider,
-	MenuItem, MenuItemOption, MenuList, MenuOptionGroup, useDisclosure, usePrevious
+	MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Spinner, useBoolean, useDisclosure,
+	usePrevious
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
@@ -50,6 +51,7 @@ const Question = (
 	const alertCancelRef = createRef<any>()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [isDuplicating, setIsDuplicating] = useBoolean()
 	const [question, setQuestion] = useState(parentQuestion)
 	const prevQuestion = usePrevious(question)
 
@@ -81,6 +83,72 @@ const Question = (
 			})
 		}
 	}, [question, token])
+
+	const handleDuplicateQuestion = async () => {
+		if (!token) return
+
+		setIsDuplicating.on()
+
+		const duplicateQuestion: Omit<iQuestion, "id" | "form_id"> = {
+			previous_question_id: question.id,
+			title: question.title,
+			description: question.description,
+			photo: question.photo,
+			required: question.required,
+			type: question.type
+		}
+
+		if (question.type === "choice") {
+			const duplicateChoiceQuestion = duplicateQuestion as Omit<
+				iChoiceQuestion,
+				"id" | "form_id"
+			>
+			duplicateChoiceQuestion.choices = question.choices
+			duplicateChoiceQuestion.choice_type = question.choice_type
+		}
+
+		if (question.type === "slider") {
+			const duplicateSliderQuestion = duplicateQuestion as Omit<
+				iSliderQuestion,
+				"id" | "form_id"
+			>
+			duplicateSliderQuestion.slider_min = question.slider_min
+			duplicateSliderQuestion.slider_step = question.slider_step
+			duplicateSliderQuestion.slider_max = question.slider_max
+		}
+
+		if (question.type === "table") {
+			const duplicateTableQuestion = duplicateQuestion as Omit<
+				iTableQuestion,
+				"id" | "form_id"
+			>
+			duplicateTableQuestion.table_columns = question.table_columns
+			duplicateTableQuestion.table_rows = question.table_rows
+			duplicateTableQuestion.table_type = question.table_type
+		}
+
+		const { data } = await fetcher({
+			url: "/forms/{form_id}/questions",
+			method: "POST",
+			body: duplicateQuestion,
+			parameters: {
+				form_id: question.form_id
+			},
+			token
+		})
+
+		if (data) {
+			setQuestions(questions => {
+				questions.splice(index + 1, 0, data.question)
+
+				if (index !== questions.length - 1) {
+					questions.at(index + 2)!.previous_question_id = data.question.id
+				}
+			})
+		}
+
+		setIsDuplicating.off()
+	}
 
 	const handleDeleteQuestion = () => {
 		if (!token) return
@@ -185,7 +253,21 @@ const Question = (
 										type="checkbox">
 										<MenuItemOption value="required">Required</MenuItemOption>
 									</MenuOptionGroup>
-									<MenuItem icon={<CopyIcon />}>Duplicate</MenuItem>
+									<MenuItem
+										isDisabled={isDuplicating}
+										icon={
+											isDuplicating ? (
+												<Spinner
+													w={3}
+													h={3}
+												/>
+											) : (
+												<CopyIcon />
+											)
+										}
+										onClick={handleDuplicateQuestion}>
+										Duplicate
+									</MenuItem>
 									<MenuItem
 										icon={<DeleteIcon />}
 										onClick={onOpen}>

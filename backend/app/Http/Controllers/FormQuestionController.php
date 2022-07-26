@@ -15,8 +15,8 @@ class FormQuestionController extends Controller
 		$this->validate("store", [
 			"previous_question_id" => ["nullable", "uuid"],
 			"title" => ["required", "max:255", "string"],
-			"description" => ["max:255", "string"],
-			"photo" => ["max:255", "url"],
+			"description" => ["nullable", "max:255", "string"],
+			"photo" => ["nullable", "max:255", "url"],
 			"required" => ["boolean"],
 			"type" => ["required", "in:text,paragraph,color,choice,switch,slider,datetime,table"],
 
@@ -36,8 +36,8 @@ class FormQuestionController extends Controller
 		$this->validate("update", [
 			"previous_question_id" => ["nullable", "uuid"],
 			"title" => ["max:255", "string"],
-			"description" => ["max:255", "string"],
-			"photo" => ["max:255", "url"],
+			"description" => ["nullable", "max:255", "string"],
+			"photo" => ["nullable", "max:255", "url"],
 			"required" => ["boolean"],
 			"type" => ["in:text,paragraph,color,choice,switch,slider,datetime,table"],
 
