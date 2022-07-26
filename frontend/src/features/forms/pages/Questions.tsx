@@ -88,7 +88,10 @@ const Questions: FC<
 							ref={provided.innerRef}
 							className="questions"
 							{...provided.droppableProps}>
-							<NewQuestionButton index={0} />
+							<NewQuestionButton
+								editable={editable}
+								index={0}
+							/>
 
 							{questions ? (
 								questions.map((question, i) => (

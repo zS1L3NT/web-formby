@@ -255,7 +255,10 @@ const Question = (
 							) : null}
 						</Card>
 
-						<NewQuestionButton index={index + 1} />
+						<NewQuestionButton
+							editable={editable}
+							index={index + 1}
+						/>
 					</Box>
 				)}
 			</Draggable>

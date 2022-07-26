@@ -10,10 +10,11 @@ import { iTextQuestion } from "../../../models/Question"
 
 const NewQuestionButton = (
 	props: PropsWithChildren<{
+		editable: boolean
 		index: number
 	}>
 ) => {
-	const { index } = props
+	const { editable, index } = props
 
 	const { token } = useContext(AuthContext)
 	const { form, questions, setQuestions } = useContext(FormContext)
@@ -57,7 +58,7 @@ const NewQuestionButton = (
 		setIsCreating.off()
 	}
 
-	return (
+	return editable ? (
 		<IconButton
 			aria-label="Add Question"
 			isDisabled={isCreating}
@@ -79,6 +80,8 @@ const NewQuestionButton = (
 			mb={4}
 			onClick={() => handleCreate(index)}
 		/>
+	) : (
+		<></>
 	)
 }
 
