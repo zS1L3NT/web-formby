@@ -19,7 +19,7 @@ return new class extends Migration
 			$table->uuid('previous_question_id')->nullable();
 			$table->string('title');
 			$table->string('description')->nullable();
-			$table->string('photo')->nullable();
+			$table->longText('photo')->nullable();
 			$table->boolean('required')->default(false);
 			$table->enum('type', ["text", "paragraph", "color", "choice", "switch", "slider", "datetime", "table"]);
 

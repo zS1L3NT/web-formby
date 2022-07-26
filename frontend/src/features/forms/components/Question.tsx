@@ -2,8 +2,10 @@ import { createRef, PropsWithChildren, useContext, useEffect } from "react"
 import { Draggable } from "react-beautiful-dnd"
 import { useImmer } from "use-immer"
 
-import { DragHandleIcon } from "@chakra-ui/icons"
-import { Box, Button, IconButton, Image, Input, useDisclosure, usePrevious } from "@chakra-ui/react"
+import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
+import {
+	Box, Button, Center, IconButton, Image, Input, useDisclosure, usePrevious, useToast
+} from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
 import AuthContext from "../../../contexts/AuthContext"
@@ -45,6 +47,8 @@ const Question = (
 	const { token } = useContext(AuthContext)
 	const { setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
+	const toast = useToast()
+	const photoInputRef = createRef<HTMLInputElement>()
 	const menuRef = createRef<HTMLButtonElement>()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
@@ -80,8 +84,7 @@ const Question = (
 		}
 	}, [question, token])
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0]
+	const handleFileChange = (file: File | null) => {
 		if (!file) {
 			setQuestion(question => {
 				question.photo = null
@@ -90,7 +93,22 @@ const Question = (
 		}
 
 		if (!file.type.startsWith("image/")) {
-			e.target.value = ""
+			toast({
+				title: "File is not an image",
+				status: "error",
+				isClosable: true
+			})
+			photoInputRef.current!.value = ""
+			return
+		}
+
+		if (file.size > 500000) {
+			toast({
+				title: "File size cannot be more than 500kB",
+				status: "error",
+				isClosable: true
+			})
+			photoInputRef.current!.value = ""
 			return
 		}
 
@@ -163,25 +181,58 @@ const Question = (
 							/>
 
 							{question.photo ? (
-								<>
-								<Button mt={2}>Remove Image</Button>
+								<Box
+									pos="relative"
+									w="fit-content"
+									maxH={56}>
 									<Image
 										src={question.photo}
 										mt={2}
 										maxH={56}
 									/>
-								</>
-							) : (
-								<Input
-									type="file"
-									px={1}
-									py={1}
-									mt={2}
-									accept="image/*"
-									placeholder="Basic usage"
-									onChange={handleFileChange}
-								/>
-							)}
+									{editable ? (
+										<Center
+											w="max"
+											h="max"
+											pos="absolute"
+											top={0}
+											left={0}
+											bg="black"
+											zIndex={1}
+											transition="opacity 0.3s"
+											opacity={0}
+											_hover={{
+												opacity: 0.8
+											}}>
+											<IconButton
+												aria-label="Delete photo"
+												icon={<DeleteIcon />}
+												onClick={() => handleFileChange(null)}
+											/>
+										</Center>
+									) : null}
+								</Box>
+							) : editable ? (
+								<Box>
+									<Button
+										display="block"
+										mt={2}
+										mr="auto"
+										onClick={() => photoInputRef.current?.click()}>
+										Select Photo
+									</Button>
+									<Input
+										hidden={true}
+										ref={photoInputRef}
+										type="file"
+										accept="image/*"
+										onChange={e =>
+											handleFileChange(e.target.files?.[0] ?? null)
+										}
+									/>
+								</Box>
+							) : null}
+							
 							<Box h={4} />
 
 							{question.type === "text" ? (
