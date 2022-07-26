@@ -26,7 +26,7 @@ export default (old: iQuestion, new_: iQuestion) => {
 
 		switch (new_.type) {
 			case "choice":
-				difference.choices = new_.choices ?? []
+				difference.choices = new_.choices ?? ["Choice 1"]
 				difference.choice_type = new_.choice_type ?? "radio"
 				break
 			case "slider":
@@ -35,8 +35,8 @@ export default (old: iQuestion, new_: iQuestion) => {
 				difference.slider_max = new_.slider_max ?? 100
 				break
 			case "table":
-				difference.table_columns = new_.table_columns ?? []
-				difference.table_rows = new_.table_rows ?? []
+				difference.table_columns = new_.table_columns ?? ["Column 1"]
+				difference.table_rows = new_.table_rows ?? ["Row 1"]
 				difference.table_type = new_.table_type ?? "radio"
 				break
 		}
