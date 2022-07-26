@@ -108,6 +108,7 @@ const Questions: FC<
 								</Center>
 							)}
 							{provided.placeholder}
+							<Box h={16} />
 						</Box>
 					)}
 				</Droppable>
