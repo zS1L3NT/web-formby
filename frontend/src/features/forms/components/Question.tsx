@@ -4,9 +4,9 @@ import { Draggable } from "react-beautiful-dnd"
 import { CopyIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
 	AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter,
-	AlertDialogHeader, AlertDialogOverlay, Box, Button, IconButton, Menu, MenuButton, MenuDivider,
-	MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Spinner, useBoolean, useDisclosure,
-	usePrevious
+	AlertDialogHeader, AlertDialogOverlay, Box, Button, IconButton, Image, Menu, MenuButton,
+	MenuDivider, MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Spinner, useBoolean,
+	useDisclosure, usePrevious
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
@@ -296,6 +296,13 @@ const Question = (
 								mt={2}
 								noOfLines={2}
 							/>
+							{question.photo ? (
+								<Image
+									src={question.photo}
+									mt={4}
+									maxH={56}
+								/>
+							) : null}
 							<Box h={4} />
 
 							{question.type === "text" ? (
