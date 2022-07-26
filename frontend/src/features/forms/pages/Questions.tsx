@@ -76,10 +76,7 @@ const Questions: FC<
 
 	return (
 		<>
-			<FormHeader
-				form={form}
-				editable={editable}
-			/>
+			<FormHeader editable={editable} />
 			<DragDropContext
 				onDragEnd={result => handleReorder(result.source.index, result.destination?.index)}>
 				<Droppable droppableId="questions">

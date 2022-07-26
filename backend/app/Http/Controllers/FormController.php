@@ -49,10 +49,11 @@ class FormController extends Controller
 	 */
 	public function store()
 	{
-		Form::create([...request()->data, "user_id" => auth()->user()->id]);
+		$form = Form::create([...request()->data, "user_id" => auth()->user()->id]);
 
 		return [
-			"message" => "Form created successfully!"
+			"message" => "Form created successfully!",
+			"form" => $form
 		];
 	}
 
@@ -76,7 +77,8 @@ class FormController extends Controller
 		$form->update(request()->data);
 
 		return [
-			"message" => "Form updated successfully!"
+			"message" => "Form updated successfully!",
+			"form" => $form
 		];
 	}
 
