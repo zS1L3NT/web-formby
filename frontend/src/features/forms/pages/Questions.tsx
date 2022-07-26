@@ -100,17 +100,6 @@ const Questions: FC<
 										index={i}
 										editable={editable}
 										parentQuestion={question}
-										setParentQuestion={question => {
-											if (question) {
-												setQuestions(
-													questions.map((q, j) =>
-														j === i ? question : q
-													)
-												)
-											} else {
-												setQuestions(questions.filter((_, j) => j !== i))
-											}
-										}}
 									/>
 								))
 							) : (

@@ -10,6 +10,7 @@ import {
 
 import Card from "../../../components/Card"
 import AuthContext from "../../../contexts/AuthContext"
+import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
 import {
 	iChoiceQuestion, iColorQuestion, iDateTimeQuestion, iParagraphQuestion, iQuestion,
@@ -38,12 +39,12 @@ const Question = (
 		index: number
 		editable: boolean
 		parentQuestion: iQuestion
-		setParentQuestion: (question: iQuestion | null) => void
 	}>
 ) => {
-	const { index, editable, parentQuestion, setParentQuestion } = props
+	const { index, editable, parentQuestion } = props
 
 	const { token } = useContext(AuthContext)
+	const { setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
 	const menuRef = createRef<HTMLButtonElement>()
 	const alertCancelRef = createRef<any>()
@@ -73,7 +74,9 @@ const Question = (
 				}
 			).then(({ data }) => {
 				if (data) {
-					setParentQuestion(data.question)
+					setQuestions(questions =>
+						questions.map((q, i) => (i === index ? data.question : q))
+					)
 				}
 			})
 		}
@@ -82,7 +85,15 @@ const Question = (
 	const handleDeleteQuestion = () => {
 		if (!token) return
 
-		setParentQuestion(null)
+		setQuestions(questions =>
+			questions
+				.filter((_, i) => i !== index)
+				.map(q =>
+					q.previous_question_id === parentQuestion.id
+						? { ...q, previous_question_id: parentQuestion.previous_question_id }
+						: q
+				)
+		)
 		fetcher(
 			{
 				url: "/forms/{form_id}/questions/{question_id}",
