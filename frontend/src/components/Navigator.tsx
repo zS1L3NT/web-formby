@@ -171,8 +171,9 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 			<Box
 				display={{ md: "none" }}
 				pos="absolute"
-				top="60px"
-				w="max">
+				top="56px"
+				w="max"
+				zIndex={100}>
 				<Collapse
 					in={isOpen}
 					animateOpacity>
