@@ -74,7 +74,6 @@ const Question = (
 			).then(({ data }) => {
 				if (data) {
 					setParentQuestion(data.question)
-					setQuestion(data.question)
 				}
 			})
 		}
