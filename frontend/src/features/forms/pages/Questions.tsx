@@ -1,114 +1,78 @@
-import { FC, PropsWithChildren } from "react"
-import { DragDropContext, Draggable, DraggableProvided, Droppable } from "react-beautiful-dnd"
+import { FC, PropsWithChildren, useContext, useEffect } from "react"
+import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
 import { Box, Center, Spinner } from "@chakra-ui/react"
 
-import Form from "../../../models/Form"
-import {
-	ChoiceQuestion, ColorQuestion, DateTimeQuestion, ParagraphQuestion, Question, SliderQuestion,
-	SwitchQuestion, TableQuestion, TextQuestion
-} from "../../../models/Question"
+import AuthContext from "../../../contexts/AuthContext"
+import FormContext from "../../../contexts/FormContext"
+import useFetcher from "../../../hooks/useFetcher"
+import assertLinkedQuestions from "../../../utils/assertLinkedQuestions"
 import FormHeader from "../components/FormHeader"
-import ChoiceQuestionComponent from "../components/questions/ChoiceQuestionComponent"
-import ColorQuestionComponent from "../components/questions/ColorQuestionComponent"
-import DateTimeQuestionComponent from "../components/questions/DateTimeQuestionComponent"
-import ParagraphQuestionComponent from "../components/questions/ParagraphQuestionComponent"
-import SliderQuestionComponent from "../components/questions/SliderQuestionComponent"
-import SwitchQuestionComponent from "../components/questions/SwitchQuestionComponent"
-import TableQuestionComponent from "../components/questions/TableQuestionComponent"
-import TextQuestionComponent from "../components/questions/TextQuestionComponent"
-
-const QuestionSwitcher: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: Question
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
-
-	const componentProps = {
-		key: question.id,
-		editable,
-		provided
-	}
-
-	if (question instanceof TextQuestion) {
-		return (
-			<TextQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-	if (question instanceof ParagraphQuestion) {
-		return (
-			<ParagraphQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-	if (question instanceof SliderQuestion) {
-		return (
-			<SliderQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-	if (question instanceof SwitchQuestion) {
-		return (
-			<SwitchQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-	if (question instanceof ColorQuestion) {
-		return (
-			<ColorQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-	if (question instanceof DateTimeQuestion) {
-		return (
-			<DateTimeQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-	if (question instanceof ChoiceQuestion) {
-		return (
-			<ChoiceQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-	if (question instanceof TableQuestion) {
-		return (
-			<TableQuestionComponent
-				question={question}
-				{...componentProps}
-			/>
-		)
-	}
-
-	return <></>
-}
+import NewQuestionButton from "../components/NewQuestionButton"
+import Question from "../components/Question"
 
 const Questions: FC<
 	PropsWithChildren<{
-		form: Form
-		questions: Question[] | null
 		editable: boolean
 	}>
 > = props => {
-	const { form, questions, editable } = props
+	const { editable } = props
+
+	const { token } = useContext(AuthContext)
+	const { form, questions, setQuestions } = useContext(FormContext)
+	const fetcher = useFetcher()
+
+	useEffect(() => {
+		if (!questions) return
+
+		assertLinkedQuestions(questions)
+	}, [questions])
+
+	const handleReorder = (oldIndex: number, newIndex?: number) => {
+		if (
+			oldIndex === newIndex ||
+			newIndex === undefined ||
+			questions === null ||
+			token === null
+		) {
+			return
+		}
+
+		setQuestions(questions => {
+			const __questions = [...questions.map(question => ({ ...question }))]
+
+			questions.splice(newIndex, 0, questions.splice(oldIndex, 1)[0]!)
+
+			questions.at(oldIndex)!.previous_question_id = questions[oldIndex - 1]?.id ?? null
+			if (questions.at(oldIndex + 1)) {
+				questions.at(oldIndex + 1)!.previous_question_id = questions.at(oldIndex)!.id
+			}
+
+			questions.at(newIndex)!.previous_question_id = questions[newIndex - 1]?.id ?? null
+			if (questions.at(newIndex + 1)) {
+				questions.at(newIndex + 1)!.previous_question_id = questions.at(newIndex)!.id
+			}
+
+			for (const __question of __questions) {
+				const question = questions.find(question => question.id === __question.id)!
+
+				if (__question.previous_question_id !== question.previous_question_id) {
+					fetcher({
+						url: "/forms/{form_id}/questions/{question_id}",
+						method: "PUT",
+						parameters: {
+							form_id: form!.id,
+							question_id: question.id
+						},
+						body: {
+							previous_question_id: question.previous_question_id
+						},
+						token
+					})
+				}
+			}
+		})
+	}
 
 	return (
 		<>
@@ -116,27 +80,27 @@ const Questions: FC<
 				form={form}
 				editable={editable}
 			/>
-			<DragDropContext onDragEnd={console.log}>
+			<DragDropContext
+				onDragEnd={result => handleReorder(result.source.index, result.destination?.index)}>
 				<Droppable droppableId="questions">
 					{provided => (
 						<Box
 							ref={provided.innerRef}
 							className="questions"
 							{...provided.droppableProps}>
+							<NewQuestionButton
+								editable={editable}
+								index={0}
+							/>
+
 							{questions ? (
 								questions.map((question, i) => (
-									<Draggable
+									<Question
 										key={question.id}
 										index={i}
-										draggableId={question.id}>
-										{provided => (
-											<QuestionSwitcher
-												provided={provided}
-												question={question}
-												editable={editable}
-											/>
-										)}
-									</Draggable>
+										editable={editable}
+										parentQuestion={question}
+									/>
 								))
 							) : (
 								<Center>
@@ -144,6 +108,7 @@ const Questions: FC<
 								</Center>
 							)}
 							{provided.placeholder}
+							<Box h={16} />
 						</Box>
 					)}
 				</Droppable>

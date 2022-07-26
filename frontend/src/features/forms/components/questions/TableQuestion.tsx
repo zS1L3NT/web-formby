@@ -1,34 +1,25 @@
-import { FC, PropsWithChildren, useState } from "react"
-import { DraggableProvided } from "react-beautiful-dnd"
+import { FC } from "react"
 
 import {
-	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
-	Text, Th, Thead, Tr
+    Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
+    Text, Th, Thead, Tr
 } from "@chakra-ui/react"
 
 import Dropdown from "../../../../components/Dropdown"
-import { TableQuestion } from "../../../../models/Question"
+import { iTableQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
-import QuestionComponent from "../QuestionComponent"
+import { QuestionProps } from "../Question"
 
-const TableQuestionComponent: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: TableQuestion
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
-
-	const [tableType, setTableType] = useState(question.tableType)
-	const [tableRows, setTableRows] = useState(question.tableRows)
-	const [tableColumns, setTableColumns] = useState(question.tableColumns)
+const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
+	const { editable, question, setQuestion } = props
+	const {
+		table_rows: tableRows,
+		table_columns: tableColumns,
+		table_type: tableType
+	} = question
 
 	return (
-		<QuestionComponent
-			provided={provided}
-			editable={editable}
-			question={question}>
+		<>
 			{editable ? (
 				<Flex
 					alignItems="center"
@@ -41,9 +32,12 @@ const TableQuestionComponent: FC<
 						<Dropdown
 							choices={["radio", "checkbox"]}
 							selectedChoice={tableType}
-							setSelectedChoice={choice => {
-								if (choice !== null) {
-									setTableType(choice as "radio" | "checkbox")
+							setSelectedChoice={table_type => {
+								if (table_type !== null) {
+									setQuestion({
+										...question,
+										table_type
+									})
 								}
 							}}
 						/>
@@ -63,8 +57,10 @@ const TableQuestionComponent: FC<
 						<Text textAlign="left">Rows</Text>
 						<ListMaker
 							editable={editable}
-							items={tableRows}
-							setItems={setTableRows}
+							items={tableRows ?? []}
+							setItems={table_rows =>
+								setQuestion({ ...question, table_rows })
+							}
 						/>
 					</Box>
 
@@ -74,8 +70,10 @@ const TableQuestionComponent: FC<
 						<Text textAlign="left">Columns</Text>
 						<ListMaker
 							editable={editable}
-							items={tableColumns}
-							setItems={setTableColumns}
+							items={tableColumns ?? []}
+							setItems={table_columns =>
+								setQuestion({ ...question, table_columns })
+							}
 						/>
 					</Box>
 				</Stack>
@@ -86,19 +84,19 @@ const TableQuestionComponent: FC<
 					<Thead>
 						<Tr>
 							<Th />
-							{tableColumns.map(row => (
+							{tableColumns?.map(row => (
 								<Th key={row}>{row}</Th>
 							))}
 						</Tr>
 					</Thead>
 					<Tbody>
 						{[
-							tableRows.map(column =>
+							tableRows?.map(column =>
 								tableType === "checkbox" ? (
 									<Tr key={column}>
 										<CheckboxGroup>
 											<Th>{column}</Th>
-											{tableColumns.map(row => (
+											{tableColumns?.map(row => (
 												<Th key={column + "-" + row}>
 													<Checkbox isDisabled={editable} />
 												</Th>
@@ -110,7 +108,7 @@ const TableQuestionComponent: FC<
 										key={column}
 										as={Tr}>
 										<Th>{column}</Th>
-										{tableColumns.map(row => (
+										{tableColumns?.map(row => (
 											<Th key={column + "-" + row}>
 												<Radio isDisabled={editable} />
 											</Th>
@@ -122,8 +120,8 @@ const TableQuestionComponent: FC<
 					</Tbody>
 				</Table>
 			</TableContainer>
-		</QuestionComponent>
+		</>
 	)
 }
 
-export default TableQuestionComponent
+export default TableQuestion

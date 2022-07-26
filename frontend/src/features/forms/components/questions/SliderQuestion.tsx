@@ -1,31 +1,22 @@
-import { FC, PropsWithChildren, useEffect, useState } from "react"
-import { DraggableProvided } from "react-beautiful-dnd"
+import { FC, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 
 import {
-	Box, Flex, InputGroup, InputLeftAddon, NumberInput, NumberInputField, Slider, SliderFilledTrack,
-	SliderMark, SliderThumb, SliderTrack, Text
+    Box, Flex, InputGroup, InputLeftAddon, NumberInput, NumberInputField, Slider, SliderFilledTrack,
+    SliderMark, SliderThumb, SliderTrack, Text
 } from "@chakra-ui/react"
 
-import { SliderQuestion } from "../../../../models/Question"
-import QuestionComponent from "../QuestionComponent"
+import { iSliderQuestion } from "../../../../models/Question"
+import { QuestionProps } from "../Question"
 
-const SliderQuestionComponent: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: SliderQuestion
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
+const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
+	const { editable, question, setQuestion } = props
+	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = question
 
-	const [sliderMin, setSliderMin] = useState(question.sliderMin)
-	const [sliderStep, setSliderStep] = useState(question.sliderStep)
-	const [sliderMax, setSliderMax] = useState(question.sliderMax)
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
-		if (isNaN(sliderMin) || isNaN(sliderMax) || isNaN(sliderStep)) {
+		if (isNaN(sliderMin) || isNaN(sliderStep) || isNaN(sliderMax)) {
 			return setError("Please enter valid numbers")
 		}
 
@@ -55,16 +46,13 @@ const SliderQuestionComponent: FC<
 
 	const css = {
 		"& > input": {
-			"borderTopLeftRadius": 0,
-			"borderBottomLeftRadius": 0
+			borderTopLeftRadius: 0,
+			borderBottomLeftRadius: 0
 		}
 	}
 
 	return (
-		<QuestionComponent
-			provided={provided}
-			editable={editable}
-			question={question}>
+		<>
 			{editable ? (
 				<Flex
 					w="max"
@@ -79,7 +67,12 @@ const SliderQuestionComponent: FC<
 							flex="1"
 							css={css}
 							value={isNaN(sliderMin) ? "" : sliderMin}
-							onChange={min => setSliderMin(parseInt(min))}>
+							onChange={(_, slider_min) =>
+								setQuestion({
+									...question,
+									slider_min
+								})
+							}>
 							<NumberInputField />
 						</NumberInput>
 					</InputGroup>
@@ -89,7 +82,12 @@ const SliderQuestionComponent: FC<
 							flex="1"
 							css={css}
 							value={isNaN(sliderStep) ? "" : sliderStep}
-							onChange={step => setSliderStep(parseInt(step))}
+							onChange={(_, slider_step) =>
+								setQuestion({
+									...question,
+									slider_step
+								})
+							}
 							min={1}>
 							<NumberInputField />
 						</NumberInput>
@@ -100,7 +98,12 @@ const SliderQuestionComponent: FC<
 							flex="1"
 							css={css}
 							value={isNaN(sliderMax) ? "" : sliderMax}
-							onChange={max => setSliderMax(parseInt(max))}>
+							onChange={(_, slider_max) =>
+								setQuestion({
+									...question,
+									slider_max
+								})
+							}>
 							<NumberInputField />
 						</NumberInput>
 					</InputGroup>
@@ -141,8 +144,8 @@ const SliderQuestionComponent: FC<
 					</Slider>
 				</ErrorBoundary>
 			</Box>
-		</QuestionComponent>
+		</>
 	)
 }
 
-export default SliderQuestionComponent
+export default SliderQuestion

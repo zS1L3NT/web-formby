@@ -10,7 +10,6 @@ import {
 import AuthContext from "../../../contexts/AuthContext"
 import useFetcher from "../../../hooks/useFetcher"
 import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"
-import User from "../../../models/User"
 
 const Login: FC<PropsWithChildren<{}>> = props => {
 	const { setToken, setUser } = useContext(AuthContext)
@@ -63,7 +62,7 @@ const Login: FC<PropsWithChildren<{}>> = props => {
 
 		if (data) {
 			setToken(data.token)
-			setUser(User.fromJson(data.user))
+			setUser(data.user)
 			toast({
 				title: data.message,
 				status: "success",

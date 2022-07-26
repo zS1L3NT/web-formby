@@ -2,7 +2,6 @@ import { useContext, useDebugValue, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import AuthContext from "../contexts/AuthContext"
-import User from "../models/User"
 import useFetcher from "./useFetcher"
 
 const useOnlyAuthenticated = (redirect = "/login") => {
@@ -26,9 +25,9 @@ const useOnlyAuthenticated = (redirect = "/login") => {
 				},
 				{ toast: false }
 			).then(({ data }) => {
-				if (!data) return
-
-				setUser(User.fromJson(data))
+				if (data) {
+					setUser(data)
+				}
 			})
 		}
 	}, [token, user])

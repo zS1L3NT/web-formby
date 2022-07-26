@@ -1,13 +1,13 @@
 import { createContext, FC, PropsWithChildren, useEffect, useState } from "react"
 
 import useFetcher from "../hooks/useFetcher"
-import User from "../models/User"
+import { iUser } from "../models/User"
 
-const context = createContext<{
+const AuthContext = createContext<{
 	token: string | null
 	setToken: (token: string | null) => void
-	user: User | null
-	setUser: (user: User | null) => void
+	user: iUser | null
+	setUser: (user: iUser | null) => void
 }>({
 	token: null,
 	setToken: () => {},
@@ -19,7 +19,7 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 	const fetcher = useFetcher()
 
 	const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
-	const [user, setUser] = useState<User | null>(null)
+	const [user, setUser] = useState<iUser | null>(null)
 
 	useEffect(() => {
 		const token = localStorage.getItem("token")
@@ -31,7 +31,7 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 				token
 			}).then(({ data }) => {
 				if (data) {
-					setUser(User.fromJson(data))
+					setUser(data)
 				} else {
 					setToken(null)
 					localStorage.removeItem("token")
@@ -46,12 +46,12 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 		} else {
 			localStorage.removeItem("token")
 		}
-		
+
 		setToken(token)
 	}
 
 	return (
-		<context.Provider
+		<AuthContext.Provider
 			value={{
 				token,
 				setToken: setTokenAndLocalStorage,
@@ -59,8 +59,8 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 				setUser
 			}}>
 			{props.children}
-		</context.Provider>
+		</AuthContext.Provider>
 	)
 }
 
-export default context
+export default AuthContext

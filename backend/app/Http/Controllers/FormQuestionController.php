@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Question;
+use Illuminate\Support\Facades\Log;
 
 class FormQuestionController extends Controller
 {
@@ -15,8 +16,8 @@ class FormQuestionController extends Controller
 		$this->validate("store", [
 			"previous_question_id" => ["nullable", "uuid"],
 			"title" => ["required", "max:255", "string"],
-			"description" => ["max:255", "string"],
-			"photo" => ["max:255", "url"],
+			"description" => ["nullable", "max:255", "string"],
+			"photo" => ["nullable", "string"],
 			"required" => ["boolean"],
 			"type" => ["required", "in:text,paragraph,color,choice,switch,slider,datetime,table"],
 
@@ -34,23 +35,24 @@ class FormQuestionController extends Controller
 		]);
 
 		$this->validate("update", [
+			"previous_question_id" => ["nullable", "uuid"],
 			"title" => ["max:255", "string"],
-			"description" => ["max:255", "string"],
-			"photo" => ["max:255", "url"],
+			"description" => ["nullable", "max:255", "string"],
+			"photo" => ["nullable", "string"],
 			"required" => ["boolean"],
 			"type" => ["in:text,paragraph,color,choice,switch,slider,datetime,table"],
 
-			"choices.*" => [...$when("choice"), "max:255", "string"],
-			"choices" => [...$when("choice"), "array"],
-			"choice_type" => [...$when("choice"), "in:radio,checkbox,dropdown"],
-			"slider_min" => [...$when("slider"), "integer"],
-			"slider_max" => [...$when("slider"), "integer"],
-			"slider_step" => [...$when("slider"), "integer"],
-			"table_columns.*" => [...$when("table"), "max:255", "string"],
-			"table_columns" => [...$when("table"), "array"],
-			"table_rows.*" => [...$when("table"), "max:255", "string"],
-			"table_rows" => [...$when("table"), "array"],
-			"table_type" => [...$when("table"), "in:radio,checkbox"]
+			"choices.*" => ["max:255", "string"],
+			"choices" => ["array"],
+			"choice_type" => ["in:radio,checkbox,dropdown"],
+			"slider_min" => ["integer"],
+			"slider_max" => ["integer"],
+			"slider_step" => ["integer"],
+			"table_columns.*" => ["max:255", "string"],
+			"table_columns" => ["array"],
+			"table_rows.*" => ["max:255", "string"],
+			"table_rows" => ["array"],
+			"table_type" => ["in:radio,checkbox"]
 		]);
 
 		$this->middleware('form.user')->only(["index", "show"]);
@@ -103,7 +105,8 @@ class FormQuestionController extends Controller
 			->update(["previous_question_id" => $question->id]);
 
 		return [
-			"message" => "Question created successfully!"
+			"message" => "Question created successfully!",
+			"question" => $question
 		];
 	}
 
@@ -124,24 +127,11 @@ class FormQuestionController extends Controller
 	 */
 	public function update(Form $form, Question $question)
 	{
-		if (request("type") != NULL) {
-			$question->update([
-				"choices" => NULL,
-				"choice_type" => NULL,
-				"slider_min" => NULL,
-				"slider_max" => NULL,
-				"slider_step" => NULL,
-				"table_columns" => NULL,
-				"table_rows" => NULL,
-				"table_type" => NULL,
-				...request()->data
-			]);
-		} else {
-			$question->update(request()->data);
-		}
+		$question->update(request()->data);
 
 		return [
-			"message" => "Question updated successfully!"
+			"message" => "Question updated successfully!",
+			"question" => $question
 		];
 	}
 

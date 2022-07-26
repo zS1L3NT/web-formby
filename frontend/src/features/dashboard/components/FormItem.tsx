@@ -6,9 +6,14 @@ import { useNavigate } from "react-router-dom"
 import { AddIcon, EditIcon, LockIcon } from "@chakra-ui/icons"
 import { Box, Center, chakra, Flex, HStack, Text } from "@chakra-ui/react"
 
-import Form from "../../../models/Form"
+import { WithTimestamps } from "../../../models"
+import { iForm } from "../../../models/Form"
 
-const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
+const FormItem: FC<
+	PropsWithChildren<{
+		form: WithTimestamps<iForm> | null
+	}>
+> = props => {
 	const { form } = props
 
 	const navigate = useNavigate()
@@ -53,14 +58,14 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 					noOfLines={2}
 					opacity="0.75">
 					<chakra.span fontWeight="bold">Created At: </chakra.span>
-					{form.createdAt.toLocaleString()}
+					{new Date(form.created_at).toLocaleString()}
 				</Text>
 				<Text
 					fontSize="12"
 					noOfLines={2}
 					opacity="0.75">
 					<chakra.span fontWeight="bold">Last Updated: </chakra.span>
-					{form.updatedAt.toLocaleString()}
+					{new Date(form.updated_at).toLocaleString()}
 				</Text>
 				<HStack
 					mt={1}
@@ -77,7 +82,7 @@ const FormItem: FC<PropsWithChildren<{ form: Form | null }>> = props => {
 							color="primary"
 						/>
 					)}
-					{form.requiresAuth ? (
+					{form.requires_auth ? (
 						<LockIcon
 							w={4}
 							h={4}

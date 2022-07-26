@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext, useEffect, useState } from "react"
+import { FC, PropsWithChildren, useContext, useEffect } from "react"
 import { MdBlock } from "react-icons/md"
 import { useNavigate, useParams } from "react-router-dom"
 
@@ -7,9 +7,8 @@ import {
 } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
-import Form from "../../../models/Form"
-import { Question } from "../../../models/Question"
 import Questions from "./Questions"
 import Respond from "./Respond"
 import Responses from "./Responses"
@@ -17,12 +16,10 @@ import Settings from "./Settings"
 
 const FormPage: FC<PropsWithChildren<{}>> = props => {
 	const { token, user } = useContext(AuthContext)
+	const { form, setForm, setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
 	const navigate = useNavigate()
 	const params = useParams()
-
-	const [form, setForm] = useState<Form | null>()
-	const [questions, setQuestions] = useState<Question[] | null>(null)
 
 	useEffect(() => {
 		const form_id = params["id"] ?? ""
@@ -40,7 +37,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			{ toast: false, redirect: false }
 		).then(({ data }) => {
 			if (data) {
-				setForm(Form.fromJson(data))
+				setForm(data)
 			}
 		})
 	}, [params])
@@ -57,9 +54,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			token
 		}).then(({ data }) => {
 			if (data) {
-				setQuestions(data.map(Question.fromJson))
-			} else {
-				setQuestions(null)
+				setQuestions(data)
 			}
 		})
 	}, [form])
@@ -70,11 +65,8 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			maxW="4xl">
 			{form !== undefined ? (
 				form !== null ? (
-					!user || user.id !== form.userId ? (
-						<Respond
-							form={form}
-							questions={questions}
-						/>
+					!user || user.id !== form.user_id ? (
+						<Respond />
 					) : (
 						<Tabs
 							variant="soft-rounded"
@@ -88,11 +80,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 							</TabList>
 							<TabPanels>
 								<TabPanel p={0}>
-									<Questions
-										form={form}
-										questions={questions}
-										editable={true}
-									/>
+									<Questions editable={!form.live} />
 								</TabPanel>
 								<TabPanel p={0}>
 									<Responses />

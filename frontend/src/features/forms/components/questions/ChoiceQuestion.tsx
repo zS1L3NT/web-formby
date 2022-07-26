@@ -1,33 +1,23 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { FC, useState } from "react"
 
 import { Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Text } from "@chakra-ui/react"
 
-import { DraggableProvided } from "react-beautiful-dnd"
 import Dropdown from "../../../../components/Dropdown"
-import { ChoiceQuestion } from "../../../../models/Question"
+import { iChoiceQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
-import QuestionComponent from "../QuestionComponent"
+import { QuestionProps } from "../Question"
 
-const ChoiceQuestionComponent: FC<
-	PropsWithChildren<{
-		provided: DraggableProvided
-		question: ChoiceQuestion
-		editable: boolean
-	}>
-> = props => {
-	const { provided, question, editable } = props
+const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
+	const { editable, question, setQuestion } = props
+	const { choices, choice_type: choiceType } = question
 
-	const [title, setTitle] = useState(question.title)
-	const [description, setDescription] = useState(question.description)
-	const [choiceType, setChoiceType] = useState(question.choiceType)
-	const [choices, setChoices] = useState(question.choices)
 	const [selectedChoices, setSelectedChoices] = useState<string[]>([])
 
 	const listMaker = (
 		<ListMaker
 			editable={editable}
-			items={choices}
-			setItems={setChoices}
+			items={choices ?? []}
+			setItems={choices => setQuestion({ ...question, choices })}
 			leading={(choice, i) =>
 				choice === null || i === null ? (
 					<Box
@@ -69,10 +59,7 @@ const ChoiceQuestionComponent: FC<
 	)
 
 	return (
-		<QuestionComponent
-			provided={provided}
-			editable={editable}
-			question={question}>
+		<>
 			{editable ? (
 				<Flex
 					alignItems="center"
@@ -85,9 +72,12 @@ const ChoiceQuestionComponent: FC<
 						<Dropdown
 							choices={["radio", "checkbox", "dropdown"]}
 							selectedChoice={choiceType}
-							setSelectedChoice={choice => {
-								if (choice !== null) {
-									setChoiceType(choice as "radio" | "checkbox" | "dropdown")
+							setSelectedChoice={choice_type => {
+								if (choice_type !== null) {
+									setQuestion({
+										...question,
+										choice_type
+									})
 								}
 							}}
 						/>
@@ -95,23 +85,23 @@ const ChoiceQuestionComponent: FC<
 				</Flex>
 			) : null}
 
-			{question.choiceType === "checkbox" ? (
+			{choiceType === "checkbox" ? (
 				<CheckboxGroup
-					onChange={selected => setSelectedChoices(selected as string[])}
-					value={editable ? [] : selectedChoices}>
+					value={editable ? [] : selectedChoices}
+					onChange={selected => setSelectedChoices(selected as string[])}>
 					{listMaker}
 				</CheckboxGroup>
 			) : null}
 
-			{question.choiceType === "radio" ? (
+			{choiceType === "radio" ? (
 				<RadioGroup
-					onChange={e => setSelectedChoices([e])}
-					value={editable ? 0 : selectedChoices[0]}>
+					value={editable ? 0 : selectedChoices[0]}
+					onChange={e => setSelectedChoices([e])}>
 					{listMaker}
 				</RadioGroup>
 			) : null}
 
-			{question.choiceType === "dropdown" ? (
+			{choiceType === "dropdown" ? (
 				editable ? (
 					listMaker
 				) : (
@@ -126,8 +116,8 @@ const ChoiceQuestionComponent: FC<
 					/>
 				)
 			) : null}
-		</QuestionComponent>
+		</>
 	)
 }
 
-export default ChoiceQuestionComponent
+export default ChoiceQuestion
