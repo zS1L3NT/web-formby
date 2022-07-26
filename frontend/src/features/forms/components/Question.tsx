@@ -56,6 +56,10 @@ const Question = (
 	const __question = usePrevious(question)
 
 	useEffect(() => {
+		setQuestion(parentQuestion)
+	}, [parentQuestion])
+
+	useEffect(() => {
 		if (!token || !__question) return
 
 		const difference = getQuestionDifference(__question, question)

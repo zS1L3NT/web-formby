@@ -89,7 +89,7 @@ const OptionsMenu = (
 			setQuestions(questions => {
 				questions.splice(index + 1, 0, data.question)
 
-				if (index !== questions.length - 1) {
+				if (questions.at(index + 2)) {
 					questions.at(index + 2)!.previous_question_id = data.question.id
 				}
 			})
