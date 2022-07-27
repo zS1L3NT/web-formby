@@ -12,6 +12,10 @@ import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
 import {
+	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iSliderAnswer,
+	iSwitchAnswer, iTableAnswer, iTextAnswer
+} from "../../../models/Answer"
+import {
 	iChoiceQuestion, iColorQuestion, iDateTimeQuestion, iParagraphQuestion, iQuestion,
 	iSliderQuestion, iSwitchQuestion, iTableQuestion, iTextQuestion
 } from "../../../models/Question"
@@ -29,10 +33,12 @@ import SwitchQuestion from "./questions/SwitchQuestion"
 import TableQuestion from "./questions/TableQuestion"
 import TextQuestion from "./questions/TextQuestion"
 
-export type QuestionProps<iQ extends iQuestion> = PropsWithChildren<{
+export type QuestionProps<iQ extends iQuestion, iA extends iAnswer> = PropsWithChildren<{
 	editable: boolean
 	question: iQ
 	setQuestion: (question: iQ) => void
+	answer: iA
+	setAnswer: (answer: iA) => void
 }>
 
 const Question = (
@@ -54,6 +60,20 @@ const Question = (
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [question, setQuestion] = useImmer(parentQuestion)
+	const [answer, setAnswer] = useImmer<iAnswer>({
+		id: "",
+		user_id: "",
+		question_id: "",
+		text: "",
+		paragraph: "",
+		color: "",
+		choices: [],
+		switch: false,
+		slider: (question as iSliderQuestion).slider_min ?? 0,
+		date: new Date(),
+		time: new Date(),
+		table: []
+	})
 	const __question = usePrevious(question)
 
 	useEffect(() => {
@@ -126,10 +146,12 @@ const Question = (
 		reader.readAsDataURL(file)
 	}
 
-	const componentProps = {
+	const componentProps: QuestionProps<iQuestion, iAnswer> = {
 		editable,
 		question,
-		setQuestion
+		setQuestion,
+		answer,
+		setAnswer
 	}
 
 	return (
@@ -185,6 +207,7 @@ const Question = (
 						<Box
 							pos="relative"
 							w="fit-content"
+							mx="auto"
 							maxH={56}>
 							<Image
 								src={question.photo}
@@ -235,39 +258,60 @@ const Question = (
 					<Box h={4} />
 
 					{question.type === "text" ? (
-						<TextQuestion {...(componentProps as QuestionProps<iTextQuestion>)} />
+						<TextQuestion
+							{...(componentProps as QuestionProps<
+								iTextQuestion,
+								iTextAnswer
+							>)}
+						/>
 					) : null}
 
 					{question.type === "paragraph" ? (
 						<ParagraphQuestion
-							{...(componentProps as QuestionProps<iParagraphQuestion>)}
+							{...(componentProps as QuestionProps<
+								iParagraphQuestion,
+								iParagraphAnswer
+							>)}
 						/>
 					) : null}
 
 					{question.type === "color" ? (
-						<ColorQuestion {...(componentProps as QuestionProps<iColorQuestion>)} />
+						<ColorQuestion
+							{...(componentProps as QuestionProps<iColorQuestion, iColorAnswer>)}
+						/>
 					) : null}
 
 					{question.type === "choice" ? (
-						<ChoiceQuestion {...(componentProps as QuestionProps<iChoiceQuestion>)} />
+						<ChoiceQuestion
+							{...(componentProps as QuestionProps<iChoiceQuestion, iChoiceAnswer>)}
+						/>
 					) : null}
 
 					{question.type === "switch" ? (
-						<SwitchQuestion {...(componentProps as QuestionProps<iSwitchQuestion>)} />
+						<SwitchQuestion
+							{...(componentProps as QuestionProps<iSwitchQuestion, iSwitchAnswer>)}
+						/>
 					) : null}
 
 					{question.type === "slider" ? (
-						<SliderQuestion {...(componentProps as QuestionProps<iSliderQuestion>)} />
+						<SliderQuestion
+							{...(componentProps as QuestionProps<iSliderQuestion, iSliderAnswer>)}
+						/>
 					) : null}
 
 					{question.type === "datetime" ? (
 						<DateTimeQuestion
-							{...(componentProps as QuestionProps<iDateTimeQuestion>)}
+							{...(componentProps as QuestionProps<
+								iDateTimeQuestion,
+								iDateTimeAnswer
+							>)}
 						/>
 					) : null}
 
 					{question.type === "table" ? (
-						<TableQuestion {...(componentProps as QuestionProps<iTableQuestion>)} />
+						<TableQuestion
+							{...(componentProps as QuestionProps<iTableQuestion, iTableAnswer>)}
+						/>
 					) : null}
 				</Card>
 
