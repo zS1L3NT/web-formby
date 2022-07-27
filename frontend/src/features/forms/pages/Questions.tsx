@@ -91,11 +91,11 @@ const Questions: FC<PropsWithChildren<{}>> = props => {
 							{questions ? (
 								questions.map((question, i) => (
 									<Draggable
+										key={question.id}
 										index={i}
 										draggableId={question.id}>
 										{provided => (
 											<Question
-												key={question.id}
 												index={i}
 												provided={provided}
 												editable={!form!.live}
