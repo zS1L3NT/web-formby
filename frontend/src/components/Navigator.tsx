@@ -122,7 +122,9 @@ const Navigator: FC<PropsWithChildren<{}>> = props => {
 										src={user.photo}
 									/>
 								</MenuButton>
-								<MenuList alignItems="center">
+								<MenuList
+									zIndex={101}
+									alignItems="center">
 									<VStack
 										w="2xs"
 										px={4}>
