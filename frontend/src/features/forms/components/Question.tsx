@@ -135,7 +135,7 @@ const Question = (
 	return (
 		<>
 			<Box
-				ref={editable ? provided?.innerRef : null}
+				ref={provided?.innerRef}
 				{...(editable ? provided?.draggableProps : {})}>
 				<Card
 					mb={4}
@@ -148,7 +148,7 @@ const Question = (
 						right={4}
 						minW={6}
 						onClick={() => menuRef.current?.click()}
-						{...(editable ? provided?.dragHandleProps : {})}
+						{...provided?.dragHandleProps}
 					/>
 
 					<OptionsMenu
