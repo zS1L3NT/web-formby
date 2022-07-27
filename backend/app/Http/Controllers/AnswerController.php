@@ -7,8 +7,6 @@ use App\Models\Answer;
 class AnswerController extends Controller
 {
 	private $color_regex = "/^#(?:[0-9a-fA-F]{3}){1,2}$/";
-	private $date_regex = "/^\d{4}-\d{2}-\d{2}$/";
-	private $time_regex = "/^\d{2}:\d{2}:\d{2}$/";
 
 	public function __construct()
 	{
@@ -30,8 +28,7 @@ class AnswerController extends Controller
 			"answers.*.choices" => [...$when("choice"), "array", "min:1"],
 			"answers.*.switch" => [...$when("switch"), "boolean"],
 			"answers.*.slider" => [...$when("slider"), "integer"],
-			"answers.*.date" => [...$when("datetime"), "regex:$this->date_regex"],
-			"answers.*.time" => [...$when("datetime"), "regex:$this->time_regex"],
+			"answers.*.datetime" => [...$when("datetime"), "date"],
 			"answers.*.table.*.0" => [...$when("table"), "in_array:questions.*.table_rows.*"],
 			"answers.*.table.*.1" => [...$when("table"), "in_array:questions.*.table_columns.*"],
 			"answers.*.table.*" => [...$when("table"), "array", "size:2"],

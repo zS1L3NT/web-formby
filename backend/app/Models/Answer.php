@@ -18,8 +18,7 @@ class Answer extends Model
 		"choices",
 		"switch",
 		"slider",
-		"date",
-		"time",
+		"datetime",
 		"table"
 	];
 

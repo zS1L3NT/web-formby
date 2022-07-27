@@ -24,8 +24,7 @@ return new class extends Migration
 			$table->json('choices')->nullable();
 			$table->boolean('switch')->nullable();
 			$table->integer('slider')->nullable();
-			$table->date('date')->nullable();
-			$table->time('time')->nullable();
+			$table->timestamp('datetime')->nullable();
 			$table->json('table')->nullable();
 
 			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
