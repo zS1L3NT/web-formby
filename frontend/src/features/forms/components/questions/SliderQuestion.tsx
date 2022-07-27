@@ -1,16 +1,22 @@
-import { FC, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 
 import {
-    Box, Flex, InputGroup, InputLeftAddon, NumberInput, NumberInputField, Slider, SliderFilledTrack,
-    SliderMark, SliderThumb, SliderTrack, Text
+	Box, Flex, InputGroup, InputLeftAddon, NumberInput, NumberInputField, Slider, SliderFilledTrack,
+	SliderMark, SliderThumb, SliderTrack, Text
 } from "@chakra-ui/react"
 
+import { iSliderAnswer } from "../../../../models/Answer"
 import { iSliderQuestion } from "../../../../models/Question"
 import { QuestionProps } from "../Question"
 
-const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
-	const { editable, question, setQuestion } = props
+const SliderQuestion = ({
+	editable,
+	question,
+	setQuestion,
+	answer,
+	setAnswer
+}: QuestionProps<iSliderQuestion, iSliderAnswer>) => {
 	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = question
 
 	const [error, setError] = useState<string | null>(null)
@@ -125,7 +131,9 @@ const SliderQuestion: FC<QuestionProps<iSliderQuestion>> = props => {
 						defaultValue={sliderMin}
 						min={sliderMin}
 						max={sliderMax}
-						step={sliderStep}>
+						step={sliderStep}
+						value={answer.slider}
+						onChange={e => setAnswer({ ...answer, slider: e })}>
 						{((sliderMax - sliderMin) / sliderStep + 1) % 1 === 0
 							? Array.from(Array((sliderMax - sliderMin) / sliderStep + 1)).map(
 									(_, i) => (

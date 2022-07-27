@@ -1,17 +1,19 @@
-import { FC, useState } from "react"
-
 import { Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Text } from "@chakra-ui/react"
 
 import Dropdown from "../../../../components/Dropdown"
+import { iChoiceAnswer } from "../../../../models/Answer"
 import { iChoiceQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
 import { QuestionProps } from "../Question"
 
-const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
-	const { editable, question, setQuestion } = props
+const ChoiceQuestion = ({
+	editable,
+	question,
+	setQuestion,
+	answer,
+	setAnswer
+}: QuestionProps<iChoiceQuestion, iChoiceAnswer>) => {
 	const { choices, choice_type: choiceType } = question
-
-	const [selectedChoices, setSelectedChoices] = useState<string[]>([])
 
 	const listMaker = (
 		<ListMaker
@@ -87,16 +89,16 @@ const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
 
 			{choiceType === "checkbox" ? (
 				<CheckboxGroup
-					value={editable ? [] : selectedChoices}
-					onChange={selected => setSelectedChoices(selected as string[])}>
+					value={editable ? [] : answer.choices}
+					onChange={choices => setAnswer({ ...answer, choices: choices as string[] })}>
 					{listMaker}
 				</CheckboxGroup>
 			) : null}
 
 			{choiceType === "radio" ? (
 				<RadioGroup
-					value={editable ? 0 : selectedChoices[0]}
-					onChange={e => setSelectedChoices([e])}>
+					value={editable ? 0 : answer.choices[0]}
+					onChange={choice => setAnswer({ ...answer, choices: [choice] })}>
 					{listMaker}
 				</RadioGroup>
 			) : null}
@@ -107,10 +109,10 @@ const ChoiceQuestion: FC<QuestionProps<iChoiceQuestion>> = props => {
 				) : (
 					<Dropdown
 						choices={choices}
-						selectedChoice={selectedChoices[0] ?? null}
+						selectedChoice={answer.choices[0] ?? null}
 						setSelectedChoice={choice => {
 							if (choice !== null) {
-								setSelectedChoices([choice])
+								setAnswer({ ...answer, choices: [choice] })
 							}
 						}}
 					/>

@@ -13,7 +13,7 @@ import Question from "../components/Question"
 
 const Questions: FC<PropsWithChildren<{}>> = props => {
 	const { token } = useContext(AuthContext)
-	const { form, questions, setQuestions } = useContext(FormContext)
+	const { form, questions, setQuestions, answers } = useContext(FormContext)
 	const fetcher = useFetcher()
 
 	useEffect(() => {
@@ -88,7 +88,7 @@ const Questions: FC<PropsWithChildren<{}>> = props => {
 								index={0}
 							/>
 
-							{questions ? (
+							{questions && answers ? (
 								questions.map((question, i) => (
 									<Draggable
 										key={question.id}

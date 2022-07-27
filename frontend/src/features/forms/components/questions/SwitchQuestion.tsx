@@ -1,15 +1,14 @@
-import { FC } from "react"
+import { Flex, Switch, Text } from "@chakra-ui/react"
 
-import { Flex, Switch, Text, useBoolean } from "@chakra-ui/react"
-
+import { iSwitchAnswer } from "../../../../models/Answer"
 import { iSwitchQuestion } from "../../../../models/Question"
 import { QuestionProps } from "../Question"
 
-const SwitchQuestion: FC<QuestionProps<iSwitchQuestion>> = props => {
-	const { editable } = props
-
-	const [value, setValue] = useBoolean()
-
+const SwitchQuestion = ({
+	editable,
+	answer,
+	setAnswer
+}: QuestionProps<iSwitchQuestion, iSwitchAnswer>) => {
 	return (
 		<Flex
 			alignItems="center"
@@ -21,13 +20,13 @@ const SwitchQuestion: FC<QuestionProps<iSwitchQuestion>> = props => {
 				width={24}
 				pl={1}
 				textAlign="start">
-				{value ? "Enabled" : "Disabled"}
+				{answer.switch ? "Enabled" : "Disabled"}
 			</Text>
 			<Switch
 				size="lg"
-				isChecked={value}
+				isChecked={answer.switch}
 				isDisabled={editable}
-				onChange={setValue.toggle}
+				onChange={() => setAnswer({ ...answer, switch: !answer.switch })}
 				mx={4}
 			/>
 		</Flex>

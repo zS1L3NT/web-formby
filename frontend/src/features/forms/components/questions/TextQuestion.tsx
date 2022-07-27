@@ -1,19 +1,20 @@
-import { FC, useState } from "react"
+
 
 import { Input } from "@chakra-ui/react"
 
+import { iTextAnswer } from "../../../../models/Answer"
 import { iTextQuestion } from "../../../../models/Question"
 import { QuestionProps } from "../Question"
 
-const TextQuestion: FC<QuestionProps<iTextQuestion>> = props => {
-	const { editable } = props
-
-	const [text, setText] = useState("")
-
+const TextQuestion = ({
+	editable,
+	answer,
+	setAnswer
+}: QuestionProps<iTextQuestion, iTextAnswer>) => {
 	return (
 		<Input
-			value={text}
-			onChange={e => setText(e.target.value)}
+			value={answer.text}
+			onChange={e => setAnswer({ ...answer, text: e.target.value })}
 			placeholder="Text answer"
 			disabled={editable}
 		/>

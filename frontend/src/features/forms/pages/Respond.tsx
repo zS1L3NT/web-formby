@@ -7,9 +7,9 @@ import FormHeader from "../components/FormHeader"
 import Question from "../components/Question"
 
 const Respond = (props: PropsWithChildren<{}>) => {
-	const { questions } = useContext(FormContext)
+	const { questions, answers } = useContext(FormContext)
 
-	return questions ? (
+	return questions && answers ? (
 		<>
 			<FormHeader editable={false} />
 			{questions.map((question, i) => (

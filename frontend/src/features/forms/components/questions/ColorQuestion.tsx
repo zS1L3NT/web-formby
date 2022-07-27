@@ -1,16 +1,16 @@
-import { FC, useState } from "react"
 import { HexColorPicker } from "react-colorful"
 
 import { Box, Flex, Input } from "@chakra-ui/react"
 
+import { iColorAnswer } from "../../../../models/Answer"
 import { iColorQuestion } from "../../../../models/Question"
 import { QuestionProps } from "../Question"
 
-const ColorQuestion: FC<QuestionProps<iColorQuestion>> = props => {
-	const { editable } = props
-
-	const [color, setColor] = useState("#000000")
-
+const ColorQuestion = ({
+	editable,
+	answer,
+	setAnswer
+}: QuestionProps<iColorQuestion, iColorAnswer>) => {
 	return (
 		<Flex
 			pos="relative"
@@ -26,8 +26,8 @@ const ColorQuestion: FC<QuestionProps<iColorQuestion>> = props => {
 						height: "100%",
 						cursor: "pointer"
 					}}
-					color={color}
-					onChange={setColor}
+					color={answer.color}
+					onChange={color => setAnswer({ ...answer, color })}
 				/>
 			</Box>
 
@@ -39,7 +39,7 @@ const ColorQuestion: FC<QuestionProps<iColorQuestion>> = props => {
 					w={10}
 					h={10}
 					my="auto"
-					bg={color}
+					bg={answer.color}
 					borderRadius="50%"
 				/>
 				<Input
@@ -47,8 +47,8 @@ const ColorQuestion: FC<QuestionProps<iColorQuestion>> = props => {
 					h="max"
 					ml={2}
 					flex={1}
-					value={color}
-					onChange={e => setColor(e.target.value)}
+					value={answer.color}
+					onChange={e => setAnswer({ ...answer, color: e.target.value })}
 				/>
 			</Flex>
 

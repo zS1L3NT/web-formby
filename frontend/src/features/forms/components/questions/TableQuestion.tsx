@@ -1,22 +1,22 @@
-import { FC } from "react"
-
 import {
-    Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
-    Text, Th, Thead, Tr
+	Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Stack, Table, TableContainer, Tbody,
+	Text, Th, Thead, Tr
 } from "@chakra-ui/react"
 
 import Dropdown from "../../../../components/Dropdown"
+import { iTableAnswer } from "../../../../models/Answer"
 import { iTableQuestion } from "../../../../models/Question"
 import ListMaker from "../ListMaker"
 import { QuestionProps } from "../Question"
 
-const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
-	const { editable, question, setQuestion } = props
-	const {
-		table_rows: tableRows,
-		table_columns: tableColumns,
-		table_type: tableType
-	} = question
+const TableQuestion = ({
+	editable,
+	question,
+	setQuestion,
+	answer,
+	setAnswer
+}: QuestionProps<iTableQuestion, iTableAnswer>) => {
+	const { table_rows: tableRows, table_columns: tableColumns, table_type: tableType } = question
 
 	return (
 		<>
@@ -58,9 +58,7 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 						<ListMaker
 							editable={editable}
 							items={tableRows ?? []}
-							setItems={table_rows =>
-								setQuestion({ ...question, table_rows })
-							}
+							setItems={table_rows => setQuestion({ ...question, table_rows })}
 						/>
 					</Box>
 
@@ -71,9 +69,7 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 						<ListMaker
 							editable={editable}
 							items={tableColumns ?? []}
-							setItems={table_columns =>
-								setQuestion({ ...question, table_columns })
-							}
+							setItems={table_columns => setQuestion({ ...question, table_columns })}
 						/>
 					</Box>
 				</Stack>
@@ -94,11 +90,31 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 							tableRows?.map(column =>
 								tableType === "checkbox" ? (
 									<Tr key={column}>
-										<CheckboxGroup>
+										<CheckboxGroup
+											value={answer.table
+												.filter(item => item[0] === column)
+												.map(item => item[1])}
+											onChange={choices => {
+												setAnswer({
+													...answer,
+													table: [
+														...answer.table.filter(
+															item => item[0] !== column
+														),
+														...choices.map<[string, string]>(choice => [
+															column,
+															choice as string
+														])
+													]
+												})
+											}}>
 											<Th>{column}</Th>
 											{tableColumns?.map(row => (
 												<Th key={column + "-" + row}>
-													<Checkbox isDisabled={editable} />
+													<Checkbox
+														value={row}
+														isDisabled={editable}
+													/>
 												</Th>
 											))}
 										</CheckboxGroup>
@@ -106,11 +122,30 @@ const TableQuestion: FC<QuestionProps<iTableQuestion>> = props => {
 								) : (
 									<RadioGroup
 										key={column}
-										as={Tr}>
+										as={Tr}
+										value={
+											answer.table
+												.filter(item => item[0] === column)
+												.map(item => item[1])[0]
+										}
+										onChange={choice => {
+											setAnswer({
+												...answer,
+												table: [
+													...answer.table.filter(
+														item => item[0] !== column
+													),
+													[column, choice]
+												]
+											})
+										}}>
 										<Th>{column}</Th>
 										{tableColumns?.map(row => (
 											<Th key={column + "-" + row}>
-												<Radio isDisabled={editable} />
+												<Radio
+													value={row}
+													isDisabled={editable}
+												/>
 											</Th>
 										))}
 									</RadioGroup>

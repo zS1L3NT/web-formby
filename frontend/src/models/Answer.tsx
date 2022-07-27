@@ -1,6 +1,6 @@
 type iBaseAnswer = {
 	id: string
-	user_id: string
+	user_id: string | null
 	question_id: string
 }
 
@@ -39,8 +39,7 @@ export type iSliderAnswer = iBaseAnswer & {
 }
 
 export type iDateTimeAnswer = iBaseAnswer & {
-	date: any
-	time: any
+	datetime: string
 }
 
 export type iTableAnswer = iBaseAnswer & {

@@ -1,6 +1,6 @@
 import { createRef, PropsWithChildren, useContext, useEffect } from "react"
 import { DraggableProvided } from "react-beautiful-dnd"
-import { useImmer } from "use-immer"
+import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
@@ -36,23 +36,24 @@ import TextQuestion from "./questions/TextQuestion"
 export type QuestionProps<iQ extends iQuestion, iA extends iAnswer> = PropsWithChildren<{
 	editable: boolean
 	question: iQ
-	setQuestion: (question: iQ) => void
-	answer: iA
-	setAnswer: (answer: iA) => void
+	setQuestion: Updater<iQ>
+	answer: Omit<iA, "id">
+	setAnswer: (answer: Omit<iA, "id">) => void
 }>
 
-const Question = (
-	props: PropsWithChildren<{
-		index: number
-		provided?: DraggableProvided
-		editable: boolean
-		parentQuestion: iQuestion
-	}>
-) => {
-	const { index, provided, editable, parentQuestion } = props
-
+const Question = ({
+	index,
+	provided,
+	editable,
+	parentQuestion,
+}: PropsWithChildren<{
+	index: number
+	provided?: DraggableProvided
+	editable: boolean
+	parentQuestion: iQuestion
+}>) => {
 	const { token } = useContext(AuthContext)
-	const { setQuestions } = useContext(FormContext)
+	const { setQuestions, answers, setAnswers } = useContext(FormContext)
 	const fetcher = useFetcher()
 	const toast = useToast()
 	const photoInputRef = createRef<HTMLInputElement>()
@@ -60,20 +61,6 @@ const Question = (
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [question, setQuestion] = useImmer(parentQuestion)
-	const [answer, setAnswer] = useImmer<iAnswer>({
-		id: "",
-		user_id: "",
-		question_id: "",
-		text: "",
-		paragraph: "",
-		color: "",
-		choices: [],
-		switch: false,
-		slider: (question as iSliderQuestion).slider_min ?? 0,
-		date: new Date(),
-		time: new Date(),
-		table: []
-	})
 	const __question = usePrevious(question)
 
 	useEffect(() => {
@@ -150,8 +137,12 @@ const Question = (
 		editable,
 		question,
 		setQuestion,
-		answer,
-		setAnswer
+		answer: answers![index]!,
+		setAnswer: answer => {
+			setAnswers(answers => {
+				answers[index] = answer 
+			})
+		}
 	}
 
 	return (
@@ -259,10 +250,7 @@ const Question = (
 
 					{question.type === "text" ? (
 						<TextQuestion
-							{...(componentProps as QuestionProps<
-								iTextQuestion,
-								iTextAnswer
-							>)}
+							{...(componentProps as QuestionProps<iTextQuestion, iTextAnswer>)}
 						/>
 					) : null}
 
