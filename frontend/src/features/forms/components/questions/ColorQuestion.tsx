@@ -16,7 +16,8 @@ const ColorQuestion = ({
 			pos="relative"
 			direction="column"
 			justifyContent="center"
-			alignItems="center">
+			alignItems="center"
+			zIndex={1}>
 			<Box
 				w={{ base: "max", sm: 80 }}
 				h={48}>
