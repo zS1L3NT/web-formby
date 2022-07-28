@@ -15,6 +15,7 @@ const ParagraphQuestion = ({
 			onChange={e => setAnswer({ ...answer, paragraph: e.target.value })}
 			placeholder="Paragraph answer"
 			disabled={editable}
+			borderColor="whiteAlpha.300"
 		/>
 	)
 }

@@ -17,6 +17,7 @@ const DateTimeQuestion = ({
 			type="datetime-local"
 			value={DateTime.fromJSDate(new Date(answer.datetime)).toFormat("yyyy-MM-dd'T'HH:mm''")}
 			onChange={e => setAnswer({ ...answer, datetime: new Date(e.target.value).toISOString() })}
+			borderColor="whiteAlpha.300"
 		/>
 	)
 }

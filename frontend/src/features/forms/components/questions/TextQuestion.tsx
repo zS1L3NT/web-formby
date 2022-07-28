@@ -17,6 +17,7 @@ const TextQuestion = ({
 			onChange={e => setAnswer({ ...answer, text: e.target.value })}
 			placeholder="Text answer"
 			disabled={editable}
+			borderColor="whiteAlpha.300"
 		/>
 	)
 }

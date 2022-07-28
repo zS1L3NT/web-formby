@@ -44,7 +44,7 @@ export const FormProvider = (props: PropsWithChildren<{}>) => {
 						case "paragraph":
 							return { ...answer, paragraph: "" }
 						case "color":
-							return { ...answer, color: "#FFFFFF" }
+							return { ...answer, color: "" }
 						case "choice":
 							return { ...answer, choices: [] }
 						case "switch":
@@ -52,7 +52,7 @@ export const FormProvider = (props: PropsWithChildren<{}>) => {
 						case "slider":
 							return { ...answer, slider: question.slider_min }
 						case "datetime":
-							return { ...answer, datetime: new Date().toISOString() }
+							return { ...answer, datetime: "" }
 						case "table":
 							return { ...answer, table: [] }
 						default:

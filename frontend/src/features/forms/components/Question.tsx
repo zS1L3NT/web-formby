@@ -4,7 +4,8 @@ import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Center, IconButton, Image, Input, Text, useDisclosure, usePrevious, useToast
+	Alert, AlertIcon, AlertTitle, Box, Button, Center, Collapse, IconButton, Image, Input, Text,
+	useDisclosure, usePrevious, useToast
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
@@ -45,12 +46,14 @@ const Question = ({
 	index,
 	provided,
 	editable,
-	parentQuestion
+	parentQuestion,
+	error
 }: PropsWithChildren<{
 	index: number
 	provided?: DraggableProvided
 	editable: boolean
 	parentQuestion: iQuestion
+	error: string | null
 }>) => {
 	const { token } = useContext(AuthContext)
 	const { setQuestions, answers, setAnswers } = useContext(FormContext)
@@ -152,7 +155,11 @@ const Question = ({
 				{...(editable ? provided?.draggableProps : {})}>
 				<Card
 					mb={4}
-					pos="relative">
+					pos="relative"
+					borderWidth={error ? 4 : 0}
+					borderColor="red.200"
+					borderRadius="lg"
+					transition="borderWidth 0.3s">
 					<IconButton
 						hidden={!editable}
 						icon={<DragHandleIcon />}
@@ -312,6 +319,18 @@ const Question = ({
 							{...(componentProps as QuestionProps<iTableQuestion, iTableAnswer>)}
 						/>
 					) : null}
+
+					<Collapse
+						in={!!error}
+						animateOpacity>
+						<Alert
+							variant="left-accent"
+							status="error"
+							mt={4}>
+							<AlertIcon />
+							<AlertTitle>{error}</AlertTitle>
+						</Alert>
+					</Collapse>
 				</Card>
 
 				<NewQuestionButton

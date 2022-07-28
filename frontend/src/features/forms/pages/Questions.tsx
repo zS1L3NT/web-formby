@@ -100,6 +100,7 @@ const Questions: FC<PropsWithChildren<{}>> = props => {
 												provided={provided}
 												editable={!form!.live}
 												parentQuestion={question}
+												error={null}
 											/>
 										)}
 									</Draggable>
