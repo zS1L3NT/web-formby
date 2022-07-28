@@ -4,7 +4,7 @@ import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Center, IconButton, Image, Input, useDisclosure, usePrevious, useToast
+	Box, Button, Center, IconButton, Image, Input, Text, useDisclosure, usePrevious, useToast
 } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
@@ -45,7 +45,7 @@ const Question = ({
 	index,
 	provided,
 	editable,
-	parentQuestion,
+	parentQuestion
 }: PropsWithChildren<{
 	index: number
 	provided?: DraggableProvided
@@ -140,7 +140,7 @@ const Question = ({
 		answer: answers![index]!,
 		setAnswer: answer => {
 			setAnswers(answers => {
-				answers[index] = answer 
+				answers[index] = answer
 			})
 		}
 	}
@@ -184,6 +184,7 @@ const Question = ({
 							noOfLines={2}
 						/>
 					</Box>
+
 					<EditableText
 						editable={editable}
 						text={question.description ?? ""}
@@ -193,6 +194,16 @@ const Question = ({
 						mt={2}
 						noOfLines={2}
 					/>
+
+					{question.required ? (
+						<Text
+							color="red"
+							textAlign="start"
+							fontSize={14}
+							mt={2}>
+							* Required
+						</Text>
+					) : null}
 
 					{question.photo ? (
 						<Box
