@@ -136,6 +136,15 @@ class DatabaseSeeder extends Seeder
 				"type" => "table",
 				"table_columns" => $faker->words(3),
 				"table_rows" => $faker->words(3),
+				"table_type" => "radio"
+			]);
+
+			$prev_qn = Question::create([
+				...$question_data($prev_qn),
+				"required" => true,
+				"type" => "table",
+				"table_columns" => $faker->words(3),
+				"table_rows" => $faker->words(3),
 				"table_type" => "checkbox"
 			]);
 		}
@@ -169,8 +178,7 @@ class DatabaseSeeder extends Seeder
 					$answer_data["slider"] = $faker->numberBetween(0, 100);
 					break;
 				case "datetime":
-					$answer_data["date"] = $faker->date();
-					$answer_data["time"] = $faker->time();
+					$answer_data["datetime"] = $faker->dateTime();
 					break;
 				case "table":
 					$answer_data["table"] = array_map(
