@@ -11,7 +11,7 @@ import {
 import FormHeader from "../components/FormHeader"
 import Question from "../components/Question"
 
-const Respond = () => {
+const CreateResponse = () => {
 	const { token } = useContext(AuthContext)
 	const { questions, answers } = useContext(FormContext)
 	const fetcher = useFetcher()
@@ -123,4 +123,4 @@ const Respond = () => {
 	)
 }
 
-export default Respond
+export default CreateResponse

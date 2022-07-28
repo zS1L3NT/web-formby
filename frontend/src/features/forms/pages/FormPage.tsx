@@ -1,28 +1,25 @@
-import { FC, PropsWithChildren, useContext, useEffect } from "react"
+import { useContext, useEffect } from "react"
 import { MdBlock } from "react-icons/md"
-import { useNavigate, useParams } from "react-router-dom"
+import { Outlet, useMatch, useNavigate, useParams } from "react-router-dom"
 
 import {
-	Box, Button, Center, Container, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text
+	Box, Button, Center, Container, Flex, Spinner, Tab, TabList, Tabs, Text
 } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
-import Questions from "./Questions"
-import Respond from "./Respond"
-import Responses from "./Responses"
-import Settings from "./Settings"
 
-const FormPage: FC<PropsWithChildren<{}>> = props => {
+const FormPage = () => {
 	const { token, user } = useContext(AuthContext)
 	const { form, setForm, setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
+	const match = useMatch("/forms/:id")
 	const navigate = useNavigate()
 	const params = useParams()
 
 	useEffect(() => {
-		const form_id = params["id"] ?? ""
+		const form_id = params.id ?? ""
 		if (!form_id) return
 
 		fetcher(
@@ -63,8 +60,8 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			maxW="4xl">
 			{form !== undefined ? (
 				form !== null ? (
-					!user || user.id !== form.user_id ? (
-						<Respond />
+					!user || user.id !== form.user_id || match ? (
+						<Outlet />
 					) : (
 						<Tabs
 							variant="soft-rounded"
@@ -72,21 +69,11 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 							lazyBehavior="keepMounted"
 							isLazy>
 							<TabList>
-								<Tab>Questions</Tab>
-								<Tab>Responses</Tab>
-								<Tab>Settings</Tab>
+								<Tab onClick={() => navigate("edit")}>Questions</Tab>
+								<Tab onClick={() => navigate("responses")}>Responses</Tab>
+								<Tab onClick={() => navigate("settings")}>Settings</Tab>
 							</TabList>
-							<TabPanels>
-								<TabPanel p={0}>
-									<Questions />
-								</TabPanel>
-								<TabPanel p={0}>
-									<Responses />
-								</TabPanel>
-								<TabPanel p={0}>
-									<Settings />
-								</TabPanel>
-							</TabPanels>
+							<Outlet />
 						</Tabs>
 					)
 				) : (

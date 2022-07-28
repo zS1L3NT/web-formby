@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext, useEffect } from "react"
+import { useContext, useEffect } from "react"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
 import { Box, Center, Spinner } from "@chakra-ui/react"
@@ -11,7 +11,7 @@ import FormHeader from "../components/FormHeader"
 import NewQuestionButton from "../components/NewQuestionButton"
 import Question from "../components/Question"
 
-const Questions: FC<PropsWithChildren<{}>> = props => {
+const FormEdit = () => {
 	const { token } = useContext(AuthContext)
 	const { form, questions, setQuestions, answers } = useContext(FormContext)
 	const fetcher = useFetcher()
@@ -132,4 +132,4 @@ const Questions: FC<PropsWithChildren<{}>> = props => {
 	)
 }
 
-export default Questions
+export default FormEdit

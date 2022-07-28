@@ -8,7 +8,11 @@ import Login from "./features/authentication/pages/Login"
 import Logout from "./features/authentication/pages/Logout"
 import Register from "./features/authentication/pages/Register"
 import Dashboard from "./features/dashboard/pages/Dashboard"
+import CreateResponse from "./features/forms/pages/CreateResponse"
+import FormEdit from "./features/forms/pages/FormEdit"
 import FormPage from "./features/forms/pages/FormPage"
+import FormResponses from "./features/forms/pages/FormResponses"
+import FormSettings from "./features/forms/pages/FormSettings"
 import Landing from "./features/landing/pages/Landing"
 
 const App: FC<PropsWithChildren<{}>> = props => {
@@ -27,25 +31,39 @@ const App: FC<PropsWithChildren<{}>> = props => {
 						element={<Landing />}
 					/>
 					<Route
-						path="/login"
+						path="login"
 						element={<Login />}
 					/>
 					<Route
-						path="/register"
+						path="register"
 						element={<Register />}
 					/>
 					<Route
-						path="/logout"
+						path="logout"
 						element={<Logout />}
 					/>
 					<Route
-						path="/dashboard"
+						path="dashboard"
 						element={<Dashboard />}
 					/>
-					<Route
-						path="/forms/:id"
-						element={<FormPage />}
-					/>
+					<Route path="forms/:id" element={<FormPage />}>
+						<Route
+							index
+							element={<CreateResponse />}
+						/>
+						<Route
+							path="edit"
+							element={<FormEdit />}
+						/>
+						<Route
+							path="responses"
+							element={<FormResponses />}
+						/>
+						<Route
+							path="settings"
+							element={<FormSettings />}
+						/>
+					</Route>
 				</Routes>
 			</Flex>
 		</Flex>

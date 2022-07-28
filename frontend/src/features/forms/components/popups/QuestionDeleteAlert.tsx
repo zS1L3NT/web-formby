@@ -5,10 +5,10 @@ import {
 	AlertDialogHeader, AlertDialogOverlay, Button
 } from "@chakra-ui/react"
 
-import AuthContext from "../../../contexts/AuthContext"
-import FormContext from "../../../contexts/FormContext"
-import useFetcher from "../../../hooks/useFetcher"
-import { iQuestion } from "../../../models/Question"
+import AuthContext from "../../../../contexts/AuthContext"
+import FormContext from "../../../../contexts/FormContext"
+import useFetcher from "../../../../hooks/useFetcher"
+import { iQuestion } from "../../../../models/Question"
 
 const QuestionDeleteAlert = (
 	props: PropsWithChildren<{

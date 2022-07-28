@@ -7,12 +7,12 @@ import {
 	Spinner, useBoolean
 } from "@chakra-ui/react"
 
-import AuthContext from "../../../contexts/AuthContext"
-import FormContext from "../../../contexts/FormContext"
-import useFetcher from "../../../hooks/useFetcher"
+import AuthContext from "../../../../contexts/AuthContext"
+import FormContext from "../../../../contexts/FormContext"
+import useFetcher from "../../../../hooks/useFetcher"
 import {
 	iChoiceQuestion, iQuestion, iSliderQuestion, iTableQuestion
-} from "../../../models/Question"
+} from "../../../../models/Question"
 
 const OptionsMenu = (
 	props: PropsWithChildren<{
