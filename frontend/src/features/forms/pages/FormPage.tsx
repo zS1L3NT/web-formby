@@ -36,9 +36,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 			},
 			{ toast: false, redirect: false }
 		).then(({ data }) => {
-			if (data) {
-				setForm(data)
-			}
+			setForm(data)
 		})
 	}, [params])
 
@@ -94,7 +92,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 				) : (
 					<Box
 						w="max"
-						bg="white"
+						bg="card"
 						shadow="sm"
 						rounded="lg"
 						p={4}>
@@ -103,7 +101,7 @@ const FormPage: FC<PropsWithChildren<{}>> = props => {
 							<Box ml={4}>
 								<Text
 									fontWeight="bold"
-									color="black">
+									color="bw">
 									Login to view this form
 								</Text>
 								<Text fontWeight="normal">

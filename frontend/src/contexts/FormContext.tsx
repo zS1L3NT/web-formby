@@ -8,7 +8,7 @@ import AuthContext from "./AuthContext"
 
 const FormContext = createContext<{
 	form: iForm | null | undefined
-	setForm: Updater<iForm>
+	setForm: Updater<iForm | null>
 	questions: iQuestion[] | null
 	setQuestions: Updater<iQuestion[]>
 	answers: Omit<iAnswer, "id">[] | null
@@ -66,7 +66,7 @@ export const FormProvider = (props: PropsWithChildren<{}>) => {
 		<FormContext.Provider
 			value={{
 				form,
-				setForm: setForm as Updater<iForm>,
+				setForm: setForm as Updater<iForm | null>,
 				questions,
 				setQuestions: setQuestions as Updater<iQuestion[]>,
 				answers,
