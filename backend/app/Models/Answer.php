@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuids;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
@@ -35,6 +36,11 @@ class Answer extends Model
 	public function setChoicesAttribute(array|NULL $choices)
 	{
 		$this->attributes['choices'] = $choices === NULL ? NULL : json_encode($choices);
+	}
+
+	public function setDatetimeAttribute(string|NULL $datetime)
+	{
+		$this->attributes['datetime'] = $datetime === NULL ? NULL : Carbon::parse($datetime)->setTimezone("UTC");
 	}
 
 	public function getTableAttribute($table)

@@ -1,8 +1,10 @@
 import { useContext, useState } from "react"
 
-import { Box, Button, Center, Spinner, useToast } from "@chakra-ui/react"
+import { Box, Button, Center, Spinner, useBoolean, useToast } from "@chakra-ui/react"
 
+import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
+import useFetcher from "../../../hooks/useFetcher"
 import {
 	iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iTableAnswer, iTextAnswer
 } from "../../../models/Answer"
@@ -10,12 +12,15 @@ import FormHeader from "../components/FormHeader"
 import Question from "../components/Question"
 
 const Respond = () => {
+	const { token } = useContext(AuthContext)
 	const { questions, answers } = useContext(FormContext)
+	const fetcher = useFetcher()
 	const toast = useToast()
 
+	const [isSubmitting, setIsSubmitting] = useBoolean()
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		if (!questions || !answers) return
 
 		const errors = questions.map((question, i) => {
@@ -71,7 +76,16 @@ const Respond = () => {
 
 		setErrors(errors)
 		if (errors.every(item => item === null)) {
-			console.log("SUBMITTING")
+			setIsSubmitting.on()
+			await fetcher({
+				url: "/answers",
+				method: "POST",
+				body: {
+					answers
+				},
+				token
+			})
+			setIsSubmitting.off()
 		} else {
 			toast({
 				title: "Error",
@@ -95,6 +109,7 @@ const Respond = () => {
 				/>
 			))}
 			<Button
+				disabled={isSubmitting}
 				variant="primary"
 				onClick={handleSubmit}>
 				Submit

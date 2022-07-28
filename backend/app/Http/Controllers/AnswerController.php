@@ -36,13 +36,13 @@ class AnswerController extends Controller
 			"answers" => ["required", "array"],
 		]);
 
-		$this->middleware('response.live_restrict')->only(["store"]);
+		$this->middleware('responded.restrict')->only(["store"]);
 	}
 
 	/**
 	 * Middleware:
 	 * - fill_question_data
-	 * - response.live_restrict
+	 * - responded.restrict
 	 */
 	public function store()
 	{
@@ -50,18 +50,18 @@ class AnswerController extends Controller
 			$question = request("questions")[$i];
 			$answer = request("answers")[$i];
 
-			if ($question->type == "choice") {
-				if ($question->choice_type != "checkbox" && count($answer->choices) > 1) {
+			if ($question["type"] == "choice") {
+				if ($question["choice_type"] != "checkbox" && count($answer["choices"]) > 1) {
 					return response([
 						"type" => "Invalid Choice Data",
-						"message" => "answers.$i.choices: A choice type of " . $question->choice_type . " cannot have more than 1 value"
+						"message" => "answers.$i.choices: A choice type of " . $question["choice_type"] . " cannot have more than 1 value"
 					], 400);
 				}
 			}
 
-			if ($question->type == "table" && $question->table_type == "radio") {
-				$qr = $question->table_rows;
-				$ar = array_map(fn ($item) => $item[0], $answer->table);
+			if ($question["type"] == "table" && $question["table_type"] == "radio") {
+				$qr = $question["table_rows"];
+				$ar = array_map(fn ($item) => $item[0], $answer["table"]);
 				if (count(array_diff($qr, $ar)) > 0 || count(array_diff($ar, $qr)) > 0) {
 					return response([
 						"type" => "Invalid Table Data",
@@ -80,7 +80,7 @@ class AnswerController extends Controller
 		}
 
 		return [
-			"message" => "Answer created successfully!"
+			"message" => "Answers created successfully!"
 		];
 	}
 }

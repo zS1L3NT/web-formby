@@ -16,7 +16,9 @@ import { iUser } from "../models/User"
 type Routes = {
 	"/answers": {
 		POST: {
-			body: Omit<iAnswer, "id" | "user_id">[]
+			body: {
+				answers: Omit<iAnswer, "id" | "user_id">[]
+			}
 			response: {
 				message: string
 			}
