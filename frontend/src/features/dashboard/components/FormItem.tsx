@@ -37,7 +37,13 @@ const FormItem: FC<
 				borderColor: "primary",
 				cursor: "pointer"
 			}}
-			onClick={() => navigate("/forms/" + form.id)}>
+			onClick={() => {
+				if (form.state === "draft") {
+					navigate(`/forms/${form.id}/edit`)
+				} else {
+					navigate(`/forms/${form.id}/responses`)
+				}
+			}}>
 			<Box>
 				<Text
 					fontSize="18"

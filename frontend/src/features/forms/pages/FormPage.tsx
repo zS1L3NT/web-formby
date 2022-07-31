@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react"
 import { MdBlock } from "react-icons/md"
-import { Outlet, useMatch, useNavigate, useParams } from "react-router-dom"
+import { Outlet, useLocation, useMatch, useNavigate, useParams } from "react-router-dom"
 
 import {
 	Box, Button, Center, Container, Flex, Spinner, Tab, TabList, Tabs, Text
@@ -14,6 +14,7 @@ const FormPage = () => {
 	const { token, user } = useContext(AuthContext)
 	const { form, setForm, setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
+	const location = useLocation()
 	const match = useMatch("/forms/:id")
 	const navigate = useNavigate()
 	const params = useParams()
@@ -67,6 +68,9 @@ const FormPage = () => {
 							variant="soft-rounded"
 							align="center"
 							lazyBehavior="keepMounted"
+							defaultIndex={["edit", "responses", "settings"].indexOf(
+								location.pathname.split("/").at(-1)!
+							)}
 							isLazy>
 							<TabList>
 								<Tab onClick={() => navigate("edit")}>Questions</Tab>
