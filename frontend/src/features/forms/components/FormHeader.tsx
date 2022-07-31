@@ -1,10 +1,11 @@
-import { FC, PropsWithChildren, useContext, useEffect, useState } from "react"
+import { FC, PropsWithChildren, useContext, useState } from "react"
 
 import { Box } from "@chakra-ui/react"
 
 import Card from "../../../components/Card"
 import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
+import useAsyncEffect from "../../../hooks/useAsyncEffect"
 import useFetcher from "../../../hooks/useFetcher"
 import EditableText from "./EditableText"
 
@@ -22,11 +23,12 @@ const FormHeader: FC<
 	const [name, setName] = useState(form!.name)
 	const [description, setDescription] = useState(form!.description)
 
-	useEffect(() => {
+	// Update the form on the server when the name or description changes
+	useAsyncEffect(async () => {
 		if (!token) return
 
 		if (form!.name !== name || form!.description !== description) {
-			fetcher({
+			const { data } = await fetcher({
 				url: "/forms/{form_id}",
 				method: "PUT",
 				parameters: {
@@ -37,11 +39,11 @@ const FormHeader: FC<
 					description
 				},
 				token
-			}).then(({ data }) => {
-				if (data) {
-					setForm(data.form)
-				}
 			})
+
+			if (data?.form) {
+				setForm(data.form)
+			}
 		}
 	}, [token, form, name, description])
 

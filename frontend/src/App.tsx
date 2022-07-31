@@ -8,7 +8,7 @@ import Login from "./features/authentication/pages/Login"
 import Logout from "./features/authentication/pages/Logout"
 import Register from "./features/authentication/pages/Register"
 import Dashboard from "./features/dashboard/pages/Dashboard"
-import CreateResponse from "./features/forms/pages/CreateResponse"
+import FormAnswer from "./features/forms/pages/FormAnswer"
 import FormEdit from "./features/forms/pages/FormEdit"
 import FormPage from "./features/forms/pages/FormPage"
 import FormResponses from "./features/forms/pages/FormResponses"
@@ -49,7 +49,7 @@ const App: FC<PropsWithChildren<{}>> = props => {
 					<Route path="forms/:id" element={<FormPage />}>
 						<Route
 							index
-							element={<CreateResponse />}
+							element={<FormAnswer />}
 						/>
 						<Route
 							path="edit"

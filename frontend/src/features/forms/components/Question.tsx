@@ -11,6 +11,7 @@ import {
 import Card from "../../../components/Card"
 import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
+import useAsyncEffect from "../../../hooks/useAsyncEffect"
 import useFetcher from "../../../hooks/useFetcher"
 import {
 	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iSliderAnswer,
@@ -66,16 +67,18 @@ const Question = ({
 	const [question, setQuestion] = useImmer(parentQuestion)
 	const __question = usePrevious(question)
 
+	// Update {question} every time {parentQuestion} changes
 	useEffect(() => {
 		setQuestion(parentQuestion)
 	}, [parentQuestion])
 
-	useEffect(() => {
+	// Update the question on the server whenever a field in the question changes
+	useAsyncEffect(async () => {
 		if (!token || !__question) return
 
 		const difference = getQuestionDifference(__question, question)
 		if (Object.keys(difference).length > 0) {
-			fetcher(
+			const { data } = await fetcher(
 				{
 					url: "/forms/{form_id}/questions/{question_id}",
 					method: "PUT",
@@ -89,13 +92,13 @@ const Question = ({
 				{
 					toast: false
 				}
-			).then(({ data }) => {
-				if (data) {
-					setQuestions(questions =>
-						questions.map((q, i) => (i === index ? data.question : q))
-					)
-				}
-			})
+			)
+
+			if (data) {
+				setQuestions(questions =>
+					questions.map((q, i) => (i === index ? data.question : q))
+				)
+			}
 		}
 	}, [question, token])
 

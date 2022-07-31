@@ -8,6 +8,7 @@ import {
 
 import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
+import useAsyncEffect from "../../../hooks/useAsyncEffect"
 import useFetcher from "../../../hooks/useFetcher"
 
 const FormPage = () => {
@@ -19,41 +20,36 @@ const FormPage = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 
-	useEffect(() => {
-		const form_id = params.id ?? ""
-		if (!form_id) return
-
-		fetcher(
+	// Load the data from the API
+	useAsyncEffect(async () => {
+		const { data: form } = await fetcher(
 			{
 				url: "/forms/{form_id}",
 				method: "GET",
 				parameters: {
-					form_id
+					form_id: params.id!
 				},
 				token
 			},
 			{ toast: false, redirect: false }
-		).then(({ data }) => {
-			setForm(data)
-		})
-	}, [params])
+		)
 
-	useEffect(() => {
-		if (!form) return
+		setForm(form)
+		if (form === null) return
 
-		fetcher({
+		const { data: questions } = await fetcher({
 			url: "/forms/{form_id}/questions",
 			method: "GET",
 			parameters: {
 				form_id: form.id
 			},
 			token
-		}).then(({ data }) => {
-			if (data) {
-				setQuestions(data)
-			}
 		})
-	}, [form])
+
+		if (questions) {
+			setQuestions(questions)
+		}
+	}, [])
 
 	useEffect(() => {
 		if (!user || !form) return

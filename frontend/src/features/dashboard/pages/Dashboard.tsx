@@ -1,8 +1,9 @@
-import { FC, PropsWithChildren, useContext, useEffect, useState } from "react"
+import { FC, PropsWithChildren, useContext, useState } from "react"
 
 import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 
 import AuthContext from "../../../contexts/AuthContext"
+import useAsyncEffect from "../../../hooks/useAsyncEffect"
 import useFetcher from "../../../hooks/useFetcher"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
 import { WithTimestamps } from "../../../models"
@@ -17,21 +18,19 @@ const Dashboard: FC<PropsWithChildren<{}>> = props => {
 
 	useOnlyAuthenticated()
 
-	useEffect(() => {
+	useAsyncEffect(async () => {
 		if (!token) return
 
-		fetcher({
+		const { data: form } = await fetcher({
 			url: "/forms",
 			method: "GET",
 			query: {
 				page: "1"
 			},
 			token
-		}).then(({ data }) => {
-			if (data) {
-				setForms(data)
-			}
 		})
+
+		setForms(form)
 	}, [token])
 
 	return (
