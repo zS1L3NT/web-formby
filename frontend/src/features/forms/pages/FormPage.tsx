@@ -55,6 +55,14 @@ const FormPage = () => {
 		})
 	}, [form])
 
+	useEffect(() => {
+		if (!user || !form) return
+
+		if (!match && form.user_id !== user.id) {
+			navigate(`/forms/${form.id}`)
+		}
+	}, [user, form, match])
+
 	return (
 		<Container
 			mt={4}
