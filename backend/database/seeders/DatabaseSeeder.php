@@ -6,6 +6,7 @@ use App\Models\Form;
 use App\Models\User;
 use App\Models\Answer;
 use App\Models\Question;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Faker\Factory as FakerFactory;
 
@@ -178,7 +179,7 @@ class DatabaseSeeder extends Seeder
 					$answer_data["slider"] = $faker->numberBetween(0, 100);
 					break;
 				case "datetime":
-					$answer_data["datetime"] = $faker->dateTime();
+					$answer_data["datetime"] = (new Carbon($faker->dateTime()))->toDateTimeString();
 					break;
 				case "table":
 					$answer_data["table"] = array_map(
