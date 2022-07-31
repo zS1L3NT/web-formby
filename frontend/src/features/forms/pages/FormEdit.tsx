@@ -71,10 +71,10 @@ const FormEdit = () => {
 	return (
 		<Box
 			pos="relative"
-			mt={form!.live ? 4 : 0}
-			py={form!.live ? 1 : 0}
-			px={form!.live ? 4 : 0}>
-			<FormHeader editable={!form!.live} />
+			mt={form!.state === "draft" ? 0 : 4}
+			py={form!.state === "draft" ? 0 : 1}
+			px={form!.state === "draft" ? 0 : 4}>
+			<FormHeader editable={form!.state === "draft"} />
 			<DragDropContext
 				onDragEnd={result => handleReorder(result.source.index, result.destination?.index)}>
 				<Droppable droppableId="questions">
@@ -84,7 +84,7 @@ const FormEdit = () => {
 							className="questions"
 							{...provided.droppableProps}>
 							<NewQuestionButton
-								editable={!form!.live}
+								editable={form!.state === "draft"}
 								index={0}
 							/>
 
@@ -98,7 +98,7 @@ const FormEdit = () => {
 											<Question
 												index={i}
 												provided={provided}
-												editable={!form!.live}
+												editable={form!.state === "draft"}
 												parentQuestion={question}
 												error={null}
 											/>
@@ -125,7 +125,7 @@ const FormEdit = () => {
 				opacity={0.4}
 				bg="black"
 				borderRadius="lg"
-				zIndex={form!.live ? 1 : -1}
+				zIndex={form!.state === "draft" ? -1 : 1}
 				cursor="not-allowed"
 			/>
 		</Box>

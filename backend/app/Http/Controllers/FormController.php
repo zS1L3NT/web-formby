@@ -13,15 +13,15 @@ class FormController extends Controller
 		$this->validate("store", [
 			"name" => ["required", "max:255", "string"],
 			"description" => ["required", "max:255", "string"],
-			"requires_auth" => ["boolean"],
-			"live" => ["boolean"]
+			"auth" => ["boolean"],
+			"state" => ["required", "in:draft,live,closed"]
 		]);
 
 		$this->validate("update", [
 			"name" => ["max:255", "string"],
 			"description" => ["max:255", "string"],
-			"requires_auth" => ["boolean"],
-			"live" => ["boolean"]
+			"auth" => ["boolean"],
+			"state" => ["required", "in:draft,live,closed"]
 		]);
 
 		$this->middleware('form.user')->only(["show"]);

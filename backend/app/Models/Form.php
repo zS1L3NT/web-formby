@@ -13,12 +13,11 @@ class Form extends Model
 		"user_id",
 		"name",
 		"description",
-		"requires_auth",
-		"live"
+		"auth",
+		"state"
 	];
 
 	protected $casts = [
-		"requires_auth" => "boolean",
-		"live" => "boolean"
+		"auth" => "boolean"
 	];
 }

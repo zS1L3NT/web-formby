@@ -3,6 +3,6 @@ export type iForm = {
 	user_id: string
 	name: string
 	description: string
-	requires_auth: boolean
-	live: boolean
+	auth: boolean
+	state: "draft" | "live" | "closed"
 }

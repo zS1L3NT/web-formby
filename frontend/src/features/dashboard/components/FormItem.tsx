@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from "react"
 import { HiStatusOnline } from "react-icons/hi"
-import { MdPublic } from "react-icons/md"
+import { MdOutlineClose, MdPublic } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 
 import { AddIcon, EditIcon, LockIcon } from "@chakra-ui/icons"
@@ -70,19 +70,24 @@ const FormItem: FC<
 				<HStack
 					mt={1}
 					spacing={2}>
-					{form.live ? (
-						<HiStatusOnline
-							size={20}
-							color="var(--chakra-colors-primary)"
-						/>
-					) : (
+					{form.state === "draft" ? (
 						<EditIcon
 							w={4}
 							h={4}
 							color="primary"
 						/>
+					) : form.state === "live" ? (
+						<HiStatusOnline
+							size={20}
+							color="var(--chakra-colors-primary)"
+						/>
+					) : (
+						<MdOutlineClose
+							size={20}
+							color="var(--chakra-colors-primary)"
+						/>
 					)}
-					{form.requires_auth ? (
+					{form.auth ? (
 						<LockIcon
 							w={4}
 							h={4}

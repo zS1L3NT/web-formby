@@ -18,8 +18,8 @@ return new class extends Migration
 			$table->uuid('user_id');
 			$table->string('name');
 			$table->string('description');
-			$table->boolean('requires_auth')->default(false);
-			$table->boolean('live')->default(false);
+			$table->boolean('auth')->default(false);
+			$table->enum('state', ['draft', 'live', 'closed'])->default("draft");
 
 			$table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 

@@ -38,15 +38,15 @@ class DatabaseSeeder extends Seeder
 			"user_id" => $main_user->id,
 			"name" => $faker->sentence(),
 			"description" => $faker->sentences(3, true),
-			"requires_auth" => true,
-			"live" => true,
+			"auth" => true,
+			"state" => "live",
 		]);
 		$noauth_form = Form::create([
 			"user_id" => $other_user->id,
 			"name" => $faker->sentence(),
 			"description" => $faker->sentences(3, true),
-			"requires_auth" => false,
-			"live" => true,
+			"auth" => false,
+			"state" => "live",
 		]);
 
 		foreach ([$auth_form->id, $noauth_form->id] as $form_id) {

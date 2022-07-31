@@ -18,7 +18,7 @@ class FormLiveRestrict
 	{
 		$form = $request->route()->parameter("form");
 
-		if ($form->live) {
+		if ($form->state !== "draft") {
 			return response([
 				"type" => "Form is Live",
 				"message" => "You cannot modify a live form!"
