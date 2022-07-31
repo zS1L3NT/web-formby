@@ -13,27 +13,13 @@ import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
 import useAsyncEffect from "../../../hooks/useAsyncEffect"
 import useFetcher from "../../../hooks/useFetcher"
-import {
-	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iSliderAnswer,
-	iSwitchAnswer, iTableAnswer, iTextAnswer
-} from "../../../models/Answer"
-import {
-	iChoiceQuestion, iColorQuestion, iDateTimeQuestion, iParagraphQuestion, iQuestion,
-	iSliderQuestion, iSwitchQuestion, iTableQuestion, iTextQuestion
-} from "../../../models/Question"
-import getQuestionDifference from "../../../utils/getQuestionDifference"
+import { iAnswer } from "../../../models/Answer"
+import { iQuestion } from "../../../models/Question"
+import { getQuestionDifference, RenderQuestion } from "../../../utils/questionUtils"
+import AddQuestion from "./AddQuestion"
 import EditableText from "./EditableText"
-import NewQuestionButton from "./NewQuestionButton"
 import OptionsMenu from "./popups/OptionsMenu"
 import QuestionDeleteAlert from "./popups/QuestionDeleteAlert"
-import ChoiceQuestion from "./questions/ChoiceQuestion"
-import ColorQuestion from "./questions/ColorQuestion"
-import DateTimeQuestion from "./questions/DateTimeQuestion"
-import ParagraphQuestion from "./questions/ParagraphQuestion"
-import SliderQuestion from "./questions/SliderQuestion"
-import SwitchQuestion from "./questions/SwitchQuestion"
-import TableQuestion from "./questions/TableQuestion"
-import TextQuestion from "./questions/TextQuestion"
 
 export type QuestionProps<iQ extends iQuestion, iA extends iAnswer> = PropsWithChildren<{
 	editable: boolean
@@ -137,18 +123,6 @@ const Question = ({
 			})
 		}
 		reader.readAsDataURL(file)
-	}
-
-	const componentProps: QuestionProps<iQuestion, iAnswer> = {
-		editable,
-		question,
-		setQuestion,
-		answer: answers![index]!,
-		setAnswer: answer => {
-			setAnswers(answers => {
-				answers[index] = answer
-			})
-		}
 	}
 
 	return (
@@ -269,59 +243,17 @@ const Question = ({
 
 					<Box h={4} />
 
-					{question.type === "text" ? (
-						<TextQuestion
-							{...(componentProps as QuestionProps<iTextQuestion, iTextAnswer>)}
-						/>
-					) : null}
-
-					{question.type === "paragraph" ? (
-						<ParagraphQuestion
-							{...(componentProps as QuestionProps<
-								iParagraphQuestion,
-								iParagraphAnswer
-							>)}
-						/>
-					) : null}
-
-					{question.type === "color" ? (
-						<ColorQuestion
-							{...(componentProps as QuestionProps<iColorQuestion, iColorAnswer>)}
-						/>
-					) : null}
-
-					{question.type === "choice" ? (
-						<ChoiceQuestion
-							{...(componentProps as QuestionProps<iChoiceQuestion, iChoiceAnswer>)}
-						/>
-					) : null}
-
-					{question.type === "switch" ? (
-						<SwitchQuestion
-							{...(componentProps as QuestionProps<iSwitchQuestion, iSwitchAnswer>)}
-						/>
-					) : null}
-
-					{question.type === "slider" ? (
-						<SliderQuestion
-							{...(componentProps as QuestionProps<iSliderQuestion, iSliderAnswer>)}
-						/>
-					) : null}
-
-					{question.type === "datetime" ? (
-						<DateTimeQuestion
-							{...(componentProps as QuestionProps<
-								iDateTimeQuestion,
-								iDateTimeAnswer
-							>)}
-						/>
-					) : null}
-
-					{question.type === "table" ? (
-						<TableQuestion
-							{...(componentProps as QuestionProps<iTableQuestion, iTableAnswer>)}
-						/>
-					) : null}
+					<RenderQuestion
+						editable={editable}
+						question={question}
+						setQuestion={setQuestion}
+						answer={answers![index]!}
+						setAnswer={answer => {
+							setAnswers(answers => {
+								answers[index] = answer
+							})
+						}}
+					/>
 
 					<Collapse
 						in={!!error}
@@ -336,7 +268,7 @@ const Question = ({
 					</Collapse>
 				</Card>
 
-				<NewQuestionButton
+				<AddQuestion
 					editable={editable}
 					index={index + 1}
 				/>

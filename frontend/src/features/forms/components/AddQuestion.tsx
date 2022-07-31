@@ -8,7 +8,7 @@ import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
 import { iTextQuestion } from "../../../models/Question"
 
-const NewQuestionButton = (
+const AddQuestion = (
 	props: PropsWithChildren<{
 		editable: boolean
 		index: number
@@ -85,4 +85,4 @@ const NewQuestionButton = (
 	)
 }
 
-export default NewQuestionButton
+export default AddQuestion

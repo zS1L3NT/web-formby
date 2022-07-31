@@ -5,9 +5,7 @@ import { Box, Button, Center, Spinner, useBoolean, useToast } from "@chakra-ui/r
 import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
-import {
-	iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iTableAnswer, iTextAnswer
-} from "../../../models/Answer"
+import { getAnswerError, isAnswerEmpty } from "../../../utils/answerUtils"
 import FormHeader from "../components/FormHeader"
 import Question from "../components/Question"
 
@@ -23,56 +21,7 @@ const FormAnswer = () => {
 	const handleSubmit = async () => {
 		if (!questions || !answers) return
 
-		const errors = questions.map((question, i) => {
-			switch (question.type) {
-				case "text":
-					const textAnswer = answers[i] as iTextAnswer
-					if (question.required && textAnswer.text === "") {
-						return "Text cannot be empty"
-					}
-					return null
-				case "paragraph":
-					const paragraphAnswer = answers[i] as iParagraphAnswer
-					if (question.required && paragraphAnswer.paragraph === "") {
-						return "Paragraph cannot be empty"
-					}
-					return null
-				case "color":
-					const colorAnswer = answers[i] as iColorAnswer
-					if (question.required && colorAnswer.color === "") {
-						return "Color cannot be empty"
-					}
-					return null
-				case "choice":
-					const choiceAnswer = answers[i] as iChoiceAnswer
-					if (question.required && choiceAnswer.choices.length === 0) {
-						return "You must select at least 1 choice"
-					}
-					return null
-				case "switch":
-				case "slider":
-					return null
-				case "datetime":
-					const dateTimeAnswer = answers[i] as iDateTimeAnswer
-					if (question.required && dateTimeAnswer.datetime === "") {
-						return "DateTime cannot be empty"
-					}
-					return null
-				case "table":
-					const tableAnswer = answers[i] as iTableAnswer
-					if (
-						question.required &&
-						question.table_rows
-							.map<boolean>(
-								tableRow => !!tableAnswer.table.find(item => item[0] === tableRow)
-							)
-							.some(item => item === false)
-					) {
-						return "You have to select at least 1 choice per row"
-					}
-					return null
-			}
-		})
+		const errors = questions.map((question, i) => getAnswerError(question, answers[i]!))
 
 		setErrors(errors)
 		if (errors.every(item => item === null)) {
@@ -81,7 +30,10 @@ const FormAnswer = () => {
 				url: "/answers",
 				method: "POST",
 				body: {
-					answers
+					answers: answers.filter(
+						(answer, i) =>
+							questions[i]!.required || !isAnswerEmpty(questions[i]!, answer)
+					)
 				},
 				token
 			})
@@ -89,7 +41,9 @@ const FormAnswer = () => {
 		} else {
 			toast({
 				title: "Error",
-				description: `Form contains ${errors.filter(item => item !== null).length} error(s)`,
+				description: `Form contains ${
+					errors.filter(item => item !== null).length
+				} error(s)`,
 				status: "error",
 				isClosable: true
 			})

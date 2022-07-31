@@ -6,9 +6,9 @@ import { Box, Center, Spinner } from "@chakra-ui/react"
 import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
-import assertLinkedQuestions from "../../../utils/assertLinkedQuestions"
+import { assertLinkedQuestions } from "../../../utils/questionUtils"
+import AddQuestion from "../components/AddQuestion"
 import FormHeader from "../components/FormHeader"
-import NewQuestionButton from "../components/NewQuestionButton"
 import Question from "../components/Question"
 
 const FormEdit = () => {
@@ -83,7 +83,7 @@ const FormEdit = () => {
 							ref={provided.innerRef}
 							className="questions"
 							{...provided.droppableProps}>
-							<NewQuestionButton
+							<AddQuestion
 								editable={form!.state === "draft"}
 								index={0}
 							/>

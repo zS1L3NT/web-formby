@@ -10,9 +10,8 @@ import {
 import AuthContext from "../../../../contexts/AuthContext"
 import FormContext from "../../../../contexts/FormContext"
 import useFetcher from "../../../../hooks/useFetcher"
-import {
-	iChoiceQuestion, iQuestion, iSliderQuestion, iTableQuestion
-} from "../../../../models/Question"
+import { iQuestion } from "../../../../models/Question"
+import { createDuplicate } from "../../../../utils/questionUtils"
 
 const OptionsMenu = (
 	props: PropsWithChildren<{
@@ -36,49 +35,10 @@ const OptionsMenu = (
 		if (!token) return
 
 		setIsDuplicating.on()
-
-		const duplicateQuestion: Omit<iQuestion, "id" | "form_id"> = {
-			previous_question_id: question.id,
-			title: question.title,
-			description: question.description,
-			photo: question.photo,
-			required: question.required,
-			type: question.type
-		}
-
-		if (question.type === "choice") {
-			const duplicateChoiceQuestion = duplicateQuestion as Omit<
-				iChoiceQuestion,
-				"id" | "form_id"
-			>
-			duplicateChoiceQuestion.choices = question.choices
-			duplicateChoiceQuestion.choice_type = question.choice_type
-		}
-
-		if (question.type === "slider") {
-			const duplicateSliderQuestion = duplicateQuestion as Omit<
-				iSliderQuestion,
-				"id" | "form_id"
-			>
-			duplicateSliderQuestion.slider_min = question.slider_min
-			duplicateSliderQuestion.slider_step = question.slider_step
-			duplicateSliderQuestion.slider_max = question.slider_max
-		}
-
-		if (question.type === "table") {
-			const duplicateTableQuestion = duplicateQuestion as Omit<
-				iTableQuestion,
-				"id" | "form_id"
-			>
-			duplicateTableQuestion.table_columns = question.table_columns
-			duplicateTableQuestion.table_rows = question.table_rows
-			duplicateTableQuestion.table_type = question.table_type
-		}
-
 		const { data } = await fetcher({
 			url: "/forms/{form_id}/questions",
 			method: "POST",
-			body: duplicateQuestion,
+			body: createDuplicate(question),
 			parameters: {
 				form_id: question.form_id
 			},
