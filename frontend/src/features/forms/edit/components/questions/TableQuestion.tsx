@@ -6,7 +6,7 @@ import {
 import Dropdown from "../../../../components/Dropdown"
 import { iTableAnswer } from "../../../../models/Answer"
 import { iTableQuestion } from "../../../../models/Question"
-import ListMaker from "../ListMaker"
+import ListMaker from "../../edit/components/ListMaker"
 import { QuestionProps } from "../Question"
 
 const TableQuestion = ({

@@ -3,7 +3,7 @@ import { Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Text } from "@ch
 import Dropdown from "../../../../components/Dropdown"
 import { iChoiceAnswer } from "../../../../models/Answer"
 import { iChoiceQuestion } from "../../../../models/Question"
-import ListMaker from "../ListMaker"
+import ListMaker from "../../edit/components/ListMaker"
 import { QuestionProps } from "../Question"
 
 const ChoiceQuestion = ({

@@ -8,18 +8,18 @@ import {
 	useDisclosure, usePrevious, useToast
 } from "@chakra-ui/react"
 
-import Card from "../../../components/Card"
-import AuthContext from "../../../contexts/AuthContext"
-import FormContext from "../../../contexts/FormContext"
-import useAsyncEffect from "../../../hooks/useAsyncEffect"
+import Card from "../../../../components/Card"
+import AuthContext from "../../../../contexts/AuthContext"
+import FormContext from "../../../../contexts/FormContext"
+import useAsyncEffect from "../../../../hooks/useAsyncEffect"
+import { iAnswer } from "../../../../models/Answer"
+import { iQuestion } from "../../../../models/Question"
+import { getQuestionDifference, RenderQuestion } from "../../../../utils/questionUtils"
 import useFetcher from "../../../hooks/useFetcher"
-import { iAnswer } from "../../../models/Answer"
-import { iQuestion } from "../../../models/Question"
-import { getQuestionDifference, RenderQuestion } from "../../../utils/questionUtils"
-import AddQuestion from "./AddQuestion"
-import EditableText from "./EditableText"
-import OptionsMenu from "./popups/OptionsMenu"
-import QuestionDeleteAlert from "./popups/QuestionDeleteAlert"
+import AddQuestion from "../../edit/components/AddQuestion"
+import EditableText from "../../edit/components/EditableText"
+import OptionsMenu from "../../edit/components/OptionsMenu"
+import QuestionDeleteAlert from "../../edit/components/QuestionDeleteAlert"
 
 export type QuestionProps<iQ extends iQuestion, iA extends iAnswer> = {
 	editable: boolean

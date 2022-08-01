@@ -6,8 +6,8 @@ import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
 import { getAnswerError, isAnswerEmpty } from "../../../utils/answerUtils"
-import FormHeader from "../components/FormHeader"
-import Question from "../components/Question"
+import FormHeader from "./components/FormHeader"
+import Question from "./components/Question"
 
 const FormAnswer = () => {
 	const { token } = useContext(AuthContext)

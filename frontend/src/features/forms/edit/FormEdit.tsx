@@ -7,9 +7,9 @@ import AuthContext from "../../../contexts/AuthContext"
 import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
 import { assertLinkedQuestions } from "../../../utils/questionUtils"
-import AddQuestion from "../components/AddQuestion"
-import FormHeader from "../components/FormHeader"
-import Question from "../components/Question"
+import FormHeader from "../answer/components/FormHeader"
+import Question from "../answer/components/Question"
+import AddQuestion from "./components/AddQuestion"
 
 const FormEdit = () => {
 	const { token } = useContext(AuthContext)

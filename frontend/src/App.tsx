@@ -7,11 +7,10 @@ import Login from "./features/authentication/pages/Login"
 import Logout from "./features/authentication/pages/Logout"
 import Register from "./features/authentication/pages/Register"
 import Dashboard from "./features/dashboard/pages/Dashboard"
-import FormAnswer from "./features/forms/pages/FormAnswer"
-import FormEdit from "./features/forms/pages/FormEdit"
-import FormPage from "./features/forms/pages/FormPage"
-import FormResponses from "./features/forms/pages/FormResponses"
-import FormSettings from "./features/forms/pages/FormSettings"
+import FormAnswer from "./features/forms/answer/FormAnswer"
+import FormEdit from "./features/forms/edit/FormEdit"
+import FormResponses from "./features/forms/responses/FormResponses"
+import FormSettings from "./features/forms/settings/FormSettings"
 import Landing from "./features/landing/pages/Landing"
 
 const App = () => {
@@ -45,7 +44,7 @@ const App = () => {
 						path="dashboard"
 						element={<Dashboard />}
 					/>
-					<Route path="forms/:id" element={<FormPage />}>
+					<Route path="forms/:id">
 						<Route
 							index
 							element={<FormAnswer />}

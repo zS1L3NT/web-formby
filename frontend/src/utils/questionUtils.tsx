@@ -1,14 +1,14 @@
 import { diff } from "deep-object-diff"
 
-import { QuestionProps } from "../features/forms/components/Question"
-import ChoiceQuestion from "../features/forms/components/questions/ChoiceQuestion"
-import ColorQuestion from "../features/forms/components/questions/ColorQuestion"
-import DateTimeQuestion from "../features/forms/components/questions/DateTimeQuestion"
-import ParagraphQuestion from "../features/forms/components/questions/ParagraphQuestion"
-import SliderQuestion from "../features/forms/components/questions/SliderQuestion"
-import SwitchQuestion from "../features/forms/components/questions/SwitchQuestion"
-import TableQuestion from "../features/forms/components/questions/TableQuestion"
-import TextQuestion from "../features/forms/components/questions/TextQuestion"
+import { QuestionProps } from "../features/forms/answer/components/Question"
+import ChoiceQuestion from "../features/forms/answer/components/questions/ChoiceQuestion"
+import ColorQuestion from "../features/forms/answer/components/questions/ColorQuestion"
+import DateTimeQuestion from "../features/forms/answer/components/questions/DateTimeQuestion"
+import ParagraphQuestion from "../features/forms/answer/components/questions/ParagraphQuestion"
+import SliderQuestion from "../features/forms/answer/components/questions/SliderQuestion"
+import SwitchQuestion from "../features/forms/answer/components/questions/SwitchQuestion"
+import TableQuestion from "../features/forms/answer/components/questions/TableQuestion"
+import TextQuestion from "../features/forms/answer/components/questions/TextQuestion"
 import {
 	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iSliderAnswer,
 	iSwitchAnswer, iTableAnswer, iTextAnswer

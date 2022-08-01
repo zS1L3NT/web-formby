@@ -3,10 +3,10 @@ import { useContext } from "react"
 import { AddIcon } from "@chakra-ui/icons"
 import { IconButton, Spinner, useBoolean } from "@chakra-ui/react"
 
-import AuthContext from "../../../contexts/AuthContext"
-import FormContext from "../../../contexts/FormContext"
+import AuthContext from "../../../../contexts/AuthContext"
+import FormContext from "../../../../contexts/FormContext"
+import { iTextQuestion } from "../../../../models/Question"
 import useFetcher from "../../../hooks/useFetcher"
-import { iTextQuestion } from "../../../models/Question"
 
 const AddQuestion = ({ editable, index }: { editable: boolean; index: number }) => {
 	const { token } = useContext(AuthContext)
