@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext, useState } from "react"
+import { useContext, useState } from "react"
 
 import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 
@@ -10,7 +10,7 @@ import { WithTimestamps } from "../../../models"
 import { iForm } from "../../../models/Form"
 import FormItem from "../components/FormItem"
 
-const Dashboard: FC<PropsWithChildren<{}>> = props => {
+const Dashboard = () => {
 	const { token } = useContext(AuthContext)
 	const fetcher = useFetcher()
 

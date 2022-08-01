@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext } from "react"
+import { useContext } from "react"
 import { AiOutlineGithub } from "react-icons/ai"
 import { useNavigate } from "react-router-dom"
 
@@ -7,7 +7,7 @@ import { Box, Button, chakra, Container, Heading, HStack, Text } from "@chakra-u
 
 import AuthContext from "../../../contexts/AuthContext"
 
-const Landing: FC<PropsWithChildren<{}>> = props => {
+const Landing = () => {
 	const { token } = useContext(AuthContext)
 	const navigate = useNavigate()
 

@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext } from "react"
+import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons"
@@ -10,7 +10,7 @@ import {
 
 import AuthContext from "../contexts/AuthContext"
 
-const Navigator: FC<PropsWithChildren<{}>> = props => {
+const Navigator = () => {
 	const { token, user } = useContext(AuthContext)
 	const { toggleColorMode } = useColorMode()
 	const navigate = useNavigate()

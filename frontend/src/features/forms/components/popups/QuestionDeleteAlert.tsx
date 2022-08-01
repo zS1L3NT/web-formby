@@ -1,4 +1,4 @@
-import { createRef, PropsWithChildren, useContext } from "react"
+import { createRef, useContext } from "react"
 
 import {
 	AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter,
@@ -10,17 +10,19 @@ import FormContext from "../../../../contexts/FormContext"
 import useFetcher from "../../../../hooks/useFetcher"
 import { iQuestion } from "../../../../models/Question"
 
-const QuestionDeleteAlert = (
-	props: PropsWithChildren<{
-		isOpen: boolean
-		onCancel: () => void
-		index: number
-		question: iQuestion
-		parentQuestion: iQuestion
-	}>
-) => {
-	const { isOpen, onCancel, index, question, parentQuestion } = props
-
+const QuestionDeleteAlert = ({
+	isOpen,
+	onCancel,
+	index,
+	question,
+	parentQuestion
+}: {
+	isOpen: boolean
+	onCancel: () => void
+	index: number
+	question: iQuestion
+	parentQuestion: iQuestion
+}) => {
 	const { token } = useContext(AuthContext)
 	const { setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()

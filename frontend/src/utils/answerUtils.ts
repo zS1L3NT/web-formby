@@ -60,22 +60,22 @@ export const getAnswerError = (question: iQuestion, answer: Omit<iAnswer, "id">)
 export const isAnswerEmpty = (question: iQuestion, answer: Omit<iAnswer, "id">) => {
 	switch (question.type) {
 		case "text":
-			return (answer as iTextAnswer).text === ""
+			return (<iTextAnswer>answer).text === ""
 		case "paragraph":
-			return (answer as iParagraphAnswer).paragraph === ""
+			return (<iParagraphAnswer>answer).paragraph === ""
 		case "color":
-			return (answer as iColorAnswer).color === ""
+			return (<iColorAnswer>answer).color === ""
 		case "choice":
-			return (answer as iChoiceAnswer).choices.length === 0
+			return (<iChoiceAnswer>answer).choices.length === 0
 		case "switch":
 		case "slider":
 			return false
 		case "datetime":
-			return (answer as iDateTimeAnswer).datetime === ""
+			return (<iDateTimeAnswer>answer).datetime === ""
 		case "table":
 			return question.table_rows
 				.map<boolean>(
-					tableRow => !!(answer as iTableAnswer).table.find(item => item[0] === tableRow)
+					tableRow => !!(<iTableAnswer>answer).table.find(item => item[0] === tableRow)
 				)
 				.some(item => item === false)
 	}

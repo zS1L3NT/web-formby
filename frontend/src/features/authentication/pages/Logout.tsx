@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext, useEffect } from "react"
+import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useToast } from "@chakra-ui/react"
@@ -7,7 +7,7 @@ import AuthContext from "../../../contexts/AuthContext"
 import useFetcher from "../../../hooks/useFetcher"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
 
-const Logout: FC<PropsWithChildren<{}>> = props => {
+const Logout = () => {
 	const { token, setToken, setUser } = useContext(AuthContext)
 	const fetcher = useFetcher()
 	const navigate = useNavigate()

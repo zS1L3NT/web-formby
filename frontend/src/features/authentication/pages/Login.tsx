@@ -1,4 +1,4 @@
-import { FC, KeyboardEvent, PropsWithChildren, useContext, useEffect, useState } from "react"
+import { KeyboardEvent, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
@@ -11,7 +11,7 @@ import AuthContext from "../../../contexts/AuthContext"
 import useFetcher from "../../../hooks/useFetcher"
 import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"
 
-const Login: FC<PropsWithChildren<{}>> = props => {
+const Login = () => {
 	const { setToken, setUser } = useContext(AuthContext)
 	const fetcher = useFetcher()
 	const navigate = useNavigate()

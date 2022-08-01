@@ -18,7 +18,18 @@ const API_ERROR: ObjectValidator<ApiError> = OBJECT({
 	fields: OR(OBJECT(), UNDEFINED())
 })
 
-export default (async ({ url, method, data, params }) => {
+export default <
+	BaseQueryFn<
+		{
+			url: string
+			method: AxiosRequestConfig["method"]
+			data?: AxiosRequestConfig["data"]
+			params?: AxiosRequestConfig["params"]
+		},
+		unknown,
+		ApiError
+	>
+>(async ({ url, method, data, params }) => {
 	try {
 		const result = await axios({
 			url: "http://localhost:8000/api" + url,
@@ -28,7 +39,7 @@ export default (async ({ url, method, data, params }) => {
 		})
 		return { data: result.data }
 	} catch (e) {
-		const error = e as AxiosError
+		const error = <AxiosError>e
 		console.error(error)
 
 		const result = validate(error.response?.data, API_ERROR)
@@ -43,13 +54,4 @@ export default (async ({ url, method, data, params }) => {
 			error: apiError
 		}
 	}
-}) as BaseQueryFn<
-	{
-		url: string
-		method: AxiosRequestConfig["method"]
-		data?: AxiosRequestConfig["data"]
-		params?: AxiosRequestConfig["params"]
-	},
-	unknown,
-	ApiError
->
+})

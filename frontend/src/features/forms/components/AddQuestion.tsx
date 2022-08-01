@@ -1,4 +1,4 @@
-import { PropsWithChildren, useContext } from "react"
+import { useContext } from "react"
 
 import { AddIcon } from "@chakra-ui/icons"
 import { IconButton, Spinner, useBoolean } from "@chakra-ui/react"
@@ -8,14 +8,7 @@ import FormContext from "../../../contexts/FormContext"
 import useFetcher from "../../../hooks/useFetcher"
 import { iTextQuestion } from "../../../models/Question"
 
-const AddQuestion = (
-	props: PropsWithChildren<{
-		editable: boolean
-		index: number
-	}>
-) => {
-	const { editable, index } = props
-
+const AddQuestion = ({ editable, index }: { editable: boolean; index: number }) => {
 	const { token } = useContext(AuthContext)
 	const { form, questions, setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()
@@ -49,7 +42,7 @@ const AddQuestion = (
 			setQuestions(questions => {
 				questions.splice(index, 0, data.question)
 
-				if (index !== (questions.length - 1)) {
+				if (index !== questions.length - 1) {
 					questions.at(index + 1)!.previous_question_id = data.question.id
 				}
 			})

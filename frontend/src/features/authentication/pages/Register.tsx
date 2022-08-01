@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
@@ -7,7 +7,7 @@ import {
 	Stack, Text
 } from "@chakra-ui/react"
 
-const Register: FC<PropsWithChildren<{}>> = props => {
+const Register = () => {
 	const navigate = useNavigate()
 
 	const [name, setName] = useState("")

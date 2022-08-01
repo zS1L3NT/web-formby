@@ -1,4 +1,4 @@
-import { createContext, FC, PropsWithChildren, useEffect, useState } from "react"
+import { createContext, PropsWithChildren, useEffect, useState } from "react"
 
 import useFetcher from "../hooks/useFetcher"
 import { iUser } from "../models/User"
@@ -15,7 +15,7 @@ const AuthContext = createContext<{
 	setUser: () => {}
 })
 
-export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
+export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
 	const fetcher = useFetcher()
 
 	const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
@@ -58,7 +58,7 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = props => {
 				user,
 				setUser
 			}}>
-			{props.children}
+			{children}
 		</AuthContext.Provider>
 	)
 }

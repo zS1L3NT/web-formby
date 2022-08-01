@@ -1,4 +1,3 @@
-import { FC, PropsWithChildren } from "react"
 import { HiStatusOnline } from "react-icons/hi"
 import { MdOutlineClose, MdPublic } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
@@ -9,13 +8,7 @@ import { Box, Center, chakra, Flex, HStack, Text } from "@chakra-ui/react"
 import { WithTimestamps } from "../../../models"
 import { iForm } from "../../../models/Form"
 
-const FormItem: FC<
-	PropsWithChildren<{
-		form: WithTimestamps<iForm> | null
-	}>
-> = props => {
-	const { form } = props
-
+const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 	const navigate = useNavigate()
 
 	return form ? (

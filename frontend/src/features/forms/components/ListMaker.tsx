@@ -1,18 +1,19 @@
-import { createRef, FC, PropsWithChildren, RefObject, useState } from "react"
+import { createRef, RefObject, useState } from "react"
 
 import { CloseIcon } from "@chakra-ui/icons"
 import { Flex, IconButton, Input } from "@chakra-ui/react"
 
-const ListMaker: FC<
-	PropsWithChildren<{
-		editable: boolean
-		items: string[]
-		setItems: (items: string[]) => void
-		leading?: (item: string | null, i: number | null) => JSX.Element | null
-	}>
-> = props => {
-	const { editable, items, setItems, leading } = props
-
+const ListMaker = ({
+	editable,
+	items,
+	setItems,
+	leading
+}: {
+	editable: boolean
+	items: string[]
+	setItems: (items: string[]) => void
+	leading?: (item: string | null, i: number | null) => JSX.Element | null
+}) => {
 	const [refs, setRefs] = useState(items.map<RefObject<HTMLInputElement>>(createRef))
 
 	const generateName = () => {

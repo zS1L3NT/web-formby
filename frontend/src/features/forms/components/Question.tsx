@@ -1,4 +1,4 @@
-import { createRef, PropsWithChildren, useContext, useEffect } from "react"
+import { createRef, useContext, useEffect } from "react"
 import { DraggableProvided } from "react-beautiful-dnd"
 import { Updater, useImmer } from "use-immer"
 
@@ -21,13 +21,13 @@ import EditableText from "./EditableText"
 import OptionsMenu from "./popups/OptionsMenu"
 import QuestionDeleteAlert from "./popups/QuestionDeleteAlert"
 
-export type QuestionProps<iQ extends iQuestion, iA extends iAnswer> = PropsWithChildren<{
+export type QuestionProps<iQ extends iQuestion, iA extends iAnswer> = {
 	editable: boolean
 	question: iQ
 	setQuestion: Updater<iQ>
 	answer: Omit<iA, "id">
 	setAnswer: (answer: Omit<iA, "id">) => void
-}>
+}
 
 const Question = ({
 	index,
@@ -35,13 +35,13 @@ const Question = ({
 	editable,
 	parentQuestion,
 	error
-}: PropsWithChildren<{
+}: {
 	index: number
 	provided?: DraggableProvided
 	editable: boolean
 	parentQuestion: iQuestion
 	error: string | null
-}>) => {
+}) => {
 	const { token } = useContext(AuthContext)
 	const { setQuestions, answers, setAnswers } = useContext(FormContext)
 	const fetcher = useFetcher()

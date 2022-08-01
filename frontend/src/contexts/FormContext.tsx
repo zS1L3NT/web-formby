@@ -22,7 +22,7 @@ const FormContext = createContext<{
 	setAnswers: () => {}
 })
 
-export const FormProvider = (props: PropsWithChildren<{}>) => {
+export const FormProvider = ({ children }: PropsWithChildren<{}>) => {
 	const { user } = useContext(AuthContext)
 
 	const [form, setForm] = useImmer<iForm | null | undefined>(undefined)
@@ -72,7 +72,7 @@ export const FormProvider = (props: PropsWithChildren<{}>) => {
 				answers,
 				setAnswers: setAnswers as Updater<Omit<iAnswer, "id">[]>
 			}}>
-			{props.children}
+			{children}
 		</FormContext.Provider>
 	)
 }

@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext } from "react"
+import { useContext } from "react"
 import { useImmer } from "use-immer"
 
 import AuthContext from "../../../contexts/AuthContext"
@@ -8,7 +8,7 @@ import useFetcher from "../../../hooks/useFetcher"
 import { WithTimestamps } from "../../../models"
 import { iAnswer } from "../../../models/Answer"
 
-const FormResponses: FC<PropsWithChildren<{}>> = props => {
+const FormResponses = () => {
 	const { token } = useContext(AuthContext)
 	const { form } = useContext(FormContext)
 	const fetcher = useFetcher()

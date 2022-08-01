@@ -1,4 +1,3 @@
-import { FC, PropsWithChildren } from "react"
 import { Route, Routes } from "react-router-dom"
 
 import { Flex } from "@chakra-ui/react"
@@ -15,7 +14,7 @@ import FormResponses from "./features/forms/pages/FormResponses"
 import FormSettings from "./features/forms/pages/FormSettings"
 import Landing from "./features/landing/pages/Landing"
 
-const App: FC<PropsWithChildren<{}>> = props => {
+const App = () => {
 	return (
 		<Flex
 			w="max"

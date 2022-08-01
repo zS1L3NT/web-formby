@@ -1,4 +1,4 @@
-import { PropsWithChildren, RefObject, useContext } from "react"
+import { RefObject, useContext } from "react"
 import { Updater } from "use-immer"
 
 import { CopyIcon, DeleteIcon } from "@chakra-ui/icons"
@@ -13,18 +13,21 @@ import useFetcher from "../../../../hooks/useFetcher"
 import { iQuestion } from "../../../../models/Question"
 import { createDuplicate } from "../../../../utils/questionUtils"
 
-const OptionsMenu = (
-	props: PropsWithChildren<{
-		editable: boolean
-		index: number
-		menuRef: RefObject<HTMLButtonElement>
-		onDelete: () => void
-		question: iQuestion
-		setQuestion: Updater<iQuestion>
-	}>
-) => {
-	const { editable, index, menuRef, onDelete, question, setQuestion } = props
-
+const OptionsMenu = ({
+	editable,
+	index,
+	menuRef,
+	onDelete,
+	question,
+	setQuestion
+}: {
+	editable: boolean
+	index: number
+	menuRef: RefObject<HTMLButtonElement>
+	onDelete: () => void
+	question: iQuestion
+	setQuestion: Updater<iQuestion>
+}) => {
 	const { token } = useContext(AuthContext)
 	const { setQuestions } = useContext(FormContext)
 	const fetcher = useFetcher()

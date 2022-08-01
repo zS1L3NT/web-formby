@@ -1,6 +1,5 @@
-import { FC, PropsWithChildren } from "react"
 
-const FormSettings: FC<PropsWithChildren<{}>> = props => {
+const FormSettings = () => {
 	return <></>
 }
 

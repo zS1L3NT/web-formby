@@ -1,21 +1,23 @@
-import { createRef, FC, PropsWithChildren, useEffect, useState } from "react"
+import { createRef, useEffect, useState } from "react"
 
 import { Box, Text, TextProps, useBoolean } from "@chakra-ui/react"
 
-const EditableText: FC<
-	PropsWithChildren<
-		{
-			editable: boolean
-			required?: boolean
-			text: string
-			setText: (text: string) => void
-			placeholder?: string
-			variant?: "description"
-		} & TextProps
-	>
-> = props => {
-	const { editable, required, text, setText, placeholder, variant, ...style } = props
-
+const EditableText = ({
+	editable,
+	required,
+	text,
+	setText,
+	placeholder,
+	variant,
+	...style
+}: {
+	editable: boolean
+	required?: boolean
+	text: string
+	setText: (text: string) => void
+	placeholder?: string
+	variant?: "description"
+} & TextProps) => {
 	const textRef = createRef<HTMLParagraphElement>()
 
 	const [editing, setEditing] = useBoolean()

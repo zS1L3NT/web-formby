@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useContext, useState } from "react"
+import { useContext, useState } from "react"
 
 import { Box } from "@chakra-ui/react"
 
@@ -9,13 +9,7 @@ import useAsyncEffect from "../../../hooks/useAsyncEffect"
 import useFetcher from "../../../hooks/useFetcher"
 import EditableText from "./EditableText"
 
-const FormHeader: FC<
-	PropsWithChildren<{
-		editable: boolean
-	}>
-> = props => {
-	const { editable } = props
-
+const FormHeader = ({ editable }: { editable: boolean }) => {
 	const { token } = useContext(AuthContext)
 	const { form, setForm } = useContext(FormContext)
 	const fetcher = useFetcher()
