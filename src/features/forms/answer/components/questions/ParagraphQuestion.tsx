@@ -5,7 +5,6 @@ import { iParagraphQuestion } from "../../../../../models/Question"
 import { QuestionProps } from "../Question"
 
 const ParagraphQuestion = ({
-	editable,
 	answer,
 	setAnswer
 }: QuestionProps<iParagraphQuestion, iParagraphAnswer>) => {
@@ -14,7 +13,6 @@ const ParagraphQuestion = ({
 			value={answer.paragraph}
 			onChange={e => setAnswer({ ...answer, paragraph: e.target.value })}
 			placeholder="Paragraph answer"
-			disabled={editable}
 			borderColor="whiteAlpha.300"
 		/>
 	)

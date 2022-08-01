@@ -4,11 +4,7 @@ import { iSwitchAnswer } from "../../../../../models/Answer"
 import { iSwitchQuestion } from "../../../../../models/Question"
 import { QuestionProps } from "../Question"
 
-const SwitchQuestion = ({
-	editable,
-	answer,
-	setAnswer
-}: QuestionProps<iSwitchQuestion, iSwitchAnswer>) => {
+const SwitchQuestion = ({ answer, setAnswer }: QuestionProps<iSwitchQuestion, iSwitchAnswer>) => {
 	return (
 		<Flex
 			alignItems="center"
@@ -16,16 +12,12 @@ const SwitchQuestion = ({
 				base: "space-between",
 				sm: "start"
 			}}>
-			<Text
-				width={24}
-				pl={1}
-				textAlign="start">
+			<Text width={24} pl={1} textAlign="start">
 				{answer.switch ? "Enabled" : "Disabled"}
 			</Text>
 			<Switch
 				size="lg"
 				isChecked={answer.switch}
-				isDisabled={editable}
 				onChange={() => setAnswer({ ...answer, switch: !answer.switch })}
 				mx={4}
 			/>
