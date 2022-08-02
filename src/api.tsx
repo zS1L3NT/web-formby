@@ -29,22 +29,22 @@ const api = createApi({
 			{ answers: Omit<iAnswer, "id" | "user_id">[] } & OptionalToken
 		>({
 			query: ({ token, answers }) => ({
-				headers: token ? { Authorization: `Bearer ${token}` } : {},
 				url: "/answers",
 				method: "POST",
 				body: {
 					answers
-				}
+				},
+				token
 			})
 		}),
 		getForms: builder.query<WithTimestamps<iForm>[], { page?: number } & RequiredToken>({
 			query: ({ token, page }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: "/forms",
 				method: "GET",
 				params: {
 					page
-				}
+				},
+				token
 			}),
 			providesTags: result => result?.map(form => ({ type: "Form", id: form.id })) ?? []
 		}),
@@ -53,18 +53,18 @@ const api = createApi({
 			Omit<iForm, "id" | "user_id"> & RequiredToken
 		>({
 			query: ({ token, ...form }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: "/forms",
 				method: "POST",
-				body: form
+				body: form,
+				token
 			}),
 			invalidatesTags: result => (result ? [{ type: "Form", id: result.form.id }] : [])
 		}),
 		getForm: builder.query<WithTimestamps<iForm>, { form_id: string } & OptionalToken>({
 			query: ({ token, form_id }) => ({
-				headers: token ? { Authorization: `Bearer ${token}` } : {},
 				url: `/forms/${form_id}`,
-				method: "GET"
+				method: "GET",
+				token
 			}),
 			providesTags: result => (result ? [{ type: "Form", id: result.id }] : [])
 		}),
@@ -73,18 +73,18 @@ const api = createApi({
 			Partial<Omit<iForm, "id" | "user_id">> & { form_id: string } & RequiredToken
 		>({
 			query: ({ token, form_id, ...form }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: `/forms/${form_id}`,
 				method: "PUT",
-				body: form
+				body: form,
+				token
 			}),
 			invalidatesTags: result => (result ? [{ type: "Form", id: result.form.id }] : [])
 		}),
 		deleteForm: builder.mutation<ApiResponse, { form_id: string } & RequiredToken>({
 			query: ({ token, form_id }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: `/forms/${form_id}`,
-				method: "DELETE"
+				method: "DELETE",
+				token
 			}),
 			invalidatesTags: (result, error, args) =>
 				result ? [{ type: "Form", id: args.form_id }] : []
@@ -94,9 +94,9 @@ const api = createApi({
 			{ form_id: string } & RequiredToken
 		>({
 			query: ({ token, form_id }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: `/forms/${form_id}/answers`,
-				method: "GET"
+				method: "GET",
+				token
 			}),
 			providesTags: result => result?.map(answer => ({ type: "Answer", id: answer.id })) ?? []
 		}),
@@ -105,13 +105,9 @@ const api = createApi({
 			{ form_id: string } & OptionalToken
 		>({
 			query: ({ token, form_id }) => ({
-				headers: token
-					? {
-							Authorization: `Bearer ${token}`
-					  }
-					: {},
 				url: `/forms/${form_id}/questions`,
-				method: "GET"
+				method: "GET",
+				token
 			}),
 			providesTags: result =>
 				result?.map(question => ({ type: "Question", id: question.id })) ?? []
@@ -121,10 +117,10 @@ const api = createApi({
 			Omit<iQuestion, "id" | "form_id"> & { form_id: string } & RequiredToken
 		>({
 			query: ({ token, form_id, ...question }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: `/forms/${form_id}/questions`,
 				method: "POST",
-				body: question
+				body: question,
+				token
 			}),
 			invalidatesTags: result => (result ? [{ type: "Question" }] : [])
 		}),
@@ -133,9 +129,9 @@ const api = createApi({
 			{ form_id: string; question_id: string } & OptionalToken
 		>({
 			query: ({ token, form_id, question_id }) => ({
-				headers: token ? { Authorization: `Bearer ${token}` } : {},
 				url: `/forms/${form_id}/questions/${question_id}`,
-				method: "GET"
+				method: "GET",
+				token
 			}),
 			providesTags: result => (result ? [{ type: "Question", id: result.id }] : [])
 		}),
@@ -147,10 +143,10 @@ const api = createApi({
 			} & RequiredToken
 		>({
 			query: ({ token, form_id, question_id, ...question }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: `/forms/${form_id}/questions/${question_id}`,
 				method: "PUT",
-				body: question
+				body: question,
+				token
 			}),
 			invalidatesTags: result => (result ? [{ type: "Question" }] : [])
 		}),
@@ -159,26 +155,26 @@ const api = createApi({
 			{ form_id: string; question_id: string } & RequiredToken
 		>({
 			query: ({ token, form_id, question_id }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: `/forms/${form_id}/questions/${question_id}`,
-				method: "DELETE"
+				method: "DELETE",
+				token
 			}),
 			invalidatesTags: (result, error, args) => (result ? [{ type: "Question" }] : [])
 		}),
 		getUser: builder.query<WithTimestamps<iUser>, RequiredToken>({
 			query: ({ token }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: "/user",
-				method: "GET"
+				method: "GET",
+				token
 			}),
 			providesTags: result => (result ? [{ type: "User", id: result.id }] : [])
 		}),
 		updateUser: builder.mutation<ApiResponse, Partial<iUser> & RequiredToken>({
 			query: ({ token, ...user }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: "/user",
 				method: "PUT",
-				body: user
+				body: user,
+				token
 			}),
 			invalidatesTags: (result, error, args) =>
 				result ? [{ type: "User", id: args.id }] : []
@@ -207,9 +203,9 @@ const api = createApi({
 		}),
 		logout: builder.mutation<ApiResponse, RequiredToken>({
 			query: ({ token }) => ({
-				headers: { Authorization: `Bearer ${token}` },
 				url: "/logout",
-				method: "POST"
+				method: "POST",
+				token
 			}),
 			invalidatesTags: result => (result ? [{ type: "User" }] : [])
 		})

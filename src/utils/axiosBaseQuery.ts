@@ -23,19 +23,21 @@ export default <
 		{
 			url: string
 			method: AxiosRequestConfig["method"]
-			data?: AxiosRequestConfig["data"]
+			body?: any
 			params?: AxiosRequestConfig["params"]
+			token?: string | null | undefined
 		},
 		unknown,
 		ApiError
 	>
->(async ({ url, method, data, params }) => {
+>(async ({ url, method, body, params, token }) => {
 	try {
 		const result = await axios({
 			url: "http://localhost:8000/api" + url,
+			headers: token ? { Authorization: `Bearer ${token}` } : undefined,
 			method,
-			data,
-			params
+			params,
+			data: body
 		})
 		return { data: result.data }
 	} catch (e) {
