@@ -1,44 +1,34 @@
-import { createContext, PropsWithChildren, useEffect, useState } from "react"
+import { createContext, PropsWithChildren, useState } from "react"
 
-import useFetcher from "../hooks/useFetcher"
+import { useLazyGetUserQuery } from "../api"
+import useAsyncEffect from "../hooks/useAsyncEffect"
 import { iUser } from "../models/User"
 
 const AuthContext = createContext<{
+	user: iUser | null
 	token: string | null
 	setToken: (token: string | null) => void
-	user: iUser | null
-	setUser: (user: iUser | null) => void
 }>({
-	token: null,
-	setToken: () => {},
 	user: null,
-	setUser: () => {}
+	token: null,
+	setToken: () => {}
 })
 
 export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
-	const fetcher = useFetcher()
+	const [getUser, { data: user }] = useLazyGetUserQuery()
 
 	const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
-	const [user, setUser] = useState<iUser | null>(null)
 
-	useEffect(() => {
-		const token = localStorage.getItem("token")
-
+	useAsyncEffect(async () => {
 		if (token) {
-			fetcher({
-				url: "/user",
-				method: "GET",
-				token
-			}).then(({ data }) => {
-				if (data) {
-					setUser(data)
-				} else {
-					setToken(null)
-					localStorage.removeItem("token")
-				}
-			})
+			const { error } = await getUser({ token })
+
+			if (error) {
+				setToken(null)
+				localStorage.removeItem("token")
+			}
 		}
-	}, [])
+	}, [token])
 
 	const setTokenAndLocalStorage = (token: string | null) => {
 		if (token) {
@@ -53,10 +43,9 @@ export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
 	return (
 		<AuthContext.Provider
 			value={{
+				user: token ? user ?? null : null,
 				token,
-				setToken: setTokenAndLocalStorage,
-				user,
-				setUser
+				setToken: setTokenAndLocalStorage
 			}}>
 			{children}
 		</AuthContext.Provider>
