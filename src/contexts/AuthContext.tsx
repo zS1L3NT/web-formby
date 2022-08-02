@@ -15,15 +15,18 @@ const AuthContext = createContext<{
 })
 
 export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
-	const [getUser, { data: user }] = useLazyGetUserQuery()
+	const [getUser] = useLazyGetUserQuery()
 
 	const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
+	const [user, setUser] = useState<iUser | null>(null)
 
 	useAsyncEffect(async () => {
 		if (token) {
-			const { error } = await getUser({ token })
+			const result = await getUser({ token })
 
-			if (error) {
+			if ("data" in result) {
+				setUser(result.data!)
+			} else {
 				setToken(null)
 				localStorage.removeItem("token")
 			}
