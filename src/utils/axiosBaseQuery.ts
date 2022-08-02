@@ -4,7 +4,7 @@ import ObjectValidator from "validate-any/dist/validators/ObjectValidator"
 
 import { BaseQueryFn } from "@reduxjs/toolkit/dist/query"
 
-type ApiError = {
+export type ApiError = {
 	type: string
 	message: string
 	stack?: any[]

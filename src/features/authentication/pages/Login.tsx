@@ -7,15 +7,16 @@ import {
 	Stack, Text, useBoolean, useToast
 } from "@chakra-ui/react"
 
+import { useLoginMutation } from "../../../api"
 import AuthContext from "../../../contexts/AuthContext"
-import useFetcher from "../../../hooks/useFetcher"
 import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"
 
 const Login = () => {
-	const { setToken, setUser } = useContext(AuthContext)
-	const fetcher = useFetcher()
+	const { setToken } = useContext(AuthContext)
 	const navigate = useNavigate()
 	const toast = useToast()
+
+	const [loginMutation] = useLoginMutation()
 
 	const [loading, setLoading] = useBoolean()
 	const [email, setEmail] = useState("")
@@ -41,17 +42,13 @@ const Login = () => {
 	const handleLogin = async () => {
 		setLoading.on()
 
-		const { data, error } = await fetcher({
-			url: "/login",
-			method: "POST",
-			body: {
-				email,
-				password
-			}
+		const result = await loginMutation({
+			email,
+			password
 		})
 
-		if (error && "fields" in error && error.fields) {
-			const fields = error.fields
+		if ("error" in result && result.error && "fields" in result.error && result.error.fields) {
+			const fields = result.error.fields
 			if ("email" in fields) {
 				setEmailError(fields.email!.join("\n"))
 			}
@@ -60,11 +57,10 @@ const Login = () => {
 			}
 		}
 
-		if (data) {
-			setToken(data.token)
-			setUser(data.user)
+		if ("data" in result) {
+			setToken(result.data.token)
 			toast({
-				title: data.message,
+				title: result.data.message,
 				status: "success",
 				isClosable: true
 			})
