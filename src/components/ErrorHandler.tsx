@@ -1,37 +1,31 @@
 import { useContext, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 
-import { Toast, useToast } from "@chakra-ui/react"
+import { useToast } from "@chakra-ui/react"
 import { isRejectedWithValue, Middleware } from "@reduxjs/toolkit"
 
 import AuthContext from "../contexts/AuthContext"
 import useAppSelector from "../hooks/useAppSelector"
 import { setError } from "../slices/ErrorSlice"
+import UnauthenticatedToast from "./UnauthenticatedToast"
 
-const ErrorHandler = ({}: {}) => {
+const ErrorHandler = () => {
 	const error = useAppSelector(state => state.error)
 	const { setToken } = useContext(AuthContext)
-	const navigate = useNavigate()
 	const toast = useToast()
 
 	useEffect(() => {
 		if (!error) return
 
-		toast({
-			render: props => (
-				<Toast
-					{...props}
-					title={error.type}
-					description={error.message}
-					status="error"
-					isClosable={true}
-				/>
-			)
-		})
-
 		if (error.type === "Unauthorized") {
+			toast({ render: props => <UnauthenticatedToast {...props} /> })
 			setToken(null)
-			// navigate("/login")
+		} else {
+			toast({
+				title: error.type,
+				description: error.message,
+				status: "error",
+				isClosable: true
+			})
 		}
 	}, [error])
 
