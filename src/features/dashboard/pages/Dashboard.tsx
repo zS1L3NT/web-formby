@@ -1,37 +1,13 @@
-import { useContext, useState } from "react"
-
 import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 
-import AuthContext from "../../../contexts/AuthContext"
-import useAsyncEffect from "../../../hooks/useAsyncEffect"
-import useFetcher from "../../../hooks/useFetcher"
+import { useGetFormsQuery } from "../../../api"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
-import { WithTimestamps } from "../../../models"
-import { iForm } from "../../../models/Form"
 import FormItem from "../components/FormItem"
 
 const Dashboard = () => {
-	const { token } = useContext(AuthContext)
-	const fetcher = useFetcher()
+	const { token } = useOnlyAuthenticated()
 
-	const [forms, setForms] = useState<WithTimestamps<iForm>[] | null>(null)
-
-	useOnlyAuthenticated()
-
-	useAsyncEffect(async () => {
-		if (!token) return
-
-		const { data: form } = await fetcher({
-			url: "/forms",
-			method: "GET",
-			query: {
-				page: "1"
-			},
-			token
-		})
-
-		setForms(form)
-	}, [token])
+	const { data: forms } = useGetFormsQuery({ token })
 
 	return (
 		<Container

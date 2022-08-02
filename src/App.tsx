@@ -44,7 +44,7 @@ const App = () => {
 						path="dashboard"
 						element={<Dashboard />}
 					/>
-					<Route path="forms/:id">
+					<Route path="forms/:form_id">
 						<Route
 							index
 							element={<FormAnswer />}
