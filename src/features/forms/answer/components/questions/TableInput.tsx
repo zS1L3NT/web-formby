@@ -4,13 +4,13 @@ import {
 
 import { iTableAnswer } from "../../../../../models/Answer"
 import { iTableQuestion } from "../../../../../models/Question"
-import { QuestionProps } from "../Question"
+import { InputProps } from "../QuestionInput"
 
-const TableQuestion = ({
+const TableInput = ({
 	question,
 	answer,
 	setAnswer
-}: QuestionProps<iTableQuestion, iTableAnswer>) => {
+}: InputProps<iTableQuestion, iTableAnswer>) => {
 	const { table_rows: tableRows, table_columns: tableColumns, table_type: tableType } = question
 
 	return (
@@ -89,4 +89,4 @@ const TableQuestion = ({
 	)
 }
 
-export default TableQuestion
+export default TableInput

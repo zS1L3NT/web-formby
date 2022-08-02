@@ -4,12 +4,12 @@ import { Input } from "@chakra-ui/react"
 
 import { iDateTimeAnswer } from "../../../../../models/Answer"
 import { iDateTimeQuestion } from "../../../../../models/Question"
-import { QuestionProps } from "../Question"
+import { InputProps } from "../QuestionInput"
 
-const DateTimeQuestion = ({
+const DateTimeInput = ({
 	answer,
 	setAnswer
-}: QuestionProps<iDateTimeQuestion, iDateTimeAnswer>) => {
+}: InputProps<iDateTimeQuestion, iDateTimeAnswer>) => {
 	return (
 		<Input
 			type="datetime-local"
@@ -22,4 +22,4 @@ const DateTimeQuestion = ({
 	)
 }
 
-export default DateTimeQuestion
+export default DateTimeInput

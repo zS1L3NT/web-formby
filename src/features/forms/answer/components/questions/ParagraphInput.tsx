@@ -2,12 +2,12 @@ import { Textarea } from "@chakra-ui/react"
 
 import { iParagraphAnswer } from "../../../../../models/Answer"
 import { iParagraphQuestion } from "../../../../../models/Question"
-import { QuestionProps } from "../Question"
+import { InputProps } from "../QuestionInput"
 
-const ParagraphQuestion = ({
+const ParagraphInput = ({
 	answer,
 	setAnswer
-}: QuestionProps<iParagraphQuestion, iParagraphAnswer>) => {
+}: InputProps<iParagraphQuestion, iParagraphAnswer>) => {
 	return (
 		<Textarea
 			value={answer.paragraph}
@@ -18,4 +18,4 @@ const ParagraphQuestion = ({
 	)
 }
 
-export default ParagraphQuestion
+export default ParagraphInput

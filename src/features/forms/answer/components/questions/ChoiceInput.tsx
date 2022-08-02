@@ -3,28 +3,46 @@ import { Box, Checkbox, CheckboxGroup, Radio, RadioGroup, Text } from "@chakra-u
 import Dropdown from "../../../../../components/Dropdown"
 import { iChoiceAnswer } from "../../../../../models/Answer"
 import { iChoiceQuestion } from "../../../../../models/Question"
-import { QuestionProps } from "../Question"
+import { InputProps } from "../QuestionInput"
 
-const ChoiceQuestion = ({
+const ChoiceInput = ({
 	question,
 	answer,
 	setAnswer
-}: QuestionProps<iChoiceQuestion, iChoiceAnswer>) => {
+}: InputProps<iChoiceQuestion, iChoiceAnswer>) => {
 	const { choices, choice_type: choiceType } = question
 
 	const listMaker = choices.map((choice, i) =>
 		choice === null || i === null ? (
-			<Box ml={{ base: 0, md: 2 }} mr={{ base: 2, md: 4 }} w="24px"></Box>
+			<Box
+				ml={{ base: 0, md: 2 }}
+				mr={{ base: 2, md: 4 }}
+				w="24px"></Box>
 		) : choiceType === "checkbox" ? (
-			<Checkbox value={choice} ml={{ base: 0, md: 2 }} mr={2} my="auto" flex={1}>
+			<Checkbox
+				value={choice}
+				ml={{ base: 0, md: 2 }}
+				mr={2}
+				my="auto"
+				flex={1}>
 				<Text ml={{ md: 2 }}>{choice}</Text>
 			</Checkbox>
 		) : choiceType === "radio" ? (
-			<Radio value={choice} ml={{ base: 0, md: 2 }} mr={2} my="auto" flex={1}>
+			<Radio
+				value={choice}
+				ml={{ base: 0, md: 2 }}
+				mr={2}
+				my="auto"
+				flex={1}>
 				<Text ml={{ md: 2 }}>{choice}</Text>
 			</Radio>
 		) : (
-			<Text ml={{ base: 0, md: 2 }} mr={4} my="auto" h="fit-content" w="24px">
+			<Text
+				ml={{ base: 0, md: 2 }}
+				mr={4}
+				my="auto"
+				h="fit-content"
+				w="24px">
 				{i + 1}
 			</Text>
 		)
@@ -63,4 +81,4 @@ const ChoiceQuestion = ({
 	)
 }
 
-export default ChoiceQuestion
+export default ChoiceInput

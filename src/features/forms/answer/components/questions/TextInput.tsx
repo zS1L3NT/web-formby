@@ -2,9 +2,9 @@ import { Input } from "@chakra-ui/react"
 
 import { iTextAnswer } from "../../../../../models/Answer"
 import { iTextQuestion } from "../../../../../models/Question"
-import { QuestionProps } from "../Question"
+import { InputProps } from "../QuestionInput"
 
-const TextQuestion = ({ answer, setAnswer }: QuestionProps<iTextQuestion, iTextAnswer>) => {
+const TextInput = ({ answer, setAnswer }: InputProps<iTextQuestion, iTextAnswer>) => {
 	return (
 		<Input
 			value={answer.text}
@@ -15,4 +15,4 @@ const TextQuestion = ({ answer, setAnswer }: QuestionProps<iTextQuestion, iTextA
 	)
 }
 
-export default TextQuestion
+export default TextInput

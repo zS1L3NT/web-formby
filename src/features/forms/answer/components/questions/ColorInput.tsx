@@ -4,9 +4,9 @@ import { Box, Flex, Input } from "@chakra-ui/react"
 
 import { iColorAnswer } from "../../../../../models/Answer"
 import { iColorQuestion } from "../../../../../models/Question"
-import { QuestionProps } from "../Question"
+import { InputProps } from "../QuestionInput"
 
-const ColorQuestion = ({ answer, setAnswer }: QuestionProps<iColorQuestion, iColorAnswer>) => {
+const ColorInput = ({ answer, setAnswer }: InputProps<iColorQuestion, iColorAnswer>) => {
 	return (
 		<Flex
 			pos="relative"
@@ -14,7 +14,9 @@ const ColorQuestion = ({ answer, setAnswer }: QuestionProps<iColorQuestion, iCol
 			justifyContent="center"
 			alignItems="center"
 			zIndex={1}>
-			<Box w={{ base: "max", sm: 80 }} h={48}>
+			<Box
+				w={{ base: "max", sm: 80 }}
+				h={48}>
 				<HexColorPicker
 					style={{
 						width: "100%",
@@ -26,8 +28,17 @@ const ColorQuestion = ({ answer, setAnswer }: QuestionProps<iColorQuestion, iCol
 				/>
 			</Box>
 
-			<Flex w={{ base: "max", sm: 80 }} h={12} mt={2}>
-				<Box w={10} h={10} my="auto" bg={answer.color} borderRadius="50%" />
+			<Flex
+				w={{ base: "max", sm: 80 }}
+				h={12}
+				mt={2}>
+				<Box
+					w={10}
+					h={10}
+					my="auto"
+					bg={answer.color}
+					borderRadius="50%"
+				/>
 				<Input
 					w="max"
 					h="max"
@@ -41,4 +52,4 @@ const ColorQuestion = ({ answer, setAnswer }: QuestionProps<iColorQuestion, iCol
 	)
 }
 
-export default ColorQuestion
+export default ColorInput

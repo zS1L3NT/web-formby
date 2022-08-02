@@ -1,45 +1,34 @@
-import { useContext, useState } from "react"
-
-import { Box } from "@chakra-ui/react"
+import { Text } from "@chakra-ui/react"
 
 import Card from "../../../../components/Card"
-import FormContext from "../../../../contexts/FormContext"
-import EditableText from "../../edit/components/EditableText"
+import { iForm } from "../../../../models/Form"
 
-const FormHeader = ({ editable }: { editable: boolean }) => {
-	const { form, setForm } = useContext(FormContext)
-
-	const [name, setName] = useState(form!.name)
-	const [description, setDescription] = useState(form!.description)
-
+const FormHeader = ({ form }: { form: iForm }) => {
 	return (
 		<Card
 			my={4}
 			_hover={{
 				shadow: "lg"
 			}}>
-			<EditableText
-				editable={editable}
-				required={true}
-				placeholder="Add a title"
-				text={name}
-				setText={setName}
+			<Text
 				fontSize="4xl"
 				noOfLines={2}
-			/>
-			<Box
 				mt={2}
-				mb={8}>
-				<EditableText
-					editable={editable}
-					placeholder="Add a description"
-					text={description}
-					setText={setDescription}
+				textAlign="left"
+				color="text">
+				{form.name}
+			</Text>
+
+			{form.description ? (
+				<Text
 					fontSize="lg"
-					noOfLines={10}>
-					{form!.description}
-				</EditableText>
-			</Box>
+					noOfLines={10}
+					mt={2}
+					textAlign="left"
+					color="text">
+					{form.description}
+				</Text>
+			) : null}
 		</Card>
 	)
 }
