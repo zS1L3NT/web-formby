@@ -2,17 +2,17 @@ import { useContext, useState } from "react"
 
 import { Box } from "@chakra-ui/react"
 
-import Card from "../../../components/Card"
-import AuthContext from "../../../contexts/AuthContext"
-import FormContext from "../../../contexts/FormContext"
-import useAsyncEffect from "../../../hooks/useAsyncEffect"
-import useFetcher from "../../../hooks/useFetcher"
+import { useSetFormMutation } from "../../../../api"
+import Card from "../../../../components/Card"
+import AuthContext from "../../../../contexts/AuthContext"
+import useAsyncEffect from "../../../../hooks/useAsyncEffect"
+import { iForm } from "../../../../models/Form"
 import EditableText from "./EditableText"
 
-const FormHeader = ({ editable }: { editable: boolean }) => {
+const FormHeader = ({ form }: { form: iForm }) => {
 	const { token } = useContext(AuthContext)
-	const { form, setForm } = useContext(FormContext)
-	const fetcher = useFetcher()
+
+	const [setFormMutation] = useSetFormMutation()
 
 	const [name, setName] = useState(form!.name)
 	const [description, setDescription] = useState(form!.description)
@@ -22,22 +22,12 @@ const FormHeader = ({ editable }: { editable: boolean }) => {
 		if (!token) return
 
 		if (form!.name !== name || form!.description !== description) {
-			const { data } = await fetcher({
-				url: "/forms/{form_id}",
-				method: "PUT",
-				parameters: {
-					form_id: form!.id
-				},
-				body: {
-					name,
-					description
-				},
-				token
+			await setFormMutation({
+				token,
+				...form,
+				name,
+				description
 			})
-
-			if (data?.form) {
-				setForm(data.form)
-			}
 		}
 	}, [token, form, name, description])
 
@@ -48,7 +38,6 @@ const FormHeader = ({ editable }: { editable: boolean }) => {
 				shadow: "lg"
 			}}>
 			<EditableText
-				editable={editable}
 				required={true}
 				placeholder="Add a title"
 				text={name}
@@ -60,7 +49,6 @@ const FormHeader = ({ editable }: { editable: boolean }) => {
 				mt={2}
 				mb={8}>
 				<EditableText
-					editable={editable}
 					placeholder="Add a description"
 					text={description}
 					setText={setDescription}

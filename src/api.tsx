@@ -126,8 +126,7 @@ const api = createApi({
 				method: "POST",
 				body: question
 			}),
-			invalidatesTags: result =>
-				result ? [{ type: "Question", id: result.question.id }] : []
+			invalidatesTags: result => (result ? [{ type: "Question" }] : [])
 		}),
 		getFormQuestion: builder.query<
 			WithTimestamps<iQuestion>,
@@ -153,8 +152,7 @@ const api = createApi({
 				method: "PUT",
 				body: question
 			}),
-			invalidatesTags: result =>
-				result ? [{ type: "Question", id: result.question.id }] : []
+			invalidatesTags: result => (result ? [{ type: "Question" }] : [])
 		}),
 		deleteFormQuestion: builder.mutation<
 			ApiResponse,
@@ -165,8 +163,7 @@ const api = createApi({
 				url: `/forms/${form_id}/questions/${question_id}`,
 				method: "DELETE"
 			}),
-			invalidatesTags: (result, error, args) =>
-				result ? [{ type: "Question", id: args.question_id }] : []
+			invalidatesTags: (result, error, args) => (result ? [{ type: "Question" }] : [])
 		}),
 		getUser: builder.query<WithTimestamps<iUser>, RequiredToken>({
 			query: ({ token }) => ({

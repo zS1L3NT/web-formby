@@ -3,23 +3,28 @@ import { useContext } from "react"
 import { AddIcon } from "@chakra-ui/icons"
 import { IconButton, Spinner, useBoolean } from "@chakra-ui/react"
 
+import { useSetFormQuestionMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
-import FormContext from "../../../../contexts/FormContext"
-import { iTextQuestion } from "../../../../models/Question"
-import useFetcher from "../../../hooks/useFetcher"
+import { iQuestion, iTextQuestion } from "../../../../models/Question"
 
-const AddQuestion = ({ editable, index }: { editable: boolean; index: number }) => {
+const AddQuestion = ({
+	formId,
+	previousQuestion
+}: {
+	formId: string
+	previousQuestion: iQuestion | null
+}) => {
 	const { token } = useContext(AuthContext)
-	const { form, questions, setQuestions } = useContext(FormContext)
-	const fetcher = useFetcher()
+
+	const [setFormQuestionMutation] = useSetFormQuestionMutation()
 
 	const [isCreating, setIsCreating] = useBoolean()
 
-	const handleCreate = async (index: number) => {
-		if (questions === null || token === null) return
+	const handleCreate = async () => {
+		if (token === null) return
 
 		const question: Omit<iTextQuestion, "id" | "form_id"> = {
-			previous_question_id: questions[index - 1]?.id ?? null,
+			previous_question_id: previousQuestion?.id ?? null,
 			title: "New Question",
 			description: null,
 			photo: null,
@@ -28,33 +33,18 @@ const AddQuestion = ({ editable, index }: { editable: boolean; index: number }) 
 		}
 
 		setIsCreating.on()
-		const { data } = await fetcher({
-			url: "/forms/{form_id}/questions",
-			method: "POST",
-			parameters: {
-				form_id: form!.id
-			},
-			body: question,
-			token
-		})
-
-		if (data) {
-			setQuestions(questions => {
-				questions.splice(index, 0, data.question)
-
-				if (index !== questions.length - 1) {
-					questions.at(index + 1)!.previous_question_id = data.question.id
-				}
-			})
-		}
-
+		await setFormQuestionMutation({ form_id: formId, token, ...question })
 		setIsCreating.off()
 	}
 
-	return editable ? (
+	return (
 		<IconButton
+			h={8}
+			w="max"
+			mb={4}
 			aria-label="Add Question"
 			isDisabled={isCreating}
+			onClick={handleCreate}
 			icon={
 				isCreating ? (
 					<Spinner
@@ -68,13 +58,7 @@ const AddQuestion = ({ editable, index }: { editable: boolean; index: number }) 
 					/>
 				)
 			}
-			h={8}
-			w="max"
-			mb={4}
-			onClick={() => handleCreate(index)}
 		/>
-	) : (
-		<></>
 	)
 }
 

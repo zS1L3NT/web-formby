@@ -6,17 +6,10 @@ import {
 	SliderMark, SliderThumb, SliderTrack, Text
 } from "@chakra-ui/react"
 
-import { iSliderAnswer } from "../../../../models/Answer"
-import { iSliderQuestion } from "../../../../models/Question"
-import { QuestionProps } from "../Question"
+import { iSliderQuestion } from "../../../../../models/Question"
+import { EditorProps } from "../QuestionEditor"
 
-const SliderQuestion = ({
-	editable,
-	question,
-	setQuestion,
-	answer,
-	setAnswer
-}: QuestionProps<iSliderQuestion, iSliderAnswer>) => {
+const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) => {
 	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = question
 
 	const [error, setError] = useState<string | null>(null)
@@ -59,62 +52,60 @@ const SliderQuestion = ({
 
 	return (
 		<>
-			{editable ? (
-				<Flex
-					w="max"
-					direction={{ base: "column", md: "row" }}
-					justifyContent="space-evenly"
-					gap={4}
-					px={{ base: 0, md: 2 }}
-					mb={4}>
-					<InputGroup>
-						<InputLeftAddon children="Min" />
-						<NumberInput
-							flex="1"
-							css={css}
-							value={isNaN(sliderMin) ? "" : sliderMin}
-							onChange={(_, slider_min) =>
-								setQuestion({
-									...question,
-									slider_min
-								})
-							}>
-							<NumberInputField />
-						</NumberInput>
-					</InputGroup>
-					<InputGroup>
-						<InputLeftAddon children="Step" />
-						<NumberInput
-							flex="1"
-							css={css}
-							value={isNaN(sliderStep) ? "" : sliderStep}
-							onChange={(_, slider_step) =>
-								setQuestion({
-									...question,
-									slider_step
-								})
-							}
-							min={1}>
-							<NumberInputField />
-						</NumberInput>
-					</InputGroup>
-					<InputGroup>
-						<InputLeftAddon children="Max" />
-						<NumberInput
-							flex="1"
-							css={css}
-							value={isNaN(sliderMax) ? "" : sliderMax}
-							onChange={(_, slider_max) =>
-								setQuestion({
-									...question,
-									slider_max
-								})
-							}>
-							<NumberInputField />
-						</NumberInput>
-					</InputGroup>
-				</Flex>
-			) : null}
+			<Flex
+				w="max"
+				direction={{ base: "column", md: "row" }}
+				justifyContent="space-evenly"
+				gap={4}
+				px={{ base: 0, md: 2 }}
+				mb={4}>
+				<InputGroup>
+					<InputLeftAddon children="Min" />
+					<NumberInput
+						flex="1"
+						css={css}
+						value={isNaN(sliderMin) ? "" : sliderMin}
+						onChange={(_, slider_min) =>
+							setQuestion({
+								...question,
+								slider_min
+							})
+						}>
+						<NumberInputField />
+					</NumberInput>
+				</InputGroup>
+				<InputGroup>
+					<InputLeftAddon children="Step" />
+					<NumberInput
+						flex="1"
+						css={css}
+						value={isNaN(sliderStep) ? "" : sliderStep}
+						onChange={(_, slider_step) =>
+							setQuestion({
+								...question,
+								slider_step
+							})
+						}
+						min={1}>
+						<NumberInputField />
+					</NumberInput>
+				</InputGroup>
+				<InputGroup>
+					<InputLeftAddon children="Max" />
+					<NumberInput
+						flex="1"
+						css={css}
+						value={isNaN(sliderMax) ? "" : sliderMax}
+						onChange={(_, slider_max) =>
+							setQuestion({
+								...question,
+								slider_max
+							})
+						}>
+						<NumberInputField />
+					</NumberInput>
+				</InputGroup>
+			</Flex>
 
 			<Text
 				mt={2}
@@ -127,13 +118,12 @@ const SliderQuestion = ({
 				pr={{ base: 2, md: 4 }}>
 				<ErrorBoundary FallbackComponent={_ => <></>}>
 					<Slider
-						isDisabled={editable}
+						isDisabled={true}
 						defaultValue={sliderMin}
 						min={sliderMin}
 						max={sliderMax}
 						step={sliderStep}
-						value={answer.slider}
-						onChange={e => setAnswer({ ...answer, slider: e })}>
+						value={sliderMin}>
 						{((sliderMax - sliderMin) / sliderStep + 1) % 1 === 0
 							? Array.from(Array((sliderMax - sliderMin) / sliderStep + 1)).map(
 									(_, i) => (
@@ -156,4 +146,4 @@ const SliderQuestion = ({
 	)
 }
 
-export default SliderQuestion
+export default SliderEditor

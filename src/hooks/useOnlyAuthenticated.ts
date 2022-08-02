@@ -31,6 +31,11 @@ const useOnlyAuthenticated = (redirect = "/login") => {
 			})
 		}
 	}, [token, user])
+
+	return {
+		token: token ?? "",
+		user
+	}
 }
 
 export default useOnlyAuthenticated

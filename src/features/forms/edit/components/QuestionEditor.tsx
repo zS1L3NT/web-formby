@@ -8,46 +8,38 @@ import {
 	useDisclosure, usePrevious, useToast
 } from "@chakra-ui/react"
 
+import { useUpdateFormQuestionMutation } from "../../../../api"
 import Card from "../../../../components/Card"
 import AuthContext from "../../../../contexts/AuthContext"
-import FormContext from "../../../../contexts/FormContext"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
-import { iAnswer } from "../../../../models/Answer"
 import { iQuestion } from "../../../../models/Question"
-import { getQuestionDifference, RenderQuestion } from "../../../../utils/questionUtils"
-import useFetcher from "../../../hooks/useFetcher"
-import AddQuestion from "../../edit/components/AddQuestion"
-import EditableText from "../../edit/components/EditableText"
-import OptionsMenu from "../../edit/components/OptionsMenu"
-import QuestionDeleteAlert from "../../edit/components/QuestionDeleteAlert"
+import { getQuestionDifference } from "../../../../utils/questionUtils"
+import AddQuestion from "./AddQuestion"
+import EditableText from "./EditableText"
+import OptionsMenu from "./OptionsMenu"
+import QuestionDeleteAlert from "./QuestionDeleteAlert"
+import RenderEditor from "./RenderEditor"
 
-export type QuestionProps<iQ extends iQuestion, iA extends iAnswer> = {
-	editable: boolean
+export type EditorProps<iQ extends iQuestion> = {
 	question: iQ
 	setQuestion: Updater<iQ>
-	answer: Omit<iA, "id">
-	setAnswer: (answer: Omit<iA, "id">) => void
 }
 
-const Question = ({
-	index,
+const QuestionEditor = ({
 	provided,
-	editable,
 	parentQuestion,
 	error
 }: {
-	index: number
 	provided?: DraggableProvided
-	editable: boolean
 	parentQuestion: iQuestion
 	error: string | null
 }) => {
 	const { token } = useContext(AuthContext)
-	const { setQuestions, answers, setAnswers } = useContext(FormContext)
-	const fetcher = useFetcher()
 	const toast = useToast()
 	const photoInputRef = createRef<HTMLInputElement>()
 	const menuRef = createRef<HTMLButtonElement>()
+
+	const [updateFormQuestionMutation] = useUpdateFormQuestionMutation()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [question, setQuestion] = useImmer(parentQuestion)
@@ -64,27 +56,12 @@ const Question = ({
 
 		const difference = getQuestionDifference(__question, question)
 		if (Object.keys(difference).length > 0) {
-			const { data } = await fetcher(
-				{
-					url: "/forms/{form_id}/questions/{question_id}",
-					method: "PUT",
-					parameters: {
-						form_id: question.form_id,
-						question_id: question.id
-					},
-					body: difference,
-					token
-				},
-				{
-					toast: false
-				}
-			)
-
-			if (data) {
-				setQuestions(questions =>
-					questions.map((q, i) => (i === index ? data.question : q))
-				)
-			}
+			await updateFormQuestionMutation({
+				form_id: question.form_id,
+				question_id: question.id,
+				token,
+				...difference
+			})
 		}
 	}, [question, token])
 
@@ -129,7 +106,7 @@ const Question = ({
 		<>
 			<Box
 				ref={provided?.innerRef}
-				{...(editable ? provided?.draggableProps : {})}>
+				{...provided?.draggableProps}>
 				<Card
 					mb={4}
 					pos="relative"
@@ -138,7 +115,6 @@ const Question = ({
 					borderRadius="lg"
 					transition="borderWidth 0.3s">
 					<IconButton
-						hidden={!editable}
 						icon={<DragHandleIcon />}
 						aria-label="Options"
 						pos="absolute"
@@ -149,17 +125,14 @@ const Question = ({
 					/>
 
 					<OptionsMenu
-						editable={editable}
-						index={index}
 						menuRef={menuRef}
 						onDelete={onOpen}
 						question={question}
 						setQuestion={setQuestion}
 					/>
 
-					<Box mr={editable ? 8 : 0}>
+					<Box mr={0}>
 						<EditableText
-							editable={editable}
 							required={true}
 							text={question.title}
 							setText={title => setQuestion({ ...question, title })}
@@ -170,7 +143,6 @@ const Question = ({
 					</Box>
 
 					<EditableText
-						editable={editable}
 						text={question.description ?? ""}
 						setText={description => setQuestion({ ...question, description })}
 						placeholder="Add a description"
@@ -200,29 +172,27 @@ const Question = ({
 								mt={2}
 								maxH={56}
 							/>
-							{editable ? (
-								<Center
-									w="max"
-									h="max"
-									pos="absolute"
-									top={0}
-									left={0}
-									bg="black"
-									zIndex={1}
-									transition="opacity 0.3s"
-									opacity={0}
-									_hover={{
-										opacity: 0.8
-									}}>
-									<IconButton
-										aria-label="Delete photo"
-										icon={<DeleteIcon />}
-										onClick={() => handleFileChange(null)}
-									/>
-								</Center>
-							) : null}
+							<Center
+								w="max"
+								h="max"
+								pos="absolute"
+								top={0}
+								left={0}
+								bg="black"
+								zIndex={1}
+								transition="opacity 0.3s"
+								opacity={0}
+								_hover={{
+									opacity: 0.8
+								}}>
+								<IconButton
+									aria-label="Delete photo"
+									icon={<DeleteIcon />}
+									onClick={() => handleFileChange(null)}
+								/>
+							</Center>
 						</Box>
-					) : editable ? (
+					) : (
 						<Box>
 							<Button
 								display="block"
@@ -239,20 +209,13 @@ const Question = ({
 								onChange={e => handleFileChange(e.target.files?.[0] ?? null)}
 							/>
 						</Box>
-					) : null}
+					)}
 
 					<Box h={4} />
 
-					<RenderQuestion
-						editable={editable}
+					<RenderEditor
 						question={question}
 						setQuestion={setQuestion}
-						answer={answers![index]!}
-						setAnswer={answer => {
-							setAnswers(answers => {
-								answers[index] = answer
-							})
-						}}
 					/>
 
 					<Collapse
@@ -269,20 +232,18 @@ const Question = ({
 				</Card>
 
 				<AddQuestion
-					editable={editable}
-					index={index + 1}
+					formId={question.form_id}
+					previousQuestion={question}
 				/>
 			</Box>
 
 			<QuestionDeleteAlert
 				isOpen={isOpen}
 				onCancel={onClose}
-				index={index}
 				question={question}
-				parentQuestion={parentQuestion}
 			/>
 		</>
 	)
 }
 
-export default Question
+export default QuestionEditor

@@ -5,55 +5,32 @@ import {
 	AlertDialogHeader, AlertDialogOverlay, Button
 } from "@chakra-ui/react"
 
+import { useDeleteFormQuestionMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
-import FormContext from "../../../../contexts/FormContext"
-import useFetcher from "../../../../hooks/useFetcher"
 import { iQuestion } from "../../../../models/Question"
 
 const QuestionDeleteAlert = ({
 	isOpen,
 	onCancel,
-	index,
-	question,
-	parentQuestion
+	question
 }: {
 	isOpen: boolean
 	onCancel: () => void
-	index: number
 	question: iQuestion
-	parentQuestion: iQuestion
 }) => {
 	const { token } = useContext(AuthContext)
-	const { setQuestions } = useContext(FormContext)
-	const fetcher = useFetcher()
 	const alertCancelRef = createRef<any>()
 
-	const handleDeleteQuestion = () => {
+	const [deleteFormQuestionMutation] = useDeleteFormQuestionMutation()
+
+	const handleDeleteQuestion = async () => {
 		if (!token) return
 
-		setQuestions(questions =>
-			questions
-				.filter((_, i) => i !== index)
-				.map(q =>
-					q.previous_question_id === parentQuestion.id
-						? { ...q, previous_question_id: parentQuestion.previous_question_id }
-						: q
-				)
-		)
-		fetcher(
-			{
-				url: "/forms/{form_id}/questions/{question_id}",
-				method: "DELETE",
-				parameters: {
-					form_id: question.form_id,
-					question_id: question.id
-				},
-				token
-			},
-			{
-				toast: false
-			}
-		)
+		await deleteFormQuestionMutation({
+			form_id: question.form_id,
+			question_id: question.id,
+			token
+		})
 	}
 
 	return (

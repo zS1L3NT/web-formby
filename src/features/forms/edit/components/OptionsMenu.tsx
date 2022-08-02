@@ -7,30 +7,25 @@ import {
 	Spinner, useBoolean
 } from "@chakra-ui/react"
 
+import { useSetFormQuestionMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
-import FormContext from "../../../../contexts/FormContext"
-import useFetcher from "../../../../hooks/useFetcher"
 import { iQuestion } from "../../../../models/Question"
 import { createDuplicate } from "../../../../utils/questionUtils"
 
 const OptionsMenu = ({
-	editable,
-	index,
 	menuRef,
 	onDelete,
 	question,
 	setQuestion
 }: {
-	editable: boolean
-	index: number
 	menuRef: RefObject<HTMLButtonElement>
 	onDelete: () => void
 	question: iQuestion
 	setQuestion: Updater<iQuestion>
 }) => {
 	const { token } = useContext(AuthContext)
-	const { setQuestions } = useContext(FormContext)
-	const fetcher = useFetcher()
+
+	const [setFormQuestion] = useSetFormQuestionMutation()
 
 	const [isDuplicating, setIsDuplicating] = useBoolean()
 
@@ -38,26 +33,7 @@ const OptionsMenu = ({
 		if (!token) return
 
 		setIsDuplicating.on()
-		const { data } = await fetcher({
-			url: "/forms/{form_id}/questions",
-			method: "POST",
-			body: createDuplicate(question),
-			parameters: {
-				form_id: question.form_id
-			},
-			token
-		})
-
-		if (data) {
-			setQuestions(questions => {
-				questions.splice(index + 1, 0, data.question)
-
-				if (questions.at(index + 2)) {
-					questions.at(index + 2)!.previous_question_id = data.question.id
-				}
-			})
-		}
-
+		await setFormQuestion({ token, ...createDuplicate(question) })
 		setIsDuplicating.off()
 	}
 
@@ -66,7 +42,6 @@ const OptionsMenu = ({
 			<MenuButton
 				ref={menuRef}
 				as={IconButton}
-				hidden={!editable}
 				aria-label="Options"
 				pos="absolute"
 				right={4}

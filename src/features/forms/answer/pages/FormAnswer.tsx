@@ -13,10 +13,11 @@ import QuestionInput from "../components/QuestionInput"
 
 const FormAnswer = () => {
 	const { token, user } = useContext(AuthContext)
-	const params = useParams()
 	const toast = useToast()
-	const { data: form } = useGetFormQuery({ form_id: params.form_id!, token })
-	const { data: questions } = useGetFormQuestionsQuery({ form_id: params.form_id!, token })
+	const form_id = useParams().form_id as string
+
+	const { data: form } = useGetFormQuery({ form_id, token })
+	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })
 	const [setAnswersMutation] = useSetAnswersMutation()
 
 	const [isSubmitting, setIsSubmitting] = useBoolean()
