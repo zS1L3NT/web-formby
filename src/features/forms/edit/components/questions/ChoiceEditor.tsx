@@ -21,18 +21,16 @@ const ChoiceEditor = ({ question, setQuestion }: EditorProps<iChoiceQuestion>) =
 					<Checkbox
 						value={choice}
 						ml={{ base: 0, md: 2 }}
-						mr={2}
+						mr={{ base: 4, md: 6 }}
 						my="auto"
-						flex={1}
 						isDisabled={true}
 					/>
 				) : question.choice_type === "radio" ? (
 					<Radio
 						value={choice}
 						ml={{ base: 0, md: 2 }}
-						mr={2}
+						mr={{ base: 4, md: 6 }}
 						my="auto"
-						flex={1}
 						isDisabled={true}
 					/>
 				) : (

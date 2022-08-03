@@ -194,7 +194,7 @@ const QuestionEditor = ({
 							<Button
 								display="block"
 								mt={2}
-								mr="auto"
+								mx="auto"
 								onClick={() => photoInputRef.current?.click()}>
 								Select Photo
 							</Button>
