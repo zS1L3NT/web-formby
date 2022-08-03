@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useImmer } from "use-immer"
 
-import { Box, Button, Center, Spinner, useBoolean, useToast } from "@chakra-ui/react"
+import { Box, Button, Center, Container, Spinner, useBoolean, useToast } from "@chakra-ui/react"
 
 import { useGetFormQuery, useGetFormQuestionsQuery, useSetAnswersMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
@@ -84,34 +84,40 @@ const FormAnswer = () => {
 		}
 	}
 
-	return form && questions && answers ? (
-		<>
-			<FormHeader form={form} />
-			{questions!.map((question, i) => (
-				<QuestionInput
-					key={question.id}
-					question={question}
-					answer={answers![i]!}
-					setAnswer={answer => {
-						setAnswers(answers => {
-							answers![i] = answer
-						})
-					}}
-					error={errors?.[i] ?? null}
-				/>
-			))}
-			<Button
-				disabled={isSubmitting}
-				variant="primary"
-				onClick={handleSubmit}>
-				Submit
-			</Button>
-			<Box h={16} />
-		</>
-	) : (
-		<Center>
-			<Spinner mt={4} />
-		</Center>
+	return (
+		<Container
+			mt={4}
+			maxW="4xl">
+			{form && questions && answers ? (
+				<>
+					<FormHeader form={form} />
+					{questions!.map((question, i) => (
+						<QuestionInput
+							key={question.id}
+							question={question}
+							answer={answers![i]!}
+							setAnswer={answer => {
+								setAnswers(answers => {
+									answers![i] = answer
+								})
+							}}
+							error={errors?.[i] ?? null}
+						/>
+					))}
+					<Button
+						disabled={isSubmitting}
+						variant="primary"
+						onClick={handleSubmit}>
+						Submit
+					</Button>
+					<Box h={16} />
+				</>
+			) : (
+				<Center>
+					<Spinner mt={4} />
+				</Center>
+			)}
+		</Container>
 	)
 }
 

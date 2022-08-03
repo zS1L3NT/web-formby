@@ -1,4 +1,4 @@
-import { Box, Checkbox, CheckboxGroup, Radio, RadioGroup, Text } from "@chakra-ui/react"
+import { Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Text } from "@chakra-ui/react"
 
 import Dropdown from "../../../../../components/Dropdown"
 import { iChoiceAnswer } from "../../../../../models/Answer"
@@ -17,13 +17,15 @@ const ChoiceInput = ({
 			<Box
 				ml={{ base: 0, md: 2 }}
 				mr={{ base: 2, md: 4 }}
-				w="24px"></Box>
+				my={2}
+				w="24px"
+			/>
 		) : choiceType === "checkbox" ? (
 			<Checkbox
 				value={choice}
 				ml={{ base: 0, md: 2 }}
 				mr={2}
-				my="auto"
+				my={2}
 				flex={1}>
 				<Text ml={{ md: 2 }}>{choice}</Text>
 			</Checkbox>
@@ -32,7 +34,7 @@ const ChoiceInput = ({
 				value={choice}
 				ml={{ base: 0, md: 2 }}
 				mr={2}
-				my="auto"
+				my={2}
 				flex={1}>
 				<Text ml={{ md: 2 }}>{choice}</Text>
 			</Radio>
@@ -40,7 +42,7 @@ const ChoiceInput = ({
 			<Text
 				ml={{ base: 0, md: 2 }}
 				mr={4}
-				my="auto"
+				my={2}
 				h="fit-content"
 				w="24px">
 				{i + 1}
@@ -54,7 +56,7 @@ const ChoiceInput = ({
 				<CheckboxGroup
 					value={answer.choices}
 					onChange={choices => setAnswer({ ...answer, choices: choices as string[] })}>
-					{listMaker}
+					<Flex direction="column">{listMaker}</Flex>
 				</CheckboxGroup>
 			) : null}
 
@@ -62,7 +64,7 @@ const ChoiceInput = ({
 				<RadioGroup
 					value={answer.choices[0]}
 					onChange={choice => setAnswer({ ...answer, choices: [choice] })}>
-					{listMaker}
+					<Flex direction="column">{listMaker}</Flex>
 				</RadioGroup>
 			) : null}
 
