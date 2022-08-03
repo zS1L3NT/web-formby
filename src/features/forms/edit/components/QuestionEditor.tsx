@@ -4,8 +4,8 @@ import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Alert, AlertIcon, AlertTitle, Box, Button, Center, Collapse, IconButton, Image, Input, Text,
-	useDisclosure, usePrevious, useToast
+	Box, Button, Center, IconButton, Image, Input, Spinner, Text, useBoolean, useDisclosure,
+	usePrevious, useToast
 } from "@chakra-ui/react"
 
 import { useUpdateFormQuestionMutation } from "../../../../api"
@@ -27,12 +27,10 @@ export type EditorProps<iQ extends iQuestion> = {
 
 const QuestionEditor = ({
 	provided,
-	parentQuestion,
-	error
+	parentQuestion
 }: {
 	provided?: DraggableProvided
 	parentQuestion: iQuestion
-	error: string | null
 }) => {
 	const { token } = useContext(AuthContext)
 	const toast = useToast()
@@ -42,6 +40,7 @@ const QuestionEditor = ({
 	const [updateFormQuestionMutation] = useUpdateFormQuestionMutation()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [isDeleting, setIsDeleting] = useBoolean()
 	const [question, setQuestion] = useImmer(parentQuestion)
 	const __question = usePrevious(question)
 
@@ -110,10 +109,8 @@ const QuestionEditor = ({
 				<Card
 					mb={4}
 					pos="relative"
-					borderWidth={error ? 4 : 0}
-					borderColor="red.200"
-					borderRadius="lg"
-					transition="borderWidth 0.3s">
+					borderWidth={0}
+					borderRadius="lg">
 					<IconButton
 						icon={<DragHandleIcon />}
 						aria-label="Options"
@@ -218,17 +215,20 @@ const QuestionEditor = ({
 						setQuestion={setQuestion}
 					/>
 
-					<Collapse
-						in={!!error}
-						animateOpacity>
-						<Alert
-							variant="left-accent"
-							status="error"
-							mt={4}>
-							<AlertIcon />
-							<AlertTitle>{error}</AlertTitle>
-						</Alert>
-					</Collapse>
+					{isDeleting ? (
+						<Center
+							pos="absolute"
+							w="max"
+							h="max"
+							top={0}
+							left={0}
+							bg="black"
+							borderRadius="lg"
+							opacity={0.5}
+							zIndex={5}>
+							<Spinner />
+						</Center>
+					) : null}
 				</Card>
 
 				<AddQuestion
@@ -239,8 +239,9 @@ const QuestionEditor = ({
 
 			<QuestionDeleteAlert
 				isOpen={isOpen}
-				onCancel={onClose}
+				onClose={onClose}
 				question={question}
+				setIsDeleting={() => setIsDeleting.on()}
 			/>
 		</>
 	)

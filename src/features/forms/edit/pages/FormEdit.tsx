@@ -112,7 +112,6 @@ const FormEdit = () => {
 													<QuestionEditor
 														provided={provided}
 														parentQuestion={question}
-														error={null}
 													/>
 												)}
 											</Draggable>

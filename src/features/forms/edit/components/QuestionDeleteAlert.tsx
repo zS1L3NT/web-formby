@@ -11,12 +11,14 @@ import { iQuestion } from "../../../../models/Question"
 
 const QuestionDeleteAlert = ({
 	isOpen,
-	onCancel,
-	question
+	onClose,
+	question,
+	setIsDeleting
 }: {
 	isOpen: boolean
-	onCancel: () => void
+	onClose: () => void
 	question: iQuestion
+	setIsDeleting: () => void
 }) => {
 	const { token } = useContext(AuthContext)
 	const alertCancelRef = createRef<any>()
@@ -26,6 +28,8 @@ const QuestionDeleteAlert = ({
 	const handleDeleteQuestion = async () => {
 		if (!token) return
 
+		onClose()
+		setIsDeleting()
 		await deleteFormQuestionMutation({
 			form_id: question.form_id,
 			question_id: question.id,
@@ -37,7 +41,7 @@ const QuestionDeleteAlert = ({
 		<AlertDialog
 			motionPreset="slideInBottom"
 			leastDestructiveRef={alertCancelRef}
-			onClose={onCancel}
+			onClose={onClose}
 			isOpen={isOpen}
 			isCentered>
 			<AlertDialogOverlay />
@@ -51,7 +55,7 @@ const QuestionDeleteAlert = ({
 				<AlertDialogFooter>
 					<Button
 						ref={alertCancelRef}
-						onClick={onCancel}>
+						onClick={onClose}>
 						Cancel
 					</Button>
 					<Button
