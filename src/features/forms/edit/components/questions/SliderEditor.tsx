@@ -10,9 +10,16 @@ import { iSliderQuestion } from "../../../../../models/Question"
 import { EditorProps } from "../QuestionEditor"
 
 const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) => {
-	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = question
-
+	const [sliderMin, setSliderMin] = useState(question.slider_min)
+	const [sliderStep, setSliderStep] = useState(question.slider_step)
+	const [sliderMax, setSliderMax] = useState(question.slider_max)
 	const [error, setError] = useState<string | null>(null)
+
+	useEffect(() => {
+		setSliderMin(question.slider_min)
+		setSliderStep(question.slider_step)
+		setSliderMax(question.slider_max)
+	}, [question.slider_min, question.slider_step, question.slider_max])
 
 	useEffect(() => {
 		if (isNaN(sliderMin) || isNaN(sliderStep) || isNaN(sliderMax)) {
@@ -65,12 +72,18 @@ const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) =
 						flex="1"
 						css={css}
 						value={isNaN(sliderMin) ? "" : sliderMin}
-						onChange={(_, slider_min) =>
-							setQuestion({
-								...question,
-								slider_min
-							})
-						}>
+						onChange={(_, newSliderMin) => {
+							if (newSliderMin !== sliderMin) {
+								setSliderMin(newSliderMin)
+							}
+						}}
+						onBlur={e => {
+							if (error !== null) {
+								setSliderMin(question.slider_min)
+							} else {
+								setQuestion({ ...question, slider_min: +e.target.value })
+							}
+						}}>
 						<NumberInputField />
 					</NumberInput>
 				</InputGroup>
@@ -79,14 +92,9 @@ const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) =
 					<NumberInput
 						flex="1"
 						css={css}
+						min={1}
 						value={isNaN(sliderStep) ? "" : sliderStep}
-						onChange={(_, slider_step) =>
-							setQuestion({
-								...question,
-								slider_step
-							})
-						}
-						min={1}>
+						onChange={(_, sliderStep) => setSliderStep(sliderStep)}>
 						<NumberInputField />
 					</NumberInput>
 				</InputGroup>
@@ -96,12 +104,7 @@ const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) =
 						flex="1"
 						css={css}
 						value={isNaN(sliderMax) ? "" : sliderMax}
-						onChange={(_, slider_max) =>
-							setQuestion({
-								...question,
-								slider_max
-							})
-						}>
+						onChange={(_, sliderMax) => setSliderMax(sliderMax)}>
 						<NumberInputField />
 					</NumberInput>
 				</InputGroup>
