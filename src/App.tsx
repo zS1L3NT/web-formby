@@ -9,6 +9,7 @@ import Register from "./features/authentication/pages/Register"
 import Dashboard from "./features/dashboard/pages/Dashboard"
 import FormAnswer from "./features/forms/answer/pages/FormAnswer"
 import FormEdit from "./features/forms/edit/pages/FormEdit"
+import FormPreview from "./features/forms/preview/page/FormPreview"
 import FormResponses from "./features/forms/responses/FormResponses"
 import FormSettings from "./features/forms/settings/FormSettings"
 import Landing from "./features/landing/pages/Landing"
@@ -53,6 +54,10 @@ const App = () => {
 						<Route
 							path="edit"
 							element={<FormEdit />}
+						/>
+						<Route
+							path="preview"
+							element={<FormPreview />}
 						/>
 						<Route
 							path="responses"

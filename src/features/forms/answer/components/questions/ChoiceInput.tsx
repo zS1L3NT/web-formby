@@ -15,6 +15,7 @@ const ChoiceInput = ({
 	const listMaker = choices.map((choice, i) =>
 		choice === null || i === null ? (
 			<Box
+				key={i}
 				ml={{ base: 0, md: 2 }}
 				mr={{ base: 2, md: 4 }}
 				my={2}
@@ -22,6 +23,7 @@ const ChoiceInput = ({
 			/>
 		) : choiceType === "checkbox" ? (
 			<Checkbox
+				key={i}
 				value={choice}
 				ml={{ base: 0, md: 2 }}
 				mr={2}
@@ -31,6 +33,7 @@ const ChoiceInput = ({
 			</Checkbox>
 		) : choiceType === "radio" ? (
 			<Radio
+				key={i}
 				value={choice}
 				ml={{ base: 0, md: 2 }}
 				mr={2}
@@ -40,6 +43,7 @@ const ChoiceInput = ({
 			</Radio>
 		) : (
 			<Text
+				key={i}
 				ml={{ base: 0, md: 2 }}
 				mr={4}
 				my={2}

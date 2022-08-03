@@ -7,7 +7,7 @@ import { Box, Button, Center, Container, Spinner, useBoolean, useToast } from "@
 import { useGetFormQuery, useGetFormQuestionsQuery, useSetAnswersMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
 import { iAnswer } from "../../../../models/Answer"
-import { getAnswerError, isAnswerEmpty } from "../../../../utils/answerUtils"
+import { getAnswerError, getEmptyAnswer, isAnswerEmpty } from "../../../../utils/answerUtils"
 import FormHeader from "../components/FormHeader"
 import QuestionInput from "../components/QuestionInput"
 
@@ -27,33 +27,8 @@ const FormAnswer = () => {
 	useEffect(() => {
 		setAnswers(
 			_ =>
-				questions?.map<Omit<iAnswer, "id">>(question => {
-					const answer = {
-						user_id: user?.id ?? null,
-						question_id: question.id
-					}
-
-					switch (question.type) {
-						case "text":
-							return { ...answer, text: "" }
-						case "paragraph":
-							return { ...answer, paragraph: "" }
-						case "color":
-							return { ...answer, color: "" }
-						case "choice":
-							return { ...answer, choices: [] }
-						case "switch":
-							return { ...answer, switch: false }
-						case "slider":
-							return { ...answer, slider: question.slider_min }
-						case "datetime":
-							return { ...answer, datetime: "" }
-						case "table":
-							return { ...answer, table: [] }
-						default:
-							throw new Error("Unknown question type")
-					}
-				}) ?? null
+				questions?.map<Omit<iAnswer, "id">>(question => getEmptyAnswer(user, question)) ??
+				null
 		)
 	}, [user, questions])
 

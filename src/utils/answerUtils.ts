@@ -1,8 +1,9 @@
 import {
-	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iTableAnswer,
-	iTextAnswer
+	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iSliderAnswer,
+	iSwitchAnswer, iTableAnswer, iTextAnswer
 } from "../models/Answer"
 import { iQuestion } from "../models/Question"
+import { iUser } from "../models/User"
 
 /**
  * Gets an error message of whether an answer is valid
@@ -46,6 +47,34 @@ export const getAnswerError = (question: iQuestion, answer: Omit<iAnswer, "id">)
 				return "You have to select at least 1 choice per row"
 			}
 			return null
+	}
+}
+
+export const getEmptyAnswer = (user: iUser | null, question: iQuestion): Omit<iAnswer, "id"> => {
+	const answer: Omit<iAnswer, "id"> = {
+		user_id: user?.id ?? null,
+		question_id: question.id
+	}
+
+	switch (question.type) {
+		case "text":
+			return <Omit<iTextAnswer, "id">>{ ...answer, text: "" }
+		case "paragraph":
+			return <Omit<iParagraphAnswer, "id">>{ ...answer, paragraph: "" }
+		case "color":
+			return <Omit<iColorAnswer, "id">>{ ...answer, color: "" }
+		case "choice":
+			return <Omit<iChoiceAnswer, "id">>{ ...answer, choices: [] }
+		case "switch":
+			return <Omit<iSwitchAnswer, "id">>{ ...answer, switch: false }
+		case "slider":
+			return <Omit<iSliderAnswer, "id">>{ ...answer, slider: question.slider_min }
+		case "datetime":
+			return <Omit<iDateTimeAnswer, "id">>{ ...answer, datetime: "" }
+		case "table":
+			return <Omit<iTableAnswer, "id">>{ ...answer, table: [] }
+		default:
+			throw new Error("Unknown question type")
 	}
 }
 
