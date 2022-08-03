@@ -2,7 +2,7 @@ import { useContext, useState } from "react"
 
 import { Box } from "@chakra-ui/react"
 
-import { useSetFormMutation } from "../../../../api"
+import { useUpdateFormMutation } from "../../../../api"
 import Card from "../../../../components/Card"
 import AuthContext from "../../../../contexts/AuthContext"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
@@ -12,7 +12,7 @@ import EditableText from "./EditableText"
 const FormHeader = ({ form }: { form: iForm }) => {
 	const { token } = useContext(AuthContext)
 
-	const [setFormMutation] = useSetFormMutation()
+	const [updateFormMutation] = useUpdateFormMutation()
 
 	const [name, setName] = useState(form!.name)
 	const [description, setDescription] = useState(form!.description)
@@ -22,11 +22,13 @@ const FormHeader = ({ form }: { form: iForm }) => {
 		if (!token) return
 
 		if (form!.name !== name || form!.description !== description) {
-			await setFormMutation({
+			await updateFormMutation({
 				token,
-				...form,
+				form_id: form!.id,
 				name,
-				description
+				description,
+				auth: form.auth,
+				state: form.state
 			})
 		}
 	}, [token, form, name, description])
