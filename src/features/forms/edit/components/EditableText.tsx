@@ -23,7 +23,7 @@ const EditableText = ({
 
 	useEffect(() => {
 		if (textRef.current && !editing && text !== newText) {
-			if (newText === "") {
+			if (required && newText === "") {
 				setNewText(text)
 				textRef.current!.innerText = text
 			} else {
