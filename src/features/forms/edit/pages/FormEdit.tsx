@@ -1,8 +1,9 @@
 import { useEffect } from "react"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { useParams } from "react-router-dom"
+import { useImmer } from "use-immer"
 
-import { Box, Center, Spinner } from "@chakra-ui/react"
+import { Box, Center, Container, Spinner } from "@chakra-ui/react"
 
 import {
 	useGetFormQuery, useGetFormQuestionsQuery, useUpdateFormQuestionMutation
@@ -11,8 +12,8 @@ import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import { WithTimestamps } from "../../../../models/index"
 import { iQuestion } from "../../../../models/Question"
 import { assertLinkedQuestions } from "../../../../utils/questionUtils"
-import FormHeader from "../../answer/components/FormHeader"
 import AddQuestion from "../components/AddQuestion"
+import FormHeader from "../components/FormHeader"
 import QuestionEditor from "../components/QuestionEditor"
 
 const FormEdit = () => {
@@ -23,10 +24,15 @@ const FormEdit = () => {
 	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })
 	const [updateFormQuestionMutation] = useUpdateFormQuestionMutation()
 
+	const [optimisticQuestions, setOptimisticQuestions] = useImmer<iQuestion[] | undefined>(
+		undefined
+	)
+
 	useEffect(() => {
 		if (!questions) return
 
 		assertLinkedQuestions(questions)
+		setOptimisticQuestions(questions)
 	}, [questions])
 
 	const handleReorder = (oldIndex: number, newIndex?: number) => {
@@ -54,6 +60,8 @@ const FormEdit = () => {
 			_questions.at(newIndex + 1)!.previous_question_id = _questions.at(newIndex)!.id
 		}
 
+		setOptimisticQuestions(_questions)
+
 		for (const __question of __questions) {
 			const _question = _questions.find(question => question.id === __question.id)!
 
@@ -68,69 +76,77 @@ const FormEdit = () => {
 		}
 	}
 
-	return form && questions ? (
-		<Box
-			pos="relative"
-			mt={form.state === "draft" ? 0 : 4}
-			py={form.state === "draft" ? 0 : 1}
-			px={form.state === "draft" ? 0 : 4}>
-			<FormHeader form={form} />
-			<DragDropContext
-				onDragEnd={result => handleReorder(result.source.index, result.destination?.index)}>
-				<Droppable droppableId="questions">
-					{provided => (
-						<Box
-							ref={provided.innerRef}
-							className="questions"
-							{...provided.droppableProps}>
-							<AddQuestion
-								formId={form.id}
-								previousQuestion={null}
-							/>
+	return (
+		<Container
+			mt={4}
+			maxW="4xl">
+			{form ? (
+				<Box
+					pos="relative"
+					mt={form.state === "draft" ? 0 : 4}
+					py={form.state === "draft" ? 0 : 1}
+					px={form.state === "draft" ? 0 : 4}>
+					<FormHeader form={form} />
+					<DragDropContext
+						onDragEnd={result =>
+							handleReorder(result.source.index, result.destination?.index)
+						}>
+						<Droppable droppableId="questions">
+							{provided => (
+								<Box
+									ref={provided.innerRef}
+									className="questions"
+									{...provided.droppableProps}>
+									<AddQuestion
+										formId={form.id}
+										previousQuestion={null}
+									/>
 
-							{questions ? (
-								questions.map((question, i) => (
-									<Draggable
-										key={question.id}
-										index={i}
-										draggableId={question.id}>
-										{provided => (
-											<QuestionEditor
-												provided={provided}
-												parentQuestion={question}
-												error={null}
-											/>
-										)}
-									</Draggable>
-								))
-							) : (
-								<Center>
-									<Spinner mt={4} />
-								</Center>
+									{optimisticQuestions ? (
+										optimisticQuestions.map((question, i) => (
+											<Draggable
+												key={question.id}
+												index={i}
+												draggableId={question.id}>
+												{provided => (
+													<QuestionEditor
+														provided={provided}
+														parentQuestion={question}
+														error={null}
+													/>
+												)}
+											</Draggable>
+										))
+									) : (
+										<Center>
+											<Spinner mt={4} />
+										</Center>
+									)}
+									{provided.placeholder}
+									<Box h={16} />
+								</Box>
 							)}
-							{provided.placeholder}
-							<Box h={16} />
-						</Box>
-					)}
-				</Droppable>
-			</DragDropContext>
-			<Box
-				w="max"
-				h="calc(var(--chakra-sizes-max) - var(--chakra-sizes-16))"
-				pos="absolute"
-				top={0}
-				left={0}
-				opacity={0.4}
-				bg="black"
-				borderRadius="lg"
-				zIndex={form.state === "draft" ? -1 : 1}
-				cursor="not-allowed"
-			/>
-		</Box>
-	) : (
-		<Center>
-			<Spinner mt={4} />
-		</Center>
+						</Droppable>
+					</DragDropContext>
+					<Box
+						w="max"
+						h="calc(var(--chakra-sizes-max) - var(--chakra-sizes-16))"
+						pos="absolute"
+						top={0}
+						left={0}
+						opacity={0.4}
+						bg="black"
+						borderRadius="lg"
+						zIndex={form.state === "draft" ? -1 : 1}
+						cursor="not-allowed"
+					/>
+				</Box>
+			) : (
+				<Center>
+					<Spinner mt={4} />
+				</Center>
+			)}
+		</Container>
 	)
 }
 

@@ -131,7 +131,7 @@ const QuestionEditor = ({
 						setQuestion={setQuestion}
 					/>
 
-					<Box mr={0}>
+					<Box mr={8}>
 						<EditableText
 							required={true}
 							text={question.title}

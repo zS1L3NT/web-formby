@@ -42,7 +42,6 @@ const ColorEditor = ({}: EditorProps<iColorQuestion>) => {
 					h="max"
 					ml={2}
 					flex={1}
-					value="#FFFFFFF"
 				/>
 			</Flex>
 
