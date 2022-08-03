@@ -1,23 +1,98 @@
-import { useContext } from "react"
-import { useNavigate } from "react-router-dom"
+import { Fragment, useContext } from "react"
+import { FaUser } from "react-icons/fa"
+import { MdQuestionAnswer } from "react-icons/md"
+import { useLocation, useNavigate } from "react-router-dom"
 
-import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons"
+import {
+	CloseIcon, EditIcon, HamburgerIcon, MoonIcon, SettingsIcon, SunIcon, ViewIcon
+} from "@chakra-ui/icons"
 import {
 	Avatar, Box, Button, Collapse, Flex, HStack, IconButton, Image, Link, Menu, MenuButton,
-	MenuDivider, MenuItem, MenuList, Stack, Text, useColorMode, useColorModeValue, useDisclosure,
-	VStack
+	MenuDivider, MenuItem, MenuList, Spinner, Stack, Text, Tooltip, useColorMode, useColorModeValue,
+	useDisclosure, useMediaQuery, VStack
 } from "@chakra-ui/react"
 
 import AuthContext from "../contexts/AuthContext"
 
+interface iNavItem {
+	title: string
+	icon?: JSX.Element
+	navigate?: string
+	onClick?: () => void
+	element?: JSX.Element
+	render: boolean
+}
+
 const Navigator = () => {
 	const { token, user } = useContext(AuthContext)
 	const { toggleColorMode } = useColorMode()
+	const location = useLocation()
 	const navigate = useNavigate()
 
 	const { isOpen, onToggle } = useDisclosure()
 
 	const sideMargins = { base: 2, md: 16, lg: 32 }
+
+	const items: iNavItem[] = [
+		{
+			title: "Login",
+			element: (
+				<Button
+					color="primary"
+					onClick={() => navigate("/login")}>
+					Login
+				</Button>
+			),
+			render: !token
+		},
+		{
+			title: "Register",
+			element: (
+				<Button
+					variant="primary"
+					onClick={() => navigate("/register")}>
+					Register
+				</Button>
+			),
+			render: !token
+		},
+		{
+			title: "Form Preview",
+			icon: <ViewIcon />,
+			navigate: `/forms/${location.pathname.slice(7, 43)}/preview`,
+			render: !!token && !!location.pathname.match("^/forms/[a-zA-Z0-9-]+/edit")
+		},
+		{
+			title: "Edit Form",
+			icon: <EditIcon />,
+			navigate: `/forms/${location.pathname.slice(7, 43)}/edit`,
+			render: !!token && !!location.pathname.match("^/forms/[a-zA-Z0-9-]+/(?!edit)\\w+")
+		},
+		{
+			title: "Responses",
+			icon: <MdQuestionAnswer />,
+			navigate: `/forms/${location.pathname.slice(7, 43)}/responses`,
+			render: !!token && !!location.pathname.match("^/forms/[a-zA-Z0-9-]+/\\w+")
+		},
+		{
+			title: "Settings",
+			icon: <SettingsIcon />,
+			navigate: `/forms/${location.pathname.slice(7, 43)}/settings`,
+			render: !!token && !!location.pathname.match("^/forms/[a-zA-Z0-9-]+/\\w+")
+		},
+		{
+			title: "Account",
+			icon: <FaUser />,
+			navigate: "/account",
+			render: !!useMediaQuery("(max-width: 48em)")[0]
+		},
+		{
+			title: "Toggle Color Scheme",
+			icon: useColorModeValue(<SunIcon />, <MoonIcon />),
+			onClick: toggleColorMode,
+			render: !!useMediaQuery("(min-width: 48em)")[0]
+		}
+	]
 
 	return (
 		<>
@@ -25,7 +100,8 @@ const Navigator = () => {
 				h="60px"
 				p={2}
 				bg="card"
-				shadow="sm"
+				shadow="lg"
+				zIndex={10}
 				align="center">
 				<Flex
 					flex={{ base: 1, md: "auto" }}
@@ -89,59 +165,58 @@ const Navigator = () => {
 					mr={sideMargins}>
 					<HStack
 						display={{ base: "none", md: "flex" }}
-						spacing={3}>
-						<Button
-							hidden={!!token}
-							color="primary"
-							onClick={() => navigate("/login")}>
-							Login
-						</Button>
-						<Button
-							hidden={!!token}
-							variant="primary"
-							onClick={() => navigate("/register")}>
-							Register
-						</Button>
-						<Button
-							hidden={!token}
-							variant="primary"
-							onClick={() => navigate("/create")}>
-							Create Form
-						</Button>
-						{user ? (
+						spacing={2}>
+						{items
+							.filter(item => item.render)
+							.map((item, i) => (
+								<Fragment key={i}>
+									{item.element ?? (
+										<Tooltip label={item.title!}>
+											<IconButton
+												aria-label={item.title!}
+												icon={item.icon!}
+												onClick={
+													item.onClick ??
+													(() =>
+														item.navigate
+															? navigate(item.navigate)
+															: null)
+												}
+											/>
+										</Tooltip>
+									)}
+								</Fragment>
+							))}
+						{token ? (
 							<Menu>
-								<MenuButton
-									as={Button}
-									rounded="full"
-									variant="link"
-									cursor="pointer"
-									ml={4}>
-									<Avatar
-										w="40px"
-										h="40px"
-										src={user.photo}
+								<Tooltip label="Account">
+									<MenuButton
+										as={IconButton}
+										icon={user ? <FaUser /> : <Spinner />}
 									/>
-								</MenuButton>
+								</Tooltip>
 								<MenuList
 									zIndex={101}
-									alignItems="center">
+									alignItems="center"
+									border="none"
+									bg="card">
 									<VStack
 										w="2xs"
 										px={4}>
 										<Avatar
 											size="xl"
-											src={user.photo}
+											src={user?.photo}
 										/>
 										<Text
 											wordBreak="break-all"
 											textAlign="center">
-											{user.name}
+											{user?.name}
 										</Text>
 										<Text
 											fontSize="sm"
 											wordBreak="break-all"
 											textAlign="center">
-											{user.email}
+											{user?.email}
 										</Text>
 									</VStack>
 									<MenuDivider />
@@ -159,14 +234,16 @@ const Navigator = () => {
 							</Menu>
 						) : null}
 					</HStack>
-					<IconButton
-						ml={4}
-						aria-label="color-mode-button"
-						icon={useColorModeValue(<SunIcon />, <MoonIcon />)}
-						color={useColorModeValue("gray.700", "gray.200")}
-						bg={useColorModeValue("gray.300", "gray.600")}
-						onClick={toggleColorMode}
-					/>
+					{!!useMediaQuery("(max-width: 48rem)")[0] ? (
+						<Tooltip label="Toggle Color Scheme">
+							<IconButton
+								ml={4}
+								aria-label="Toggle Color Scheme"
+								icon={useColorModeValue(<SunIcon />, <MoonIcon />)}
+								onClick={toggleColorMode}
+							/>
+						</Tooltip>
+					) : null}
 				</Flex>
 			</Flex>
 
@@ -183,36 +260,27 @@ const Navigator = () => {
 						bg="card"
 						p={4}
 						display={{ md: "none" }}>
-						{(
-							(token
-								? [
-										["Create Form", "/create"],
-										["Account Settings", "/account"],
-										["Logout", "/logout"]
-								  ]
-								: [
-										["Login", "/login"],
-										["Register", "/register"]
-								  ]) as [string, string][]
-						).map(([text, href], i) => (
-							<Flex
-								key={i}
-								py={2}
-								as={Link}
-								_hover={{
-									textDecoration: "none"
-								}}
-								onClick={() => {
-									navigate(href)
-									onToggle()
-								}}>
-								<Text
-									fontWeight={600}
-									color="text">
-									{text}
-								</Text>
-							</Flex>
-						))}
+						{items
+							.filter(item => item.render)
+							.map((item, i) => (
+								<Flex
+									key={i}
+									py={2}
+									as={Link}
+									_hover={{
+										textDecoration: "none"
+									}}
+									onClick={() => {
+										navigate(item.navigate!)
+										onToggle()
+									}}>
+									<Text
+										fontWeight={600}
+										color="text">
+										{item.title}
+									</Text>
+								</Flex>
+							))}
 					</Stack>
 				</Collapse>
 			</Box>

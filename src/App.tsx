@@ -22,6 +22,7 @@ const App = () => {
 			<Navigator />
 			<Flex
 				flex="1"
+				overflowY="scroll"
 				bg="background">
 				<Routes>
 					<Route
