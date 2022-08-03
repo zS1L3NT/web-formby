@@ -35,7 +35,7 @@ const FormHeader = ({ form }: { form: iForm }) => {
 
 	return (
 		<Card
-			my={4}
+			my={{ base: 2, md: 4 }}
 			_hover={{
 				shadow: "lg"
 			}}>

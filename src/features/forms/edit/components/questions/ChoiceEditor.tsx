@@ -36,7 +36,7 @@ const ChoiceEditor = ({ question, setQuestion }: EditorProps<iChoiceQuestion>) =
 				) : (
 					<Text
 						ml={{ base: 0, md: 2 }}
-						mr={4}
+						mr={{ base: 2, md: 4 }}
 						my="auto"
 						h="fit-content"
 						w="24px">

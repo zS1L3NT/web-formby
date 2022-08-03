@@ -107,7 +107,7 @@ const QuestionEditor = ({
 				ref={provided?.innerRef}
 				{...provided?.draggableProps}>
 				<Card
-					mb={4}
+					mb={{ base: 2, md: 4 }}
 					pos="relative"
 					borderWidth={0}
 					borderRadius="lg">

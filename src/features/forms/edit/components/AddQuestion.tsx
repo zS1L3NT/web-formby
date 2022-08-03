@@ -41,7 +41,7 @@ const AddQuestion = ({
 		<IconButton
 			h={8}
 			w="max"
-			mb={4}
+			mb={{ base: 2, md: 4 }}
 			bg="bg"
 			_hover={{ bg: "card" }}
 			aria-label="Add Question"
