@@ -1,6 +1,6 @@
 type iBaseAnswer = {
 	id: string
-	user_id: string | null
+	response_id: string | null
 	question_id: string
 }
 
