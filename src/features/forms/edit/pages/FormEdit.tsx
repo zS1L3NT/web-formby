@@ -20,7 +20,7 @@ import QuestionEditor from "../components/QuestionEditor"
 
 const FormEdit = () => {
 	const { token, user } = useOnlyAuthenticated()
-	const form_id = useParams().form_id as string
+	const form_id = useParams().form_id!
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })

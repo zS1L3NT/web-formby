@@ -14,7 +14,7 @@ import QuestionInput from "../../answer/components/QuestionInput"
 
 const FormPreview = () => {
 	const { token, user } = useOnlyAuthenticated()
-	const form_id = useParams().form_id as string
+	const form_id = useParams().form_id!
 
 	const { data: form } = useGetFormQuery({ form_id, token })
 	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })

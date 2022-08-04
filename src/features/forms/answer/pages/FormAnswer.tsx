@@ -17,7 +17,7 @@ import QuestionInput from "../components/QuestionInput"
 const FormAnswer = () => {
 	const { token, user } = useContext(AuthContext)
 	const toast = useToast()
-	const form_id = useParams().form_id as string
+	const form_id = useParams().form_id!
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })

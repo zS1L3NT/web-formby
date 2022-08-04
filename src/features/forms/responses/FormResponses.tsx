@@ -9,7 +9,8 @@ import useToastError from "../../../hooks/useToastError"
 
 const FormResponses = () => {
 	const { token, user } = useOnlyAuthenticated()
-	const form_id = useParams().form_id as string
+	const form_id = useParams().form_id!
+	const question_id = useParams().question_id ?? null
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
