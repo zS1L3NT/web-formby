@@ -1,17 +1,21 @@
-import { useContext, useDebugValue, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useContext, useEffect } from "react"
 
 import AuthContext from "../contexts/AuthContext"
+import { setError } from "../slices/ErrorSlice"
+import useAppDispatch from "./useAppDispatch"
 
-const useOnlyAuthenticated = (redirect = "/login") => {
+const useOnlyAuthenticated = () => {
+	const dispatch = useAppDispatch()
 	const { token, user } = useContext(AuthContext)
-	const navigate = useNavigate()
-
-	useDebugValue(`token ${token !== null ? "!" : "="}== null`)
 
 	useEffect(() => {
 		if (token === null) {
-			navigate(redirect)
+			dispatch(
+				setError({
+					type: "Unauthorized",
+					message: "You must be logged in to access this page."
+				})
+			)
 		}
 	}, [token])
 
