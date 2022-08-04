@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { Box, RenderProps, Toast } from "@chakra-ui/react"
 
-const UnauthenticatedToast = (props: RenderProps) => {
+const UnauthorizedToast = (props: RenderProps) => {
 	const navigate = useNavigate()
 
 	const [width, setWidth] = useState(100)
@@ -13,8 +13,8 @@ const UnauthenticatedToast = (props: RenderProps) => {
 			setWidth(width => {
 				switch (width) {
 					case 0:
-						return 0
-					case 0.2:
+						props.onClose()
+						navigate("/login")
 						clearInterval(interval)
 						return 0
 					default:
@@ -22,6 +22,11 @@ const UnauthenticatedToast = (props: RenderProps) => {
 				}
 			})
 		}, 10)
+
+		return () => {
+			props.onClose()
+			navigate("/login")
+		}
 	}, [])
 
 	return (
@@ -31,7 +36,7 @@ const UnauthenticatedToast = (props: RenderProps) => {
 				title="Unauthenticated"
 				description="Redirecting you to the login page"
 				status="error"
-				onClose={() => navigate("/login")}
+				duration={null}
 				isClosable={true}
 			/>
 			<Box
@@ -48,4 +53,4 @@ const UnauthenticatedToast = (props: RenderProps) => {
 	)
 }
 
-export default UnauthenticatedToast
+export default UnauthorizedToast

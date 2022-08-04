@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 
 import api from "./api"
-import { errorHandlerMiddleware } from "./components/ErrorHandler"
 import ErrorSlice from "./slices/ErrorSlice"
 
 const store = configureStore({
@@ -9,8 +8,7 @@ const store = configureStore({
 		[api.reducerPath]: api.reducer,
 		error: ErrorSlice
 	},
-	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware().concat(api.middleware, errorHandlerMiddleware)
+	middleware: getDefaultMiddleware => getDefaultMiddleware().concat(api.middleware)
 })
 
 export default store

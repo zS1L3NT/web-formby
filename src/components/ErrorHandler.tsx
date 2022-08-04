@@ -1,23 +1,29 @@
-import { useContext, useEffect } from "react"
+import { diff } from "deep-object-diff"
+import { useContext, useEffect, useState } from "react"
 
-import { useToast } from "@chakra-ui/react"
-import { isRejectedWithValue, Middleware } from "@reduxjs/toolkit"
+import { usePrevious, useToast } from "@chakra-ui/react"
 
 import AuthContext from "../contexts/AuthContext"
 import useAppSelector from "../hooks/useAppSelector"
-import { setError } from "../slices/ErrorSlice"
-import UnauthenticatedToast from "./UnauthenticatedToast"
+import UnauthorizedToast from "./UnauthorizedToast"
 
 const ErrorHandler = () => {
 	const error = useAppSelector(state => state.error)
 	const { setToken } = useContext(AuthContext)
+	const __error = usePrevious(error)
 	const toast = useToast()
+
+	const [lastToast, setLastToast] = useState(new Date())
 
 	useEffect(() => {
 		if (!error) return
 
+		const differences = Object.keys(diff(__error ?? {}, error)).length
+		if (differences > 0 && lastToast.getTime() + 1000 < new Date().getTime()) return
+
+		setLastToast(new Date())
 		if (error.type === "Unauthorized") {
-			toast({ render: props => <UnauthenticatedToast {...props} /> })
+			toast({ render: props => <UnauthorizedToast {...props} /> })
 			setToken(null)
 		} else {
 			toast({
@@ -31,17 +37,5 @@ const ErrorHandler = () => {
 
 	return <></>
 }
-
-export const errorHandlerMiddleware: Middleware =
-	({ dispatch }) =>
-	next =>
-	action => {
-		if (isRejectedWithValue(action)) {
-			console.log(action)
-			dispatch(setError(action.payload))
-		} else {
-			next(action)
-		}
-	}
 
 export default ErrorHandler
