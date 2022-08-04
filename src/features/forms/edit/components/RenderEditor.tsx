@@ -2,15 +2,15 @@ import {
 	iChoiceQuestion, iColorQuestion, iDateTimeQuestion, iParagraphQuestion, iQuestion,
 	iSliderQuestion, iSwitchQuestion, iTableQuestion, iTextQuestion
 } from "../../../../models/Question"
+import ChoiceEditor from "./editors/ChoiceEditor"
+import ColorEditor from "./editors/ColorEditor"
+import DateTimeEditor from "./editors/DateTimeEditor"
+import ParagraphEditor from "./editors/ParagraphEditor"
+import SliderEditor from "./editors/SliderEditor"
+import SwitchEditor from "./editors/SwitchEditor"
+import TableEditor from "./editors/TableEditor"
+import TextEditor from "./editors/TextEditor"
 import { EditorProps } from "./QuestionEditor"
-import ChoiceEditor from "./questions/ChoiceEditor"
-import ColorEditor from "./questions/ColorEditor"
-import DateTimeEditor from "./questions/DateTimeEditor"
-import ParagraphEditor from "./questions/ParagraphEditor"
-import SliderEditor from "./questions/SliderEditor"
-import SwitchEditor from "./questions/SwitchEditor"
-import TableEditor from "./questions/TableEditor"
-import TextEditor from "./questions/TextEditor"
 
 export default (props: EditorProps<iQuestion>) => {
 	if (props.question.type === "text")

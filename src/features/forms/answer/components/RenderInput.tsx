@@ -6,15 +6,15 @@ import {
 	iChoiceQuestion, iColorQuestion, iDateTimeQuestion, iParagraphQuestion, iQuestion,
 	iSliderQuestion, iSwitchQuestion, iTableQuestion, iTextQuestion
 } from "../../../../models/Question"
+import ChoiceInput from "./inputs/ChoiceInput"
+import ColorInput from "./inputs/ColorInput"
+import DateTimeInput from "./inputs/DateTimeInput"
+import ParagraphInput from "./inputs/ParagraphInput"
+import SliderInput from "./inputs/SliderInput"
+import SwitchInput from "./inputs/SwitchInput"
+import TableInput from "./inputs/TableInput"
+import TextInput from "./inputs/TextInput"
 import { InputProps } from "./QuestionInput"
-import ChoiceInput from "./questions/ChoiceInput"
-import ColorInput from "./questions/ColorInput"
-import DateTimeInput from "./questions/DateTimeInput"
-import ParagraphInput from "./questions/ParagraphInput"
-import SliderInput from "./questions/SliderInput"
-import SwitchInput from "./questions/SwitchInput"
-import TableInput from "./questions/TableInput"
-import TextInput from "./questions/TextInput"
 
 export default (props: InputProps<iQuestion, iAnswer>) => {
 	if (props.question.type === "text")
