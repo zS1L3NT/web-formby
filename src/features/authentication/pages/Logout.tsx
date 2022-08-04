@@ -1,4 +1,5 @@
 import { useContext } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import { useToast } from "@chakra-ui/react"
@@ -6,10 +7,11 @@ import { useToast } from "@chakra-ui/react"
 import { useLogoutMutation } from "../../../api"
 import AuthContext from "../../../contexts/AuthContext"
 import useAsyncEffect from "../../../hooks/useAsyncEffect"
-import { ApiError } from "../../../utils/axiosBaseQuery"
+import { setError } from "../../../slices/ErrorSlice"
 
 const Logout = () => {
 	const { token, setToken } = useContext(AuthContext)
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const toast = useToast()
 
@@ -34,13 +36,7 @@ const Logout = () => {
 				isClosable: true
 			})
 		} else {
-			const error = result.error as ApiError
-			toast({
-				title: error.type,
-				description: error.message,
-				status: "error",
-				isClosable: true
-			})
+			dispatch(setError(result.error))
 		}
 	}, [token])
 

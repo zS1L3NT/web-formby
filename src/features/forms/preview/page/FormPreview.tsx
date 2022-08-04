@@ -6,6 +6,7 @@ import { Box, Center, Container, Spinner } from "@chakra-ui/react"
 
 import { useGetFormQuery, useGetFormQuestionsQuery } from "../../../../api"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"
 import { iAnswer } from "../../../../models/Answer"
 import { getEmptyAnswer } from "../../../../utils/answerUtils"
 import FormHeader from "../../answer/components/FormHeader"
@@ -19,6 +20,8 @@ const FormPreview = () => {
 	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })
 
 	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id">[] | null>(null)
+
+	useOnlyFormOwner(user, form)
 
 	useEffect(() => {
 		setAnswers(

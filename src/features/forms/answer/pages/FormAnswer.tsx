@@ -6,6 +6,7 @@ import { Box, Button, Center, Container, Spinner, useBoolean, useToast } from "@
 
 import { useGetFormQuery, useGetFormQuestionsQuery, useSetAnswersMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
+import useToastError from "../../../../hooks/useToastError"
 import { iAnswer } from "../../../../models/Answer"
 import { getAnswerError, getEmptyAnswer, isAnswerEmpty } from "../../../../utils/answerUtils"
 import FormHeader from "../components/FormHeader"
@@ -16,13 +17,16 @@ const FormAnswer = () => {
 	const toast = useToast()
 	const form_id = useParams().form_id as string
 
-	const { data: form } = useGetFormQuery({ form_id, token })
-	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })
+	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
+	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 	const [setAnswersMutation] = useSetAnswersMutation()
 
 	const [isSubmitting, setIsSubmitting] = useBoolean()
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
 	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id">[] | null>(null)
+
+	useToastError(formError)
+	useToastError(questionsError)
 
 	useEffect(() => {
 		setAnswers(

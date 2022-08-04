@@ -9,10 +9,13 @@ import {
 
 import { useLoginMutation } from "../../../api"
 import AuthContext from "../../../contexts/AuthContext"
+import useAppDispatch from "../../../hooks/useAppDispatch"
 import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"
+import { setError } from "../../../slices/ErrorSlice"
 
 const Login = () => {
 	const { setToken } = useContext(AuthContext)
+	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 	const toast = useToast()
 
@@ -64,6 +67,8 @@ const Login = () => {
 				status: "success",
 				isClosable: true
 			})
+		} else {
+			dispatch(setError(result.error))
 		}
 
 		setLoading.off()

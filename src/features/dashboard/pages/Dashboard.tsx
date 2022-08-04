@@ -2,12 +2,15 @@ import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 
 import { useGetFormsQuery } from "../../../api"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../hooks/useToastError"
 import FormItem from "../components/FormItem"
 
 const Dashboard = () => {
 	const { token } = useOnlyAuthenticated()
 
-	const { data: forms } = useGetFormsQuery({ token })
+	const { data: forms, error: formsError } = useGetFormsQuery({ token })
+
+	useToastError(formsError)
 
 	return (
 		<Container
