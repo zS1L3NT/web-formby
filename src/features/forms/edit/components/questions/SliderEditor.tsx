@@ -92,9 +92,19 @@ const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) =
 					<NumberInput
 						flex="1"
 						css={css}
-						min={1}
 						value={isNaN(sliderStep) ? "" : sliderStep}
-						onChange={(_, sliderStep) => setSliderStep(sliderStep)}>
+						onChange={(_, newSliderStep) => {
+							if (newSliderStep !== sliderStep) {
+								setSliderStep(newSliderStep)
+							}
+						}}
+						onBlur={e => {
+							if (error !== null) {
+								setSliderStep(question.slider_step)
+							} else {
+								setQuestion({ ...question, slider_step: +e.target.value })
+							}
+						}}>
 						<NumberInputField />
 					</NumberInput>
 				</InputGroup>
@@ -104,7 +114,18 @@ const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) =
 						flex="1"
 						css={css}
 						value={isNaN(sliderMax) ? "" : sliderMax}
-						onChange={(_, sliderMax) => setSliderMax(sliderMax)}>
+						onChange={(_, newSliderMax) => {
+							if (newSliderMax !== sliderMax) {
+								setSliderMax(newSliderMax)
+							}
+						}}
+						onBlur={e => {
+							if (error !== null) {
+								setSliderMax(question.slider_max)
+							} else {
+								setQuestion({ ...question, slider_max: +e.target.value })
+							}
+						}}>
 						<NumberInputField />
 					</NumberInput>
 				</InputGroup>
