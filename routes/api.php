@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AnswerController;
-use App\Http\Controllers\FormAnswerController;
 use App\Http\Controllers\FormQuestionController;
+use App\Http\Controllers\FormResponseAnswerController;
+use App\Http\Controllers\FormResponseController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +30,9 @@ Route::apiResource("forms", FormController::class);
 
 Route::apiResource("forms.questions", FormQuestionController::class);
 
-Route::apiResource("forms.answers", FormAnswerController::class)->only(["index"]);
+Route::apiResource("forms.responses", FormResponseController::class)->only(["index", "store", "show"]);
 
-Route::apiResource("answers", AnswerController::class)->only(["store"]);
+Route::apiResource("forms.responses.answers", FormResponseAnswerController::class)->only(["index"]);
 
 Route::fallback(fn () => response([
 	"type" => "Page Not Found",
