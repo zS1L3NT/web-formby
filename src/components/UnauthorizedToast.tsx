@@ -33,7 +33,8 @@ const UnauthorizedToast = (props: RenderProps) => {
 		<Box pos="relative">
 			<Toast
 				{...props}
-				title="Unauthenticated"
+				id="unauthorized"
+				title="Unauthorized"
 				description="Redirecting you to the login page"
 				status="error"
 				duration={null}
