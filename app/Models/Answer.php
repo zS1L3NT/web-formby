@@ -11,7 +11,7 @@ class Answer extends Model
 	use Uuids;
 
 	protected $fillable = [
-		"user_id",
+		"response_id",
 		"question_id",
 		"text",
 		"paragraph",

@@ -149,47 +149,5 @@ class DatabaseSeeder extends Seeder
 				"table_type" => "checkbox"
 			]);
 		}
-
-		foreach (Question::all() as $question) {
-			$answer_data = [
-				"user_id" => $question->form_id == $auth_form->id ? $other_user->id : $main_user->id,
-				"question_id" => $question->id,
-			];
-
-			switch ($question->type) {
-				case "text":
-					$answer_data["text"] = $faker->sentence();
-					break;
-				case "paragraph":
-					$answer_data["paragraph"] = $faker->sentences(3, true);
-					break;
-				case "color":
-					$answer_data["color"] =  $faker->randomDigit() >= 5 ? $faker->hexcolor() : NULL;
-					break;
-				case "choice":
-					$answer_data["choices"] = $faker->randomElements(
-						$question->choices,
-						$question->choice_type == "checkbox" ? 2 : 1
-					);
-					break;
-				case "switch":
-					$answer_data["switch"] = $faker->boolean();
-					break;
-				case "slider":
-					$answer_data["slider"] = $faker->numberBetween(0, 100);
-					break;
-				case "datetime":
-					$answer_data["datetime"] = (new Carbon($faker->dateTime()))->toDateTimeString();
-					break;
-				case "table":
-					$answer_data["table"] = array_map(
-						fn ($row) => [$row, $faker->randomElement($question->table_columns)],
-						$question->table_rows
-					);
-					break;
-			}
-
-			Answer::create($answer_data);
-		}
 	}
 }
