@@ -4,6 +4,7 @@ import { WithTimestamps } from "./models"
 import { iAnswer } from "./models/Answer"
 import { iForm } from "./models/Form"
 import { iQuestion } from "./models/Question"
+import { iResponse } from "./models/Response"
 import { iUser } from "./models/User"
 import axiosBaseQuery from "./utils/axiosBaseQuery"
 
@@ -21,22 +22,9 @@ type OptionalToken = {
 
 const api = createApi({
 	reducerPath: "api",
-	tagTypes: ["User", "Form", "Question", "Answer"],
+	tagTypes: ["User", "Form", "Question", "Response", "Answer"],
 	baseQuery: axiosBaseQuery,
 	endpoints: builder => ({
-		setAnswers: builder.mutation<
-			ApiResponse,
-			{ answers: Omit<iAnswer, "id" | "user_id">[] } & OptionalToken
-		>({
-			query: ({ token, answers }) => ({
-				url: "/answers",
-				method: "POST",
-				body: {
-					answers
-				},
-				token
-			})
-		}),
 		getForms: builder.query<WithTimestamps<iForm>[], { page?: number } & RequiredToken>({
 			query: ({ token, page }) => ({
 				url: "/forms",
@@ -46,7 +34,7 @@ const api = createApi({
 				},
 				token
 			}),
-			providesTags: result => result?.map(form => ({ type: "Form", id: form.id })) ?? []
+			providesTags: ["Form"]
 		}),
 		setForm: builder.mutation<
 			ApiResponse & { form: WithTimestamps<iForm> },
@@ -58,7 +46,7 @@ const api = createApi({
 				body: form,
 				token
 			}),
-			invalidatesTags: result => (result ? [{ type: "Form", id: result.form.id }] : [])
+			invalidatesTags: ["Form"]
 		}),
 		getForm: builder.query<WithTimestamps<iForm>, { form_id: string } & OptionalToken>({
 			query: ({ token, form_id }) => ({
@@ -66,7 +54,7 @@ const api = createApi({
 				method: "GET",
 				token
 			}),
-			providesTags: result => (result ? [{ type: "Form", id: result.id }] : [])
+			providesTags: ["Form"]
 		}),
 		updateForm: builder.mutation<
 			ApiResponse & { form: WithTimestamps<iForm> },
@@ -78,7 +66,7 @@ const api = createApi({
 				body: form,
 				token
 			}),
-			invalidatesTags: result => (result ? [{ type: "Form", id: result.form.id }] : [])
+			invalidatesTags: ["Form"]
 		}),
 		deleteForm: builder.mutation<ApiResponse, { form_id: string } & RequiredToken>({
 			query: ({ token, form_id }) => ({
@@ -86,19 +74,7 @@ const api = createApi({
 				method: "DELETE",
 				token
 			}),
-			invalidatesTags: (result, error, args) =>
-				result ? [{ type: "Form", id: args.form_id }] : []
-		}),
-		getFormAnswers: builder.query<
-			WithTimestamps<iAnswer>[],
-			{ form_id: string } & RequiredToken
-		>({
-			query: ({ token, form_id }) => ({
-				url: `/forms/${form_id}/answers`,
-				method: "GET",
-				token
-			}),
-			providesTags: result => result?.map(answer => ({ type: "Answer", id: answer.id })) ?? []
+			invalidatesTags: ["Form"]
 		}),
 		getFormQuestions: builder.query<
 			WithTimestamps<iQuestion>[],
@@ -109,8 +85,7 @@ const api = createApi({
 				method: "GET",
 				token
 			}),
-			providesTags: result =>
-				result?.map(question => ({ type: "Question", id: question.id })) ?? []
+			providesTags: ["Question"]
 		}),
 		setFormQuestion: builder.mutation<
 			ApiResponse & { question: WithTimestamps<iQuestion> },
@@ -122,7 +97,7 @@ const api = createApi({
 				body: question,
 				token
 			}),
-			invalidatesTags: result => (result ? [{ type: "Question" }] : [])
+			invalidatesTags: ["Question"]
 		}),
 		getFormQuestion: builder.query<
 			WithTimestamps<iQuestion>,
@@ -133,7 +108,7 @@ const api = createApi({
 				method: "GET",
 				token
 			}),
-			providesTags: result => (result ? [{ type: "Question", id: result.id }] : [])
+			providesTags: ["Question"]
 		}),
 		updateFormQuestion: builder.mutation<
 			ApiResponse & { question: WithTimestamps<iQuestion> },
@@ -148,7 +123,7 @@ const api = createApi({
 				body: question,
 				token
 			}),
-			invalidatesTags: result => (result ? [{ type: "Question" }] : [])
+			invalidatesTags: ["Question"]
 		}),
 		deleteFormQuestion: builder.mutation<
 			ApiResponse,
@@ -159,7 +134,54 @@ const api = createApi({
 				method: "DELETE",
 				token
 			}),
-			invalidatesTags: (result, error, args) => (result ? [{ type: "Question" }] : [])
+			invalidatesTags: ["Question"]
+		}),
+		getFormResponseAnswers: builder.query<
+			WithTimestamps<iAnswer>[],
+			{ form_id: string; response_id: string } & RequiredToken
+		>({
+			query: ({ token, form_id, response_id }) => ({
+				url: `/forms/${form_id}/responses/${response_id}/answers`,
+				method: "GET",
+				token
+			}),
+			providesTags: ["Answer"]
+		}),
+		getFormResponses: builder.query<
+			WithTimestamps<iResponse>[],
+			{ form_id: string } & RequiredToken
+		>({
+			query: ({ token, form_id }) => ({
+				url: `/forms/${form_id}/responses`,
+				method: "GET",
+				token
+			}),
+			providesTags: ["Response"]
+		}),
+		setFormResponse: builder.mutation<
+			ApiResponse,
+			{ form_id: string; answers: Omit<iAnswer, "id">[] } & OptionalToken
+		>({
+			query: ({ token, form_id, answers }) => ({
+				url: `/forms/${form_id}/responses`,
+				method: "POST",
+				body: {
+					answers
+				},
+				token
+			}),
+			invalidatesTags: ["Response"]
+		}),
+		getFormResponse: builder.query<
+			WithTimestamps<iResponse>,
+			{ form_id: string; response_id: string } & RequiredToken
+		>({
+			query: ({ token, form_id, response_id }) => ({
+				url: `/forms/${form_id}/responses/${response_id}`,
+				method: "GET",
+				token
+			}),
+			providesTags: ["Response"]
 		}),
 		getUser: builder.query<WithTimestamps<iUser>, RequiredToken>({
 			query: ({ token }) => ({
@@ -216,24 +238,28 @@ export default api
 export const {
 	useDeleteFormMutation,
 	useDeleteFormQuestionMutation,
-	useGetFormAnswersQuery,
 	useGetFormQuery,
 	useGetFormQuestionQuery,
 	useGetFormQuestionsQuery,
+	useGetFormResponseAnswersQuery,
+	useGetFormResponseQuery,
+	useGetFormResponsesQuery,
 	useGetFormsQuery,
 	useGetUserQuery,
-	useLazyGetFormAnswersQuery,
 	useLazyGetFormQuestionsQuery,
 	useLazyGetFormsQuery,
 	useLazyGetUserQuery,
 	useLazyGetFormQuery,
 	useLazyGetFormQuestionQuery,
+	useLazyGetFormResponseAnswersQuery,
+	useLazyGetFormResponseQuery,
+	useLazyGetFormResponsesQuery,
 	useLoginMutation,
 	useLogoutMutation,
 	useRegisterMutation,
-	useSetAnswersMutation,
 	useSetFormMutation,
 	useSetFormQuestionMutation,
+	useSetFormResponseMutation,
 	useUpdateFormMutation,
 	useUpdateFormQuestionMutation,
 	useUpdateUserMutation
