@@ -10,6 +10,7 @@ import Dashboard from "./features/dashboard/pages/Dashboard"
 import FormAnswer from "./features/forms/answer/pages/FormAnswer"
 import FormEdit from "./features/forms/edit/pages/FormEdit"
 import FormPreview from "./features/forms/preview/page/FormPreview"
+import FormResponse from "./features/forms/response/FormResponse"
 import FormResponses from "./features/forms/responses/FormResponses"
 import FormSettings from "./features/forms/settings/FormSettings"
 import Landing from "./features/landing/pages/Landing"
@@ -59,10 +60,20 @@ const App = () => {
 							path="preview"
 							element={<FormPreview />}
 						/>
-						<Route
-							path="responses"
-							element={<FormResponses />}
-						/>
+						<Route path="responses">
+							<Route
+								index
+								element={<FormResponses />}
+							/>
+							<Route
+								path="questions/:question_id"
+								element={<FormResponses />}
+							/>
+							<Route
+								path=":response_id"
+								element={<FormResponse />}
+							/>
+						</Route>
 						<Route
 							path="settings"
 							element={<FormSettings />}

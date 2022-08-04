@@ -10,6 +10,7 @@ import {
 } from "../../../../api"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"
+import useToastError from "../../../../hooks/useToastError"
 import { WithTimestamps } from "../../../../models/index"
 import { iQuestion } from "../../../../models/Question"
 import { assertLinkedQuestions } from "../../../../utils/questionUtils"
@@ -21,8 +22,8 @@ const FormEdit = () => {
 	const { token, user } = useOnlyAuthenticated()
 	const form_id = useParams().form_id as string
 
-	const { data: form } = useGetFormQuery({ form_id, token })
-	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })
+	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
+	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 	const [updateFormQuestionMutation] = useUpdateFormQuestionMutation()
 
 	const [optimisticQuestions, setOptimisticQuestions] = useImmer<iQuestion[] | undefined>(
@@ -30,6 +31,9 @@ const FormEdit = () => {
 	)
 
 	useOnlyFormOwner(user, form)
+
+	useToastError(formError)
+	useToastError(questionsError)
 
 	useEffect(() => {
 		if (!questions) return
