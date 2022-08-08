@@ -37,6 +37,7 @@ const FormResponses = () => {
 						<QuestionAnswers
 							key={question.id}
 							question={question}
+							responses={responses}
 						/>
 					))}
 				</>

@@ -1,13 +1,8 @@
 import { iChoiceAnswer } from "../../../../../models/Answer"
 import { iChoiceQuestion } from "../../../../../models/Question"
+import { AnswersProps } from "../QuestionAnswers"
 
-const ChoiceAnswers = ({
-	question,
-	answers
-}: {
-	question: iChoiceQuestion
-	answers: iChoiceAnswer[]
-}) => {
+const ChoiceAnswers = ({ question, answers }: AnswersProps<iChoiceQuestion, iChoiceAnswer>) => {
 	return <></>
 }
 

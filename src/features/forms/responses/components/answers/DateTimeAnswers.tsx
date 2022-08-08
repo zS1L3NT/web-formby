@@ -1,13 +1,11 @@
 import { iDateTimeAnswer } from "../../../../../models/Answer"
 import { iDateTimeQuestion } from "../../../../../models/Question"
+import { AnswersProps } from "../QuestionAnswers"
 
 const DateTimeAnswers = ({
 	question,
 	answers
-}: {
-	question: iDateTimeQuestion
-	answers: iDateTimeAnswer[]
-}) => {
+}: AnswersProps<iDateTimeQuestion, iDateTimeAnswer>) => {
 	return <></>
 }
 

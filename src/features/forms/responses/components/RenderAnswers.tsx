@@ -11,13 +11,15 @@ import SliderAnswers from "./answers/SliderAnswers"
 import SwitchAnswers from "./answers/SwitchAnswers"
 import TableAnswers from "./answers/TableAnswers"
 import TextAnswers from "./answers/TextAnswers"
+import { AnswersProps } from "./QuestionAnswers"
 
-const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iAnswer[] }) => {
+const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion, iAnswer>) => {
 	if (question.type === "text") {
 		return (
 			<TextAnswers
 				question={question}
 				answers={answers as iTextAnswer[]}
+				responses={responses}
 			/>
 		)
 	}
@@ -27,6 +29,7 @@ const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iA
 			<ParagraphAnswers
 				question={question}
 				answers={answers as iParagraphAnswer[]}
+				responses={responses}
 			/>
 		)
 	}
@@ -36,6 +39,7 @@ const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iA
 			<ColorAnswers
 				question={question}
 				answers={answers as iColorAnswer[]}
+				responses={responses}
 			/>
 		)
 	}
@@ -45,6 +49,7 @@ const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iA
 			<ChoiceAnswers
 				question={question}
 				answers={answers as iChoiceAnswer[]}
+				responses={responses}
 			/>
 		)
 	}
@@ -54,6 +59,7 @@ const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iA
 			<SwitchAnswers
 				question={question}
 				answers={answers as iSwitchAnswer[]}
+				responses={responses}
 			/>
 		)
 	}
@@ -63,6 +69,7 @@ const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iA
 			<SliderAnswers
 				question={question}
 				answers={answers as iSliderAnswer[]}
+				responses={responses}
 			/>
 		)
 	}
@@ -72,6 +79,7 @@ const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iA
 			<DateTimeAnswers
 				question={question}
 				answers={answers as iDateTimeAnswer[]}
+				responses={responses}
 			/>
 		)
 	}
@@ -81,6 +89,7 @@ const RenderAnswers = ({ question, answers }: { question: iQuestion; answers: iA
 			<TableAnswers
 				question={question}
 				answers={answers as iTableAnswer[]}
+				responses={responses}
 			/>
 		)
 	}

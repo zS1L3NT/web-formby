@@ -1,13 +1,11 @@
 import { iParagraphAnswer } from "../../../../../models/Answer"
 import { iParagraphQuestion } from "../../../../../models/Question"
+import { AnswersProps } from "../QuestionAnswers"
 
 const ParagraphAnswers = ({
 	question,
 	answers
-}: {
-	question: iParagraphQuestion
-	answers: iParagraphAnswer[]
-}) => {
+}: AnswersProps<iParagraphQuestion, iParagraphAnswer>) => {
 	return <></>
 }
 

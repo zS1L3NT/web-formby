@@ -3,10 +3,25 @@ import { Box, Center, Image, Spinner, Text } from "@chakra-ui/react"
 import { useGetFormQuestionAnswersQuery } from "../../../../api"
 import Card from "../../../../components/Card"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import { WithTimestamps } from "../../../../models"
+import { iAnswer } from "../../../../models/Answer"
 import { iQuestion } from "../../../../models/Question"
+import { iResponse } from "../../../../models/Response"
 import RenderAnswers from "./RenderAnswers"
 
-const QuestionAnswers = ({ question }: { question: iQuestion }) => {
+export type AnswersProps<iQ extends iQuestion, iA extends iAnswer> = {
+	question: WithTimestamps<iQ>
+	answers: WithTimestamps<iA>[]
+	responses: iResponse[]
+}
+
+const QuestionAnswers = ({
+	question,
+	responses
+}: {
+	question: WithTimestamps<iQuestion>
+	responses: WithTimestamps<iResponse>[]
+}) => {
 	const { token } = useOnlyAuthenticated()
 	const { data: answers } = useGetFormQuestionAnswersQuery({
 		form_id: question.form_id,
@@ -58,11 +73,14 @@ const QuestionAnswers = ({ question }: { question: iQuestion }) => {
 					/>
 				</Box>
 			) : null}
-			
+
+			<Box h={4} />
+
 			{answers ? (
 				<RenderAnswers
 					question={question}
 					answers={answers}
+					responses={responses}
 				/>
 			) : (
 				<Center>

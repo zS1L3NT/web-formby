@@ -1,13 +1,8 @@
 import { iTextAnswer } from "../../../../../models/Answer"
 import { iTextQuestion } from "../../../../../models/Question"
+import { AnswersProps } from "../QuestionAnswers"
 
-const TextAnswers = ({
-	question,
-	answers
-}: {
-	question: iTextQuestion
-	answers: iTextAnswer[]
-}) => {
+const TextAnswers = ({ question, answers }: AnswersProps<iTextQuestion, iTextAnswer>) => {
 	return <></>
 }
 
