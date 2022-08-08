@@ -1,8 +1,8 @@
 import { useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useImmer } from "use-immer"
 
-import { Box, Center, Container, Spinner } from "@chakra-ui/react"
+import { Box, Center, Container, Spinner, useToast } from "@chakra-ui/react"
 
 import { useGetFormQuery, useGetFormQuestionsQuery } from "../../../../api"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
@@ -14,7 +14,9 @@ import QuestionInput from "../../answer/components/QuestionInput"
 
 const FormPreview = () => {
 	const { token, user } = useOnlyAuthenticated()
+	const navigate = useNavigate()
 	const form_id = useParams().form_id!
+	const toast = useToast()
 
 	const { data: form } = useGetFormQuery({ form_id, token })
 	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })
@@ -30,6 +32,19 @@ const FormPreview = () => {
 				null
 		)
 	}, [user, questions])
+
+	useEffect(() => {
+		if (!form) return
+
+		if (form.state !== "draft") {
+			navigate("../responses")
+			toast({
+				title: "Cannot edit a non-draft form",
+				status: "error",
+				isClosable: true
+			})
+		}
+	}, [form])
 
 	return (
 		<Container

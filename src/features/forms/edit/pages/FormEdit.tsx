@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useImmer } from "use-immer"
 
-import { Box, Center, Container, Spinner } from "@chakra-ui/react"
+import { Box, Center, Container, Spinner, useToast } from "@chakra-ui/react"
 
 import {
 	useGetFormQuery, useGetFormQuestionsQuery, useUpdateFormQuestionMutation
@@ -20,7 +20,9 @@ import QuestionEditor from "../components/QuestionEditor"
 
 const FormEdit = () => {
 	const { token, user } = useOnlyAuthenticated()
+	const navigate = useNavigate()
 	const form_id = useParams().form_id!
+	const toast = useToast()
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
@@ -41,6 +43,19 @@ const FormEdit = () => {
 		assertLinkedQuestions(questions)
 		setOptimisticQuestions(questions)
 	}, [questions])
+
+	useEffect(() => {
+		if (!form) return
+
+		if (form.state !== "draft") {
+			navigate("../responses")
+			toast({
+				title: "Cannot edit a non-draft form",
+				status: "error",
+				isClosable: true
+			})
+		}
+	}, [form])
 
 	const handleReorder = (oldIndex: number, newIndex?: number) => {
 		if (
@@ -88,11 +103,7 @@ const FormEdit = () => {
 			mt={4}
 			maxW="4xl">
 			{form ? (
-				<Box
-					pos="relative"
-					mt={form.state === "draft" ? 0 : 4}
-					py={form.state === "draft" ? 0 : 1}
-					px={form.state === "draft" ? 0 : 4}>
+				<Box pos="relative">
 					<FormHeader form={form} />
 					<DragDropContext
 						onDragEnd={result =>
@@ -143,7 +154,7 @@ const FormEdit = () => {
 						opacity={0.4}
 						bg="black"
 						borderRadius="lg"
-						zIndex={form.state === "draft" ? -1 : 1}
+						zIndex={-1}
 						cursor="not-allowed"
 					/>
 				</Box>

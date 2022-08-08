@@ -13,6 +13,8 @@ import {
 } from "@chakra-ui/react"
 
 import AuthContext from "../contexts/AuthContext"
+import useAppSelector from "../hooks/useAppSelector"
+import { iForm } from "../models/Form"
 
 interface iNavItem {
 	title: string
@@ -28,8 +30,10 @@ const Navigator = () => {
 	const { toggleColorMode } = useColorMode()
 	const location = useLocation()
 	const navigate = useNavigate()
+	// prettier-ignore
+	const form = useAppSelector(state => state.api.queries)[`getForm({"form_id":"${location.pathname.match(/\/forms\/([a-zA-Z0-9-]+)\/?/)?.[1]}","token":"${token}"})`]?.data as iForm | undefined
 
-	const { isOpen, onToggle } = useDisclosure()
+	const { isOpen, onToggle } = useDisclosure()	
 
 	const sideMargins = { base: 2, md: 16, lg: 32 }
 
@@ -60,13 +64,19 @@ const Navigator = () => {
 			title: "Form Preview",
 			icon: <ViewIcon />,
 			navigate: `/forms/${location.pathname.slice(7, 43)}/preview`,
-			render: !!token && !!location.pathname.match("^/forms/[a-zA-Z0-9-]+/edit")
+			render:
+				!!token &&
+				!!location.pathname.match("^/forms/[a-zA-Z0-9-]+/edit") &&
+				form?.state === "draft"
 		},
 		{
 			title: "Edit Form",
 			icon: <EditIcon />,
 			navigate: `/forms/${location.pathname.slice(7, 43)}/edit`,
-			render: !!token && !!location.pathname.match("^/forms/[a-zA-Z0-9-]+/(?!edit)\\w+")
+			render:
+				!!token &&
+				!!location.pathname.match("^/forms/[a-zA-Z0-9-]+/(?!edit)\\w+") &&
+				form?.state === "draft"
 		},
 		{
 			title: "Responses",
@@ -234,16 +244,16 @@ const Navigator = () => {
 							</Menu>
 						) : null}
 					</HStack>
-					{!!useMediaQuery("(max-width: 48rem)")[0] ? (
-						<Tooltip label="Toggle Color Scheme">
-							<IconButton
-								ml={4}
-								aria-label="Toggle Color Scheme"
-								icon={useColorModeValue(<SunIcon />, <MoonIcon />)}
-								onClick={toggleColorMode}
-							/>
-						</Tooltip>
-					) : null}
+					<Tooltip
+						display={{ base: "none", md: "block" }}
+						label="Toggle Color Scheme">
+						<IconButton
+							ml={4}
+							aria-label="Toggle Color Scheme"
+							icon={useColorModeValue(<SunIcon />, <MoonIcon />)}
+							onClick={toggleColorMode}
+						/>
+					</Tooltip>
 				</Flex>
 			</Flex>
 
