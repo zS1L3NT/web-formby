@@ -66,10 +66,6 @@ const App = () => {
 								element={<FormResponses />}
 							/>
 							<Route
-								path="questions/:question_id"
-								element={<FormResponses />}
-							/>
-							<Route
 								path=":response_id"
 								element={<FormResponse />}
 							/>
