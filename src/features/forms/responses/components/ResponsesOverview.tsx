@@ -1,6 +1,4 @@
-
-
-import { Flex, Text } from "@chakra-ui/react"
+import { Divider, Flex, Text } from "@chakra-ui/react"
 
 import Card from "../../../../components/Card"
 import { iForm } from "../../../../models/Form"
@@ -8,11 +6,8 @@ import { iResponse } from "../../../../models/Response"
 
 const ResponsesOverview = ({ form, responses }: { form: iForm; responses: iResponse[] }) => {
 	return (
-		<Card mb={4}>
-			<Flex
-				direction={{ base: "column", md: "row" }}
-				justifyContent="space-evenly"
-				alignItems={{ base: "center", md: "normal" }}>
+		<Card my={4}>
+			<Flex justifyContent="space-evenly">
 				<Flex
 					direction="column"
 					justifyContent="flex-end"
@@ -62,10 +57,36 @@ const ResponsesOverview = ({ form, responses }: { form: iForm; responses: iRespo
 					<Text
 						fontSize="sm"
 						textAlign="center">
-						Requires Authentication
+						Authentication
 					</Text>
 				</Flex>
 			</Flex>
+
+			<Divider
+				mt={8}
+				mb={4}
+				borderColor="gray.400"
+			/>
+
+			<Text
+				fontSize="4xl"
+				noOfLines={2}
+				textAlign="left"
+				color="text">
+				{form.name}
+			</Text>
+
+			{form.description ? (
+				<Text
+					mt={2}
+					mb={8}
+					fontSize="lg"
+					noOfLines={10}
+					textAlign="left"
+					color="text">
+					{form.description}
+				</Text>
+			) : null}
 		</Card>
 	)
 }

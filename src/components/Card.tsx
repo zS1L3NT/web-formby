@@ -11,8 +11,7 @@ const Card = (props: BoxProps) => {
 			borderColor="transparent"
 			transition="box-shadow 0.3s, border-color 0.3s"
 			_hover={{
-				shadow: "lg",
-				cursor: "pointer"
+				shadow: "lg"
 			}}
 			{...props}>
 			{props.children}
