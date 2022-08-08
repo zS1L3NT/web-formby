@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom"
 
-import { Container } from "@chakra-ui/react"
+import { Center, Container, Spinner } from "@chakra-ui/react"
 
-import {
-	useGetFormQuery, useGetFormQuestionsQuery, useGetFormResponsesQuery
-} from "../../../api"
+import { useGetFormQuery, useGetFormQuestionsQuery, useGetFormResponsesQuery } from "../../../api"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../hooks/useOnlyFormOwner"
 import useToastError from "../../../hooks/useToastError"
+import QuestionAnswers from "./components/QuestionAnswers"
+import ResponsesOverview from "./components/ResponsesOverview"
 
 const FormResponses = () => {
 	const { token, user } = useOnlyAuthenticated()
@@ -27,6 +27,24 @@ const FormResponses = () => {
 		<Container
 			mt={4}
 			maxW="4xl">
+			{form && questions && responses ? (
+				<>
+					<ResponsesOverview
+						form={form}
+						responses={responses}
+					/>
+					{questions.map(question => (
+						<QuestionAnswers
+							key={question.id}
+							question={question}
+						/>
+					))}
+				</>
+			) : (
+				<Center>
+					<Spinner />
+				</Center>
+			)}
 		</Container>
 	)
 }
