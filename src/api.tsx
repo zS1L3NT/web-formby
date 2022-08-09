@@ -194,9 +194,9 @@ const api = createApi({
 			}),
 			providesTags: ["Response"]
 		}),
-		getUser: builder.query<WithTimestamps<iUser>, RequiredToken>({
-			query: ({ token }) => ({
-				url: "/user",
+		getUser: builder.query<WithTimestamps<iUser>, { user_id: string } & RequiredToken>({
+			query: ({ token, user_id }) => ({
+				url: `/users/${user_id}`,
 				method: "GET",
 				token
 			}),
@@ -204,7 +204,7 @@ const api = createApi({
 		}),
 		updateUser: builder.mutation<ApiResponse, Partial<iUser> & RequiredToken>({
 			query: ({ token, ...user }) => ({
-				url: "/user",
+				url: `/users/${user.id}`,
 				method: "PUT",
 				body: user,
 				token
