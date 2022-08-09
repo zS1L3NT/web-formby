@@ -136,17 +136,6 @@ const api = createApi({
 			}),
 			invalidatesTags: ["Question"]
 		}),
-		getFormQuestionAnswers: builder.query<
-			WithTimestamps<iAnswer>[],
-			{ form_id: string; question_id: string } & RequiredToken
-		>({
-			query: ({ token, form_id, question_id }) => ({
-				url: `/forms/${form_id}/questions/${question_id}/answers`,
-				method: "GET",
-				token
-			}),
-			providesTags: ["Answer"]
-		}),
 		getFormResponseAnswers: builder.query<
 			WithTimestamps<iAnswer>[],
 			{ form_id: string; response_id: string } & RequiredToken
@@ -250,7 +239,6 @@ export const {
 	useDeleteFormMutation,
 	useDeleteFormQuestionMutation,
 	useGetFormQuery,
-	useGetFormQuestionAnswersQuery,
 	useGetFormQuestionQuery,
 	useGetFormQuestionsQuery,
 	useGetFormResponseAnswersQuery,
@@ -262,7 +250,6 @@ export const {
 	useLazyGetFormsQuery,
 	useLazyGetUserQuery,
 	useLazyGetFormQuery,
-	useLazyGetFormQuestionAnswersQuery,
 	useLazyGetFormQuestionQuery,
 	useLazyGetFormResponseAnswersQuery,
 	useLazyGetFormResponseQuery,
