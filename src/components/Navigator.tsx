@@ -33,7 +33,7 @@ const Navigator = () => {
 	// prettier-ignore
 	const form = useAppSelector(state => state.api.queries)[`getForm({"form_id":"${location.pathname.match(/\/forms\/([a-zA-Z0-9-]+)\/?/)?.[1]}","token":"${token}"})`]?.data as iForm | undefined
 
-	const { isOpen, onToggle } = useDisclosure()	
+	const { isOpen, onToggle } = useDisclosure()
 
 	const sideMargins = { base: 2, md: 16, lg: 32 }
 
@@ -244,10 +244,9 @@ const Navigator = () => {
 							</Menu>
 						) : null}
 					</HStack>
-					<Tooltip
-						display={{ base: "none", md: "block" }}
-						label="Toggle Color Scheme">
+					<Tooltip label="Toggle Color Scheme">
 						<IconButton
+							display={{ base: "block", md: "none" }}
 							ml={4}
 							aria-label="Toggle Color Scheme"
 							icon={useColorModeValue(<SunIcon />, <MoonIcon />)}
