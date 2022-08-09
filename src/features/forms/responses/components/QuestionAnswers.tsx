@@ -1,34 +1,26 @@
-import { Box, Center, Image, Spinner, Text } from "@chakra-ui/react"
+import { Box, Image, Text } from "@chakra-ui/react"
 
-import { useGetFormQuestionAnswersQuery } from "../../../../api"
 import Card from "../../../../components/Card"
-import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import { WithTimestamps } from "../../../../models"
 import { iAnswer } from "../../../../models/Answer"
 import { iQuestion } from "../../../../models/Question"
 import { iResponse } from "../../../../models/Response"
+import { iUser } from "../../../../models/User"
 import RenderAnswers from "./RenderAnswers"
 
 export type AnswersProps<iQ extends iQuestion, iA extends iAnswer> = {
 	question: WithTimestamps<iQ>
 	answers: WithTimestamps<iA>[]
-	responses: iResponse[]
+	responses: WithTimestamps<iResponse>[]
+	users: WithTimestamps<iUser>[]
 }
 
 const QuestionAnswers = ({
 	question,
-	responses
-}: {
-	question: WithTimestamps<iQuestion>
-	responses: WithTimestamps<iResponse>[]
-}) => {
-	const { token } = useOnlyAuthenticated()
-	const { data: answers } = useGetFormQuestionAnswersQuery({
-		form_id: question.form_id,
-		question_id: question.id,
-		token
-	})
-
+	responses,
+	answers,
+	users
+}: AnswersProps<iQuestion, iAnswer>) => {
 	return (
 		<Card mb={4}>
 			<Text
@@ -76,17 +68,12 @@ const QuestionAnswers = ({
 
 			<Box h={4} />
 
-			{answers ? (
-				<RenderAnswers
-					question={question}
-					answers={answers}
-					responses={responses}
-				/>
-			) : (
-				<Center>
-					<Spinner />
-				</Center>
-			)}
+			<RenderAnswers
+				question={question}
+				answers={answers}
+				responses={responses}
+				users={users}
+			/>
 		</Card>
 	)
 }

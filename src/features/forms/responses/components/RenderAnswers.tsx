@@ -1,3 +1,4 @@
+import { WithTimestamps } from "../../../../models"
 import {
 	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iSliderAnswer,
 	iSwitchAnswer, iTableAnswer, iTextAnswer
@@ -13,13 +14,19 @@ import TableAnswers from "./answers/TableAnswers"
 import TextAnswers from "./answers/TextAnswers"
 import { AnswersProps } from "./QuestionAnswers"
 
-const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion, iAnswer>) => {
+const RenderAnswers = ({
+	question,
+	answers,
+	responses,
+	users
+}: AnswersProps<iQuestion, iAnswer>) => {
 	if (question.type === "text") {
 		return (
 			<TextAnswers
 				question={question}
-				answers={answers as iTextAnswer[]}
+				answers={answers as WithTimestamps<iTextAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
@@ -28,8 +35,9 @@ const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion,
 		return (
 			<ParagraphAnswers
 				question={question}
-				answers={answers as iParagraphAnswer[]}
+				answers={answers as WithTimestamps<iParagraphAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
@@ -38,8 +46,9 @@ const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion,
 		return (
 			<ColorAnswers
 				question={question}
-				answers={answers as iColorAnswer[]}
+				answers={answers as WithTimestamps<iColorAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
@@ -48,8 +57,9 @@ const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion,
 		return (
 			<ChoiceAnswers
 				question={question}
-				answers={answers as iChoiceAnswer[]}
+				answers={answers as WithTimestamps<iChoiceAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
@@ -58,8 +68,9 @@ const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion,
 		return (
 			<SwitchAnswers
 				question={question}
-				answers={answers as iSwitchAnswer[]}
+				answers={answers as WithTimestamps<iSwitchAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
@@ -68,8 +79,9 @@ const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion,
 		return (
 			<SliderAnswers
 				question={question}
-				answers={answers as iSliderAnswer[]}
+				answers={answers as WithTimestamps<iSliderAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
@@ -78,8 +90,9 @@ const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion,
 		return (
 			<DateTimeAnswers
 				question={question}
-				answers={answers as iDateTimeAnswer[]}
+				answers={answers as WithTimestamps<iDateTimeAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
@@ -88,8 +101,9 @@ const RenderAnswers = ({ question, answers, responses }: AnswersProps<iQuestion,
 		return (
 			<TableAnswers
 				question={question}
-				answers={answers as iTableAnswer[]}
+				answers={answers as WithTimestamps<iTableAnswer>[]}
 				responses={responses}
+				users={users}
 			/>
 		)
 	}
