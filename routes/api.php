@@ -22,7 +22,8 @@ Route::controller(UserController::class)->group(function () {
 	Route::post("login", "login");
 	Route::post("register", "register");
 	Route::post("logout", "logout");
-	Route::get("users", "show");
+	Route::get("user", "current");
+	Route::get("users/{user_id}", "show");
 	Route::put("users", "update");
 });
 
