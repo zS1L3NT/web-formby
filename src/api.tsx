@@ -183,9 +183,9 @@ const api = createApi({
 			}),
 			providesTags: ["Response"]
 		}),
-		getUser: builder.query<WithTimestamps<iUser>, { user_id: string } & RequiredToken>({
+		getUser: builder.query<WithTimestamps<iUser>, { user_id?: string } & RequiredToken>({
 			query: ({ token, user_id }) => ({
-				url: `/users/${user_id}`,
+				url: user_id ? `/users/${user_id}` : `/user`,
 				method: "GET",
 				token
 			}),
