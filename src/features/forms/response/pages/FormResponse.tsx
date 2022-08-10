@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { Box, Center, Container, Spinner } from "@chakra-ui/react"
 
 import {
-	useGetFormQuery, useGetFormQuestionsQuery, useGetFormResponsesQuery,
+	useGetFormQuery, useGetFormQuestionsQuery, useGetFormResponseQuery,
 	useLazyGetFormResponseAnswersQuery, useLazyGetUserQuery
 } from "../../../../api"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
@@ -14,78 +14,76 @@ import useToastError from "../../../../hooks/useToastError"
 import { WithTimestamps } from "../../../../models"
 import { iAnswer } from "../../../../models/Answer"
 import { iUser } from "../../../../models/User"
-import QuestionAnswers from "../components/QuestionAnswers"
-import ResponsesOverview from "../components/ResponsesOverview"
+import ResponseOverview from "../components/ResponseOverview"
 
-const FormResponses = () => {
+const FormResponse = () => {
 	const { token, user } = useOnlyAuthenticated()
 	const form_id = useParams().form_id!
+	const response_id = useParams().response_id!
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
-	const { data: responses, error: responsesError } = useGetFormResponsesQuery({ form_id, token })
+	const { data: response, error: responseError } = useGetFormResponseQuery({
+		form_id,
+		response_id,
+		token
+	})
 	const [getResponseAnswers] = useLazyGetFormResponseAnswersQuery()
 	const [getUser] = useLazyGetUserQuery()
 
 	const [answers, setAnswers] = useState<WithTimestamps<iAnswer>[]>()
-	const [users, setUsers] = useState<WithTimestamps<iUser>[]>()
+	const [_user, setUser] = useState<WithTimestamps<iUser>>()
 
 	useOnlyFormOwner(user, form)
 
 	useToastError(formError)
 	useToastError(questionsError)
-	useToastError(responsesError)
+	useToastError(responseError)
 
 	useAsyncEffect(async () => {
-		if (!token || !responses) return
+		if (!token || !response) return
 
-		Promise.all(
-			responses
-				.filter(response => !!response.user_id)
-				.map(response =>
-					getUser(
-						{
-							user_id: response.user_id!,
-							token
-						},
-						true
-					).unwrap()
-				)
-		).then(setUsers)
+		getUser(
+			{
+				user_id: response.user_id!,
+				token
+			},
+			true
+		)
+			.unwrap()
+			.then(setUser)
 
-		Promise.all(
-			responses.map(response =>
-				getResponseAnswers(
-					{
-						response_id: response.id,
-						form_id: response.form_id,
-						token
-					},
-					true
-				).unwrap()
-			)
-		).then(answers => setAnswers(answers.flat()))
-	}, [token, responses])
+		getResponseAnswers(
+			{
+				response_id: response.id,
+				form_id: response.form_id,
+				token
+			},
+			true
+		)
+			.unwrap()
+			.then(setAnswers)
+	}, [token, response])
 
 	return (
 		<Container
 			mt={4}
 			maxW="4xl">
-			{form && questions && responses && answers && users ? (
+			{form && questions && response && answers && _user ? (
 				<>
-					<ResponsesOverview
+					<ResponseOverview
 						form={form}
-						responses={responses}
+						user={_user}
 					/>
-					{questions.map(question => (
-						<QuestionAnswers
+					{/* {questions.map(question => (
+						<QuestionAnswer
 							key={question.id}
 							question={question}
-							responses={responses}
+							response={response}
 							answers={answers.filter(answer => answer.question_id === question.id)}
-							users={users}
+							user={_user}
 						/>
-					))}
+					))} */}
 					<Box h={16} />
 				</>
 			) : (
@@ -97,4 +95,4 @@ const FormResponses = () => {
 	)
 }
 
-export default FormResponses
+export default FormResponse
