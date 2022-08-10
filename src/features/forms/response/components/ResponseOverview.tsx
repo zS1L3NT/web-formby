@@ -1,10 +1,10 @@
-import { Divider, Flex, Text } from "@chakra-ui/react"
+import { Divider, Flex, Spinner, Text } from "@chakra-ui/react"
 
 import Card from "../../../../components/Card"
 import { iForm } from "../../../../models/Form"
 import { iUser } from "../../../../models/User"
 
-const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null }) => {
+const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null | undefined }) => {
 	return (
 		<Card my={4}>
 			<Flex
@@ -38,7 +38,7 @@ const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null }) =
 						fontWeight="bold"
 						textAlign="center"
 						lineHeight={1.2}>
-						{user?.name ?? "Anonymous User"}
+						{user === undefined ? <Spinner /> : user?.name ?? "Anonymous User"}
 					</Text>
 					<Text
 						fontSize="sm"

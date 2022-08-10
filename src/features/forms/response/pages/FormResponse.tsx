@@ -69,7 +69,7 @@ const FormResponse = () => {
 		<Container
 			mt={4}
 			maxW="4xl">
-			{form && questions && response && answers && _user ? (
+			{form && questions ? (
 				<>
 					<ResponseOverview
 						form={form}

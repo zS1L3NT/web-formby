@@ -71,21 +71,29 @@ const FormResponses = () => {
 		<Container
 			mt={4}
 			maxW="4xl">
-			{form && questions && responses && answers && users ? (
+			{form && questions && responses ? (
 				<>
 					<ResponsesOverview
 						form={form}
 						responses={responses}
 					/>
-					{questions.map(question => (
-						<QuestionAnswers
-							key={question.id}
-							question={question}
-							responses={responses}
-							answers={answers.filter(answer => answer.question_id === question.id)}
-							users={users}
-						/>
-					))}
+					{answers && users ? (
+						questions.map(question => (
+							<QuestionAnswers
+								key={question.id}
+								question={question}
+								responses={responses}
+								answers={answers.filter(
+									answer => answer.question_id === question.id
+								)}
+								users={users}
+							/>
+						))
+					) : (
+						<Center mt={4}>
+							<Spinner />
+						</Center>
+					)}
 					<Box h={16} />
 				</>
 			) : (
