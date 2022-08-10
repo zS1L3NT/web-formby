@@ -8,7 +8,7 @@ import useAppDispatch from "./useAppDispatch"
 
 /**
  * Only allow the form owner to stay on this page.
- * If not, redirect the user to the form answer page or their dashboard
+ * If not, redirect the user to the form answer page or their forms view
  *
  * @param user Currently authenticated user
  * @param form Form
@@ -31,7 +31,7 @@ const useOnlyFormOwner = (user: iUser | null | undefined, form: iForm | null | u
 			if (form.state === "live") {
 				navigate(`/forms/${form.id}`)
 			} else {
-				navigate("/dashboard")
+				navigate("/forms")
 			}
 		}
 	}, [user, form])

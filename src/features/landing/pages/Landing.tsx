@@ -41,7 +41,7 @@ const Landing = () => {
 					size="lg"
 					colorScheme="blue"
 					rightIcon={<ArrowForwardIcon />}
-					onClick={() => navigate(token ? "/dashboard" : "/login")}>
+					onClick={() => navigate(token ? "/forms" : "/login")}>
 					Get Started
 				</Button>
 				<Button

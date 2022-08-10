@@ -6,13 +6,13 @@ import Navigator from "./components/Navigator"
 import Login from "./features/authentication/pages/Login"
 import Logout from "./features/authentication/pages/Logout"
 import Register from "./features/authentication/pages/Register"
-import Dashboard from "./features/dashboard/pages/Dashboard"
 import FormAnswer from "./features/forms/answer/pages/FormAnswer"
 import FormEdit from "./features/forms/edit/pages/FormEdit"
 import FormPreview from "./features/forms/preview/page/FormPreview"
 import FormResponse from "./features/forms/response/pages/FormResponse"
 import FormResponses from "./features/forms/responses/pages/FormResponses"
 import FormSettings from "./features/forms/settings/FormSettings"
+import FormsView from "./features/forms/view/pages/FormsView"
 import Landing from "./features/landing/pages/Landing"
 
 const App = () => {
@@ -43,37 +43,40 @@ const App = () => {
 						path="logout"
 						element={<Logout />}
 					/>
-					<Route
-						path="dashboard"
-						element={<Dashboard />}
-					/>
-					<Route path="forms/:form_id">
+
+					<Route path="forms">
 						<Route
 							index
-							element={<FormAnswer />}
+							element={<FormsView />}
 						/>
-						<Route
-							path="edit"
-							element={<FormEdit />}
-						/>
-						<Route
-							path="preview"
-							element={<FormPreview />}
-						/>
-						<Route path="responses">
+						<Route path=":form_id">
 							<Route
 								index
-								element={<FormResponses />}
+								element={<FormAnswer />}
 							/>
 							<Route
-								path=":response_id"
-								element={<FormResponse />}
+								path="edit"
+								element={<FormEdit />}
+							/>
+							<Route
+								path="preview"
+								element={<FormPreview />}
+							/>
+							<Route path="responses">
+								<Route
+									index
+									element={<FormResponses />}
+								/>
+								<Route
+									path=":response_id"
+									element={<FormResponse />}
+								/>
+							</Route>
+							<Route
+								path="settings"
+								element={<FormSettings />}
 							/>
 						</Route>
-						<Route
-							path="settings"
-							element={<FormSettings />}
-						/>
 					</Route>
 				</Routes>
 			</Flex>

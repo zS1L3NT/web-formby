@@ -1,11 +1,11 @@
 import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 
-import { useGetFormsQuery } from "../../../api"
-import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
-import useToastError from "../../../hooks/useToastError"
+import { useGetFormsQuery } from "../../../../api"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../../hooks/useToastError"
 import FormItem from "../components/FormItem"
 
-const Dashboard = () => {
+const FormsView = () => {
 	const { token } = useOnlyAuthenticated()
 
 	const { data: forms, error: formsError } = useGetFormsQuery({ token })
@@ -47,4 +47,4 @@ const Dashboard = () => {
 	)
 }
 
-export default Dashboard
+export default FormsView

@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom"
 import { AddIcon, EditIcon, LockIcon } from "@chakra-ui/icons"
 import { Box, Center, chakra, Flex, HStack, Text } from "@chakra-ui/react"
 
-import { WithTimestamps } from "../../../models"
-import { iForm } from "../../../models/Form"
+import { WithTimestamps } from "../../../../models"
+import { iForm } from "../../../../models/Form"
 
 const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 	const navigate = useNavigate()
