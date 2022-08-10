@@ -215,12 +215,12 @@ class DatabaseSeeder extends Seeder
 			Answer::create([
 				"response_id" => $main_response->id,
 				"question_id" => $prev_qn->id,
-				"datetime" => Carbon::parse(Date::now())->format('Y-m-d H:i:s')
+				"datetime" => Carbon::parse(Date::now())
 			]);
 			Answer::create([
 				"response_id" => $anonymous_respose->id,
 				"question_id" => $prev_qn->id,
-				"datetime" => Carbon::parse(Date::now())->format('Y-m-d H:i:s')
+				"datetime" => Carbon::parse(Date::now())
 			]);
 
 			$prev_qn = Question::create([

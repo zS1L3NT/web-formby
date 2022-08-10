@@ -38,9 +38,14 @@ class Answer extends Model
 		$this->attributes['choices'] = $choices === NULL ? NULL : json_encode($choices);
 	}
 
+	public function getDatetimeAttribute($datetime)
+	{
+		return Carbon::parse($datetime)->toIso8601String();
+	}
+
 	public function setDatetimeAttribute(string|NULL $datetime)
 	{
-		$this->attributes['datetime'] = $datetime === NULL ? NULL : Carbon::parse($datetime)->setTimezone("UTC");
+		$this->attributes['datetime'] = $datetime === NULL ? NULL : Carbon::parse($datetime);
 	}
 
 	public function getTableAttribute($table)
