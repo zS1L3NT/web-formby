@@ -6,9 +6,11 @@ use App\Models\Form;
 use App\Models\User;
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\Response;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Faker\Factory as FakerFactory;
+use Illuminate\Support\Facades\Date;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,14 +36,14 @@ class DatabaseSeeder extends Seeder
 			"password" => 'P@ssw0rd'
 		]);
 
-		$auth_form = Form::create([
+		$main_form = Form::create([
 			"user_id" => $main_user->id,
 			"name" => $faker->sentence(),
 			"description" => $faker->sentences(3, true),
 			"auth" => true,
 			"state" => "live",
 		]);
-		$noauth_form = Form::create([
+		$other_form = Form::create([
 			"user_id" => $other_user->id,
 			"name" => $faker->sentence(),
 			"description" => $faker->sentences(3, true),
@@ -49,7 +51,16 @@ class DatabaseSeeder extends Seeder
 			"state" => "live",
 		]);
 
-		foreach ([$auth_form->id, $noauth_form->id] as $form_id) {
+		$main_response = Response::create([
+			"form_id" => $main_form->id,
+			"user_id" => $main_user->id,
+		]);
+		$anonymous_respose = Response::create([
+			"form_id" => $main_form->id,
+			"user_id" => null,
+		]);
+
+		foreach ([$main_form->id, $other_form->id] as $form_id) {
 			$prev_qn = NULL;
 			$question_data = fn ($prev_qn) => [
 				"form_id" => $form_id,
@@ -64,17 +75,47 @@ class DatabaseSeeder extends Seeder
 				"required" => true,
 				"type" => "text"
 			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"text" => "Text"
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"text" => $faker->sentence()
+			]);
 
 			$prev_qn = Question::create([
 				...$question_data($prev_qn),
 				"required" => true,
 				"type" => "paragraph"
 			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"paragraph" => "Paragraph"
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"paragraph" => $faker->sentences(3, true)
+			]);
 
 			$prev_qn = Question::create([
 				...$question_data($prev_qn),
 				"required" => false,
 				"type" => "color"
+			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"color" => "#000000"
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"color" => "#FFFFFF"
 			]);
 
 			$prev_qn = Question::create([
@@ -84,6 +125,16 @@ class DatabaseSeeder extends Seeder
 				"choices" => $faker->words(3),
 				"choice_type" => "radio"
 			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"choices" => [$prev_qn->choices[0]]
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"choices" => [$prev_qn->choices[2]]
+			]);
 
 			$prev_qn = Question::create([
 				...$question_data($prev_qn),
@@ -91,6 +142,16 @@ class DatabaseSeeder extends Seeder
 				"type" => "choice",
 				"choices" => $faker->words(3),
 				"choice_type" => "checkbox"
+			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"choices" => [$prev_qn->choices[0]]
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"choices" => $prev_qn->choices
 			]);
 
 			$prev_qn = Question::create([
@@ -100,11 +161,31 @@ class DatabaseSeeder extends Seeder
 				"choices" => $faker->words(3),
 				"choice_type" => "dropdown"
 			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"choices" => [$prev_qn->choices[0]]
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"choices" => [$prev_qn->choices[2]]
+			]);
 
 			$prev_qn = Question::create([
 				...$question_data($prev_qn),
 				"required" => false,
 				"type" => "switch"
+			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"switch" => true
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"switch" => true
 			]);
 
 			$prev_qn = Question::create([
@@ -115,20 +196,31 @@ class DatabaseSeeder extends Seeder
 				"slider_max" => 100,
 				"slider_step" => 10
 			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"slider" => 10
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"slider" => 100
+			]);
 
 			$prev_qn = Question::create([
 				...$question_data($prev_qn),
 				"required" => true,
 				"type" => "datetime"
 			]);
-
-			$prev_qn = Question::create([
-				...$question_data($prev_qn),
-				"required" => true,
-				"type" => "table",
-				"table_columns" => $faker->words(3),
-				"table_rows" => $faker->words(3),
-				"table_type" => "radio"
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"datetime" => Carbon::parse(Date::now())->format('Y-m-d H:i:s')
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"datetime" => Carbon::parse(Date::now())->format('Y-m-d H:i:s')
 			]);
 
 			$prev_qn = Question::create([
@@ -138,6 +230,24 @@ class DatabaseSeeder extends Seeder
 				"table_columns" => $faker->words(3),
 				"table_rows" => $faker->words(3),
 				"table_type" => "radio"
+			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"table" => [
+					[$prev_qn->table_columns[0], $prev_qn->table_rows[0]],
+					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
+					[$prev_qn->table_columns[2], $prev_qn->table_rows[2]]
+				]
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"table" => [
+					[$prev_qn->table_columns[2], $prev_qn->table_rows[0]],
+					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
+					[$prev_qn->table_columns[0], $prev_qn->table_rows[2]]
+				]
 			]);
 
 			$prev_qn = Question::create([
@@ -147,6 +257,24 @@ class DatabaseSeeder extends Seeder
 				"table_columns" => $faker->words(3),
 				"table_rows" => $faker->words(3),
 				"table_type" => "checkbox"
+			]);
+			Answer::create([
+				"response_id" => $main_response->id,
+				"question_id" => $prev_qn->id,
+				"table" => [
+					[$prev_qn->table_columns[0], $prev_qn->table_rows[0]],
+					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
+					[$prev_qn->table_columns[2], $prev_qn->table_rows[2]]
+				]
+			]);
+			Answer::create([
+				"response_id" => $anonymous_respose->id,
+				"question_id" => $prev_qn->id,
+				"table" => [
+					[$prev_qn->table_columns[2], $prev_qn->table_rows[0]],
+					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
+					[$prev_qn->table_columns[0], $prev_qn->table_rows[2]]
+				]
 			]);
 		}
 	}
