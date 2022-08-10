@@ -1,9 +1,59 @@
+import { useState } from "react"
+
+import { Box, Flex, Text } from "@chakra-ui/react"
+
+import Dropdown from "../../../../../components/Dropdown"
 import { iTableAnswer } from "../../../../../models/Answer"
 import { iTableQuestion } from "../../../../../models/Question"
+import ChartValueDisplay from "../ChartValueDisplay"
 import { AnswersProps } from "../QuestionAnswers"
 
-const TableAnswers = ({ question, answers }: AnswersProps<iTableQuestion, iTableAnswer>) => {
-	return <></>
+const TableAnswers = ({
+	question,
+	answers,
+	responses,
+	users
+}: AnswersProps<iTableQuestion, iTableAnswer>) => {
+	const [selectedRow, setSelectedRow] = useState<string | null>(null)
+
+	return (
+		<>
+			<Flex alignItems="center">
+				<Text>Table Row:</Text>
+				<Box
+					ml={4}
+					flex={1}>
+					<Dropdown
+						choices={question.table_rows}
+						selectedChoice={selectedRow}
+						setSelectedChoice={setSelectedRow}
+					/>
+				</Box>
+			</Flex>
+			<ChartValueDisplay
+				id={question.id}
+				title="Table Columns"
+				values={question.table_columns}
+				data={answers
+					.map(answer => {
+						const response = responses.find(
+							response => response.id === answer.response_id
+						)!
+						const user = users.find(user => user.id === response.user_id)
+
+						return answer.table
+							.filter(item => item[1] === selectedRow)
+							.map(item => ({
+								value: item[0],
+								response,
+								user: user ?? null
+							}))
+					})
+					.flat()}
+				getModalHeader={value => `Responses for row "${value}"`}
+			/>
+		</>
+	)
 }
 
 export default TableAnswers

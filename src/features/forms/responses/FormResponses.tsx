@@ -42,7 +42,12 @@ const FormResponses = () => {
 		Promise.all(
 			responses
 				.filter(response => !!response.user_id)
-				.map(response => getUser({ user_id: response.user_id!, token }).unwrap())
+				.map(response =>
+					getUser({
+						user_id: response.user_id!,
+						token
+					}).unwrap()
+				)
 		).then(setUsers)
 
 		Promise.all(

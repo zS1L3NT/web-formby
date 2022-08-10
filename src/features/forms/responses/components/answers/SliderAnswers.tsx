@@ -14,6 +14,7 @@ const SliderAnswers = ({
 	return (
 		<ChartValueDisplay
 			id={question.id}
+			title="Slider Values"
 			data={answers.map(answer => {
 				const response = responses.find(response => response.id === answer.response_id)!
 				const user = users.find(user => user.id === response.user_id)

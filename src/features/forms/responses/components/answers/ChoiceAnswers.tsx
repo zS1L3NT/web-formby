@@ -16,6 +16,7 @@ const ChoiceAnswers = ({
 	return (
 		<ChartValueDisplay
 			id={question.id}
+			title="Choices"
 			data={answers
 				.map(answer => {
 					const response = responses.find(response => response.id === answer.response_id)!

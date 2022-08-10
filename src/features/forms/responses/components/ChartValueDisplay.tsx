@@ -16,11 +16,13 @@ import { iUser } from "../../../../models/User"
 
 const ChartValueDisplay = ({
 	id,
+	title,
 	data,
 	values,
 	getModalHeader
 }: {
 	id: string
+	title: string
 	data: {
 		user: WithTimestamps<iUser> | null
 		response: WithTimestamps<iResponse>
@@ -54,6 +56,12 @@ const ChartValueDisplay = ({
 					direction="column"
 					justifyContent="center"
 					w="20rem">
+					<Text
+						textDecor="underline"
+						ml={2}
+						mb={1}>
+						{title}
+					</Text>
 					{values.map((value, i) => (
 						<Flex
 							key={value}
