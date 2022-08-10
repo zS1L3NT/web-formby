@@ -14,6 +14,7 @@ import useToastError from "../../../../hooks/useToastError"
 import { WithTimestamps } from "../../../../models"
 import { iAnswer } from "../../../../models/Answer"
 import { iUser } from "../../../../models/User"
+import QuestionAnswer from "../components/QuestionAnswer"
 import ResponseOverview from "../components/ResponseOverview"
 
 const FormResponse = () => {
@@ -75,15 +76,23 @@ const FormResponse = () => {
 						form={form}
 						user={_user}
 					/>
-					{/* {questions.map(question => (
-						<QuestionAnswer
-							key={question.id}
-							question={question}
-							response={response}
-							answers={answers.filter(answer => answer.question_id === question.id)}
-							user={_user}
-						/>
-					))} */}
+					{response && answers && _user ? (
+						questions.map(question => (
+							<QuestionAnswer
+								key={question.id}
+								question={question}
+								response={response}
+								answers={answers.filter(
+									answer => answer.question_id === question.id
+								)}
+								user={_user}
+							/>
+						))
+					) : (
+						<Center mt={4}>
+							<Spinner />
+						</Center>
+					)}
 					<Box h={16} />
 				</>
 			) : (
