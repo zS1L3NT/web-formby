@@ -1,21 +1,21 @@
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 
-import { Center, Container, Spinner } from "@chakra-ui/react"
+import { Box, Center, Container, Spinner } from "@chakra-ui/react"
 
 import {
 	useGetFormQuery, useGetFormQuestionsQuery, useGetFormResponsesQuery,
 	useLazyGetFormResponseAnswersQuery, useLazyGetUserQuery
-} from "../../../api"
-import useAsyncEffect from "../../../hooks/useAsyncEffect"
-import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
-import useOnlyFormOwner from "../../../hooks/useOnlyFormOwner"
-import useToastError from "../../../hooks/useToastError"
-import { WithTimestamps } from "../../../models"
-import { iAnswer } from "../../../models/Answer"
-import { iUser } from "../../../models/User"
-import QuestionAnswers from "./components/QuestionAnswers"
-import ResponsesOverview from "./components/ResponsesOverview"
+} from "../../../../api"
+import useAsyncEffect from "../../../../hooks/useAsyncEffect"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"
+import useToastError from "../../../../hooks/useToastError"
+import { WithTimestamps } from "../../../../models"
+import { iAnswer } from "../../../../models/Answer"
+import { iUser } from "../../../../models/User"
+import QuestionAnswers from "../components/QuestionAnswers"
+import ResponsesOverview from "../components/ResponsesOverview"
 
 const FormResponses = () => {
 	const { token, user } = useOnlyAuthenticated()
@@ -80,9 +80,10 @@ const FormResponses = () => {
 							users={users}
 						/>
 					))}
+					<Box h={16} />
 				</>
 			) : (
-				<Center>
+				<Center mt={4}>
 					<Spinner />
 				</Center>
 			)}
