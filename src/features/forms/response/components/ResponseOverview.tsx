@@ -75,7 +75,8 @@ const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null | un
 				fontSize="4xl"
 				noOfLines={2}
 				textAlign="left"
-				color="text">
+				color="text"
+				mb={form.description ? 0 : 8}>
 				{form.name}
 			</Text>
 
