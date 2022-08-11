@@ -42,9 +42,9 @@ const TableAnswers = ({
 						const user = users.find(user => user.id === response.user_id)
 
 						return answer.table
-							.filter(item => item[1] === selectedRow)
+							.filter(item => item[0] === selectedRow)
 							.map(item => ({
-								value: item[0],
+								value: item[1],
 								response,
 								user: user ?? null
 							}))
