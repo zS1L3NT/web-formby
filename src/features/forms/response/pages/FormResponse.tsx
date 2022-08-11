@@ -82,9 +82,10 @@ const FormResponse = () => {
 								key={question.id}
 								question={question}
 								response={response}
-								answers={answers.filter(
-									answer => answer.question_id === question.id
-								)}
+								answer={
+									answers.find(answer => answer.question_id === question.id) ??
+									null
+								}
 								user={_user}
 							/>
 						))

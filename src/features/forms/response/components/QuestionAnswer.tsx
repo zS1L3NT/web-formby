@@ -11,11 +11,11 @@ import RenderAnswer from "./RenderAnswer"
 export type AnswerProps<iQ extends iQuestion, iA extends iAnswer> = {
 	question: WithTimestamps<iQ>
 	response: WithTimestamps<iResponse>
-	answers: WithTimestamps<iA>[]
+	answer: WithTimestamps<iA> | null
 	user: WithTimestamps<iUser>
 }
 
-const QuestionAnswer = ({ question, response, answers, user }: AnswerProps<iQuestion, iAnswer>) => {
+const QuestionAnswer = ({ question, response, answer, user }: AnswerProps<iQuestion, iAnswer>) => {
 	return (
 		<Card mb={4}>
 			<Text
@@ -66,7 +66,7 @@ const QuestionAnswer = ({ question, response, answers, user }: AnswerProps<iQues
 			<RenderAnswer
 				question={question}
 				response={response}
-				answers={answers}
+				answer={answer}
 				user={user}
 			/>
 		</Card>
