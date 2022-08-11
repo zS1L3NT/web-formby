@@ -32,14 +32,23 @@ const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null | un
 				<Flex
 					direction="column"
 					justifyContent="flex-end">
-					<Text
-						color="primary"
-						fontSize="5xl"
-						fontWeight="bold"
-						textAlign="center"
-						lineHeight={1.2}>
-						{user === undefined ? <Spinner /> : user?.name ?? "Anonymous User"}
-					</Text>
+					{user === undefined ? (
+						<Spinner
+							mb={2}
+							mx="auto"
+							size="lg"
+							color="blue.400"
+						/>
+					) : (
+						<Text
+							color="primary"
+							fontSize="5xl"
+							fontWeight="bold"
+							textAlign="center"
+							lineHeight={1.2}>
+							{user?.name ?? "Anonymous User"}
+						</Text>
+					)}
 					<Text
 						fontSize="sm"
 						textAlign="center">
