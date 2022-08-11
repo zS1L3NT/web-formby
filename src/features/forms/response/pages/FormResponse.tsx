@@ -33,7 +33,7 @@ const FormResponse = () => {
 	const [getUser] = useLazyGetUserQuery()
 
 	const [answers, setAnswers] = useState<WithTimestamps<iAnswer>[]>()
-	const [_user, setUser] = useState<WithTimestamps<iUser>>()
+	const [_user, setUser] = useState<WithTimestamps<iUser> | null>()
 
 	useOnlyFormOwner(user, form)
 
@@ -44,15 +44,19 @@ const FormResponse = () => {
 	useAsyncEffect(async () => {
 		if (!token || !response) return
 
-		getUser(
-			{
-				user_id: response.user_id!,
-				token
-			},
-			true
-		)
-			.unwrap()
-			.then(setUser)
+		if (response.user_id) {
+			getUser(
+				{
+					user_id: response.user_id,
+					token
+				},
+				true
+			)
+				.unwrap()
+				.then(setUser)
+		} else {
+			setUser(null)
+		}
 
 		getResponseAnswers(
 			{
@@ -76,17 +80,15 @@ const FormResponse = () => {
 						form={form}
 						user={_user}
 					/>
-					{response && answers && _user ? (
+					{response && answers ? (
 						questions.map(question => (
 							<QuestionAnswer
 								key={question.id}
 								question={question}
-								response={response}
 								answer={
 									answers.find(answer => answer.question_id === question.id) ??
 									null
 								}
-								user={_user}
 							/>
 						))
 					) : (

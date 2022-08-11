@@ -4,18 +4,14 @@ import Card from "../../../../components/Card"
 import { WithTimestamps } from "../../../../models"
 import { iAnswer } from "../../../../models/Answer"
 import { iQuestion } from "../../../../models/Question"
-import { iResponse } from "../../../../models/Response"
-import { iUser } from "../../../../models/User"
 import RenderAnswer from "./RenderAnswer"
 
 export type AnswerProps<iQ extends iQuestion, iA extends iAnswer> = {
 	question: WithTimestamps<iQ>
-	response: WithTimestamps<iResponse>
 	answer: WithTimestamps<iA> | null
-	user: WithTimestamps<iUser>
 }
 
-const QuestionAnswer = ({ question, response, answer, user }: AnswerProps<iQuestion, iAnswer>) => {
+const QuestionAnswer = ({ question, answer }: AnswerProps<iQuestion, iAnswer>) => {
 	return (
 		<Card mb={4}>
 			<Text
@@ -65,9 +61,7 @@ const QuestionAnswer = ({ question, response, answer, user }: AnswerProps<iQuest
 
 			<RenderAnswer
 				question={question}
-				response={response}
 				answer={answer}
-				user={user}
 			/>
 		</Card>
 	)
