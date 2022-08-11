@@ -11,7 +11,7 @@ import FormEdit from "./features/forms/edit/pages/FormEdit"
 import FormPreview from "./features/forms/preview/page/FormPreview"
 import FormResponse from "./features/forms/response/pages/FormResponse"
 import FormResponses from "./features/forms/responses/pages/FormResponses"
-import FormSettings from "./features/forms/settings/FormSettings"
+import FormSettings from "./features/forms/settings/pages/FormSettings"
 import FormsView from "./features/forms/view/pages/FormsView"
 import Landing from "./features/landing/pages/Landing"
 
