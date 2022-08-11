@@ -7,6 +7,33 @@ import { iResponse } from "../../../../models/Response"
 const ResponsesOverview = ({ form, responses }: { form: iForm; responses: iResponse[] }) => {
 	return (
 		<Card my={4}>
+			<Text
+				fontSize="4xl"
+				noOfLines={2}
+				textAlign="left"
+				color="text"
+				mb={form.description ? 0 : 8}>
+				{form.name}
+			</Text>
+
+			{form.description ? (
+				<Text
+					mt={2}
+					mb={8}
+					fontSize="lg"
+					noOfLines={10}
+					textAlign="left"
+					color="text">
+					{form.description}
+				</Text>
+			) : null}
+
+			<Divider
+				mt={8}
+				mb={4}
+				borderColor="gray.400"
+			/>
+
 			<Flex justifyContent="space-evenly">
 				<Flex
 					direction="column"
@@ -61,33 +88,6 @@ const ResponsesOverview = ({ form, responses }: { form: iForm; responses: iRespo
 					</Text>
 				</Flex>
 			</Flex>
-
-			<Divider
-				mt={8}
-				mb={4}
-				borderColor="gray.400"
-			/>
-
-			<Text
-				fontSize="4xl"
-				noOfLines={2}
-				textAlign="left"
-				color="text"
-				mb={form.description ? 0 : 8}>
-				{form.name}
-			</Text>
-
-			{form.description ? (
-				<Text
-					mt={2}
-					mb={8}
-					fontSize="lg"
-					noOfLines={10}
-					textAlign="left"
-					color="text">
-					{form.description}
-				</Text>
-			) : null}
 		</Card>
 	)
 }
