@@ -235,18 +235,18 @@ class DatabaseSeeder extends Seeder
 				"response_id" => $main_response->id,
 				"question_id" => $prev_qn->id,
 				"table" => [
-					[$prev_qn->table_columns[0], $prev_qn->table_rows[0]],
-					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
-					[$prev_qn->table_columns[2], $prev_qn->table_rows[2]]
+					[$prev_qn->table_rows[0], $prev_qn->table_columns[0]],
+					[$prev_qn->table_rows[1], $prev_qn->table_columns[1]],
+					[$prev_qn->table_rows[2], $prev_qn->table_columns[2]]
 				]
 			]);
 			Answer::create([
 				"response_id" => $anonymous_respose->id,
 				"question_id" => $prev_qn->id,
 				"table" => [
-					[$prev_qn->table_columns[2], $prev_qn->table_rows[0]],
-					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
-					[$prev_qn->table_columns[0], $prev_qn->table_rows[2]]
+					[$prev_qn->table_rows[2], $prev_qn->table_columns[0]],
+					[$prev_qn->table_rows[1], $prev_qn->table_columns[1]],
+					[$prev_qn->table_rows[0], $prev_qn->table_columns[2]]
 				]
 			]);
 
@@ -262,18 +262,18 @@ class DatabaseSeeder extends Seeder
 				"response_id" => $main_response->id,
 				"question_id" => $prev_qn->id,
 				"table" => [
-					[$prev_qn->table_columns[0], $prev_qn->table_rows[0]],
-					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
-					[$prev_qn->table_columns[2], $prev_qn->table_rows[2]]
+					[$prev_qn->table_rows[0], $prev_qn->table_columns[0]],
+					[$prev_qn->table_rows[1], $prev_qn->table_columns[1]],
+					[$prev_qn->table_rows[2], $prev_qn->table_columns[2]]
 				]
 			]);
 			Answer::create([
 				"response_id" => $anonymous_respose->id,
 				"question_id" => $prev_qn->id,
 				"table" => [
-					[$prev_qn->table_columns[2], $prev_qn->table_rows[0]],
-					[$prev_qn->table_columns[1], $prev_qn->table_rows[1]],
-					[$prev_qn->table_columns[0], $prev_qn->table_rows[2]]
+					[$prev_qn->table_rows[2], $prev_qn->table_columns[0]],
+					[$prev_qn->table_rows[1], $prev_qn->table_columns[1]],
+					[$prev_qn->table_rows[0], $prev_qn->table_columns[2]]
 				]
 			]);
 		}
