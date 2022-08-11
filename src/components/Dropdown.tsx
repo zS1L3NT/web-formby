@@ -5,11 +5,13 @@ import { useColorModeValue } from "@chakra-ui/react"
 const Dropdown = <T extends string>({
 	choices,
 	selectedChoice,
-	setSelectedChoice
+	setSelectedChoice,
+	isDisabled
 }: {
 	choices: T[]
 	selectedChoice: T | null
 	setSelectedChoice: (choice: T | null) => void
+	isDisabled?: boolean
 }) => {
 	return (
 		<Select
@@ -17,6 +19,7 @@ const Dropdown = <T extends string>({
 			options={choices.map(choice => ({ value: choice, label: choice }))}
 			onChange={choice => setSelectedChoice(choice?.value ?? null)}
 			isSearchable={false}
+			isDisabled={isDisabled}
 			placeholder="Select a choice"
 			styles={{
 				indicatorSeparator: provided => ({

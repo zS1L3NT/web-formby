@@ -1,9 +1,21 @@
+import { FocusEvent } from "react"
+
+import { Input } from "@chakra-ui/react"
+
 import { iTextAnswer } from "../../../../../models/Answer"
 import { iTextQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const TextAnswer = ({}: AnswerProps<iTextQuestion, iTextAnswer>) => {
-	return <></>
+const TextAnswer = ({ answer }: AnswerProps<iTextQuestion, iTextAnswer>) => {
+	return (
+		<Input
+			defaultValue={answer?.text}
+			placeholder="Text answer"
+			borderColor="whiteAlpha.300"
+			onFocus={(e: FocusEvent<HTMLInputElement>) => e.target.blur()}
+			cursor="not-allowed"
+		/>
+	)
 }
 
 export default TextAnswer

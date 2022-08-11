@@ -1,9 +1,31 @@
+import { Flex, Switch, Text } from "@chakra-ui/react"
+
 import { iSwitchAnswer } from "../../../../../models/Answer"
 import { iSwitchQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const SwitchAnswer = ({}: AnswerProps<iSwitchQuestion, iSwitchAnswer>) => {
-	return <></>
+const SwitchAnswer = ({ answer }: AnswerProps<iSwitchQuestion, iSwitchAnswer>) => {
+	return (
+		<Flex
+			alignItems="center"
+			justifyContent={{
+				base: "space-between",
+				sm: "start"
+			}}>
+			<Text
+				width={24}
+				pl={1}
+				textAlign="start">
+				{answer?.switch ? "Enabled" : "Disabled"}
+			</Text>
+			<Switch
+				mx={4}
+				size="lg"
+				isChecked={answer?.switch}
+				isReadOnly
+			/>
+		</Flex>
+	)
 }
 
 export default SwitchAnswer

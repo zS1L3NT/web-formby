@@ -19,37 +19,37 @@ const TableInput = ({
 				<Thead>
 					<Tr>
 						<Th />
-						{tableColumns?.map(row => (
-							<Th key={row}>{row}</Th>
+						{tableColumns?.map(column => (
+							<Th key={column}>{column}</Th>
 						))}
 					</Tr>
 				</Thead>
 				<Tbody>
 					{[
-						tableRows?.map(column =>
+						tableRows?.map(row =>
 							tableType === "checkbox" ? (
-								<Tr key={column}>
+								<Tr key={row}>
 									<CheckboxGroup
 										value={answer.table
-											.filter(item => item[0] === column)
+											.filter(item => item[0] === row)
 											.map(item => item[1])}
 										onChange={choices => {
 											setAnswer({
 												...answer,
 												table: [
 													...answer.table.filter(
-														item => item[0] !== column
+														item => item[0] !== row
 													),
 													...choices.map<[string, string]>(choice => [
-														column,
+														row,
 														choice as string
 													])
 												]
 											})
 										}}>
-										<Th>{column}</Th>
+										<Th>{row}</Th>
 										{tableColumns?.map(row => (
-											<Th key={column + "-" + row}>
+											<Th key={row + "-" + row}>
 												<Checkbox value={row} />
 											</Th>
 										))}
@@ -57,25 +57,25 @@ const TableInput = ({
 								</Tr>
 							) : (
 								<RadioGroup
-									key={column}
+									key={row}
 									as={Tr}
 									value={
 										answer.table
-											.filter(item => item[0] === column)
+											.filter(item => item[0] === row)
 											.map(item => item[1])[0]
 									}
 									onChange={choice => {
 										setAnswer({
 											...answer,
 											table: [
-												...answer.table.filter(item => item[0] !== column),
-												[column, choice]
+												...answer.table.filter(item => item[0] !== row),
+												[row, choice]
 											]
 										})
 									}}>
-									<Th>{column}</Th>
+									<Th>{row}</Th>
 									{tableColumns?.map(row => (
-										<Th key={column + "-" + row}>
+										<Th key={row + "-" + row}>
 											<Radio value={row} />
 										</Th>
 									))}
