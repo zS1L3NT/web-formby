@@ -13,9 +13,9 @@ const Dropdown = <T extends string>({
 }) => {
 	return (
 		<Select
-			defaultInputValue={selectedChoice ?? undefined}
+			value={selectedChoice ? { label: selectedChoice, value: selectedChoice } : undefined}
 			options={choices.map(choice => ({ value: choice, label: choice }))}
-			onChange={option => setSelectedChoice(option?.value ?? null)}
+			onChange={choice => setSelectedChoice(choice?.value ?? null)}
 			isSearchable={false}
 			placeholder="Select a choice"
 			styles={{
