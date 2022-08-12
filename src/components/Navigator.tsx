@@ -148,7 +148,7 @@ const Navigator = () => {
 						_hover={{
 							cursor: "pointer"
 						}}
-						onClick={() => navigate("/")}>
+						onClick={() => navigate(token ? "/forms" : "/")}>
 						<Image
 							src="/assets/logo.png"
 							height="30px"

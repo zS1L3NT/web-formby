@@ -1,15 +1,24 @@
+import { DateTime } from "luxon"
 import { HiStatusOnline } from "react-icons/hi"
 import { MdOutlineClose, MdPublic } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 
 import { AddIcon, EditIcon, LockIcon } from "@chakra-ui/icons"
-import { Box, Center, chakra, Flex, HStack, Text } from "@chakra-ui/react"
+import { Box, Center, chakra, Flex, HStack, Spinner, Text } from "@chakra-ui/react"
 
+import { useCreateFormMutation } from "../../../../api"
+import useAppDispatch from "../../../../hooks/useAppDispatch"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import { WithTimestamps } from "../../../../models"
 import { iForm } from "../../../../models/Form"
+import { setError } from "../../../../slices/ErrorSlice"
 
 const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
+	const { token } = useOnlyAuthenticated()
+	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
+
+	const [createForm, { isLoading }] = useCreateFormMutation()
 
 	return form ? (
 		<Flex
@@ -111,12 +120,34 @@ const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 			borderWidth="2px"
 			borderColor="transparent"
 			transition="box-shadow 0.3s, border-color 0.3s"
-			_hover={{
-				shadow: "lg",
-				borderColor: "primary",
-				cursor: "pointer"
+			opacity={isLoading ? 0.5 : 1}
+			_hover={
+				isLoading
+					? {}
+					: {
+							shadow: "lg",
+							borderColor: "primary",
+							cursor: "pointer"
+					  }
+			}
+			onClick={async () => {
+				if (isLoading) return
+
+				const response = await createForm({
+					token,
+					name: "New Form",
+					description: `Created on ${DateTime.now().toFormat("dd LLL yyyy, HH:mm:ss")}`,
+					auth: false,
+					state: "draft"
+				})
+
+				if ("error" in response) {
+					dispatch(setError(response.error))
+				} else {
+					navigate(`/forms/${response.data.form.id}/edit`)
+				}
 			}}>
-			<AddIcon />
+			{isLoading ? <Spinner /> : <AddIcon />}
 		</Center>
 	)
 }
