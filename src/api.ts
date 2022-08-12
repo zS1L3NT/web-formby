@@ -191,7 +191,10 @@ const api = createApi({
 			}),
 			providesTags: ["User"]
 		}),
-		updateUser: builder.mutation<ApiResponse, Partial<iUser> & RequiredToken>({
+		updateUser: builder.mutation<
+			ApiResponse,
+			Omit<Partial<iUser>, "id"> & RequiredToken
+		>({
 			query: ({ token, ...user }) => ({
 				url: `/user`,
 				method: "PUT",
@@ -199,6 +202,20 @@ const api = createApi({
 				token
 			}),
 			invalidatesTags: ["User"]
+		}),
+		updateUserPassword: builder.mutation<
+			ApiResponse,
+			{ old_password: string; new_password: string } & RequiredToken
+		>({
+			query: ({ token, old_password, new_password }) => ({
+				url: `/user/password`,
+				method: "PUT",
+				body: {
+					old_password,
+					new_password
+				},
+				token
+			})
 		}),
 		register: builder.mutation<
 			ApiResponse & { token: string; user: WithTimestamps<iUser> },
@@ -261,5 +278,6 @@ export const {
 	useSetFormResponseMutation,
 	useUpdateFormMutation,
 	useUpdateFormQuestionMutation,
-	useUpdateUserMutation
+	useUpdateUserMutation,
+	useUpdateUserPasswordMutation
 } = api
