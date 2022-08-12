@@ -10,7 +10,7 @@ class UserController extends Controller
 
 	public function __construct()
 	{
-		$this->middleware("auth.jwt")->only(["logout", "current", "show", "update"]);
+		$this->middleware("auth.jwt")->only(["logout", "current", "show", "update", "updatePassword"]);
 
 		$this->validate("login", [
 			"email" => ["required", "email"],
@@ -29,6 +29,11 @@ class UserController extends Controller
 			"photo" => ["nullable", "string"],
 			"email" => ["max:255", "unique:users", "email"],
 			"password" => ["max:255", "regex:$this->password_regex"]
+		]);
+
+		$this->validate("updatePassword", [
+			"old_password" => ["required", "max:255", "regex:$this->password_regex"],
+			"new_password" => ["required", "max:255", "regex:$this->password_regex"]
 		]);
 	}
 
@@ -101,6 +106,26 @@ class UserController extends Controller
 		return [
 			"message" => "User updated successfully!",
 			"user" => auth()->user()
+		];
+	}
+
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
+	public function updatePassword()
+	{
+		$user = auth()->user();
+		if (!password_verify(request("old_password"), $user->password)) {
+			return response([
+				"type" => "Password Error",
+				"message" => "Old password is incorrect"
+			], 400);
+		}
+
+		User::find(auth()->user()->id)->update(["password" => request("new_password")]);
+		return [
+			"message" => "Password updated successfully!"
 		];
 	}
 }

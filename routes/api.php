@@ -24,6 +24,7 @@ Route::controller(UserController::class)->group(function () {
 	Route::post("logout", "logout");
 	Route::get("user", "current");
 	Route::put("user", "update");
+	Route::put("user/password", "updatePassword");
 	Route::get("users/{user_id}", "show");
 });
 
