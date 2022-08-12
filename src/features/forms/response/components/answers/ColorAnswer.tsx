@@ -9,7 +9,7 @@ import { AnswerProps } from "../QuestionAnswer"
 const ColorAnswer = ({ answer }: AnswerProps<iColorQuestion, iColorAnswer>) => {
 	return (
 		<Flex
-			w={{ base: "max", sm: 80 }}
+			w={{ base: "full", sm: 80 }}
 			h={12}
 			mt={2}
 			mx="auto">
@@ -21,8 +21,8 @@ const ColorAnswer = ({ answer }: AnswerProps<iColorQuestion, iColorAnswer>) => {
 				borderRadius="50%"
 			/>
 			<Input
-				w="max"
-				h="max"
+				w="full"
+				h="full"
 				ml={2}
 				flex={1}
 				defaultValue={answer?.color}

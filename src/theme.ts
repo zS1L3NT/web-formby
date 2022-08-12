@@ -7,10 +7,6 @@ export default extendTheme({
 		heading: "Raleway, sans-serif",
 		body: "Raleway, sans-serif"
 	},
-	sizes: {
-		min: "0%",
-		max: "100%"
-	},
 	semanticTokens: {
 		colors: {
 			primary: {

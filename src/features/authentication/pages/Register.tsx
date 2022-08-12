@@ -61,7 +61,7 @@ const Register = () => {
 							value={password}
 							onChange={e => setPassword(e.target.value)}
 						/>
-						<InputRightElement h="max">
+						<InputRightElement h="full">
 							<Button
 								variant="ghost"
 								onClick={() => setShowPassword(showPassword => !showPassword)}>

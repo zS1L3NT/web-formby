@@ -40,7 +40,7 @@ const AddQuestion = ({
 	return (
 		<IconButton
 			h={8}
-			w="max"
+			w="full"
 			mb={{ base: 2, md: 4 }}
 			bg="bg"
 			_hover={{ bg: "card" }}

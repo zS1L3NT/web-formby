@@ -118,7 +118,7 @@ const ChartValueDisplay = ({
 					))}
 				</Flex>
 				<Box
-					w={{ base: "max", md: "20rem" }}
+					w={{ base: "full", md: "20rem" }}
 					minH="16rem"
 					py={4}>
 					<Pie

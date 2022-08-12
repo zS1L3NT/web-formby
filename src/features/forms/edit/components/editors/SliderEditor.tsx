@@ -60,7 +60,7 @@ const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) =
 	return (
 		<>
 			<Flex
-				w="max"
+				w="full"
 				direction={{ base: "column", md: "row" }}
 				justifyContent="space-evenly"
 				gap={4}

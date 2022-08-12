@@ -15,7 +15,7 @@ const FormsView = () => {
 	return (
 		<Container
 			maxW={{
-				base: "max",
+				base: "full",
 				md: "41rem",
 				lg: "62rem",
 				"2xl": "83rem"
@@ -23,7 +23,7 @@ const FormsView = () => {
 			<Heading my={{ base: 4, md: 8 }}>Your Forms</Heading>
 			{forms ? (
 				<Grid
-					w="max"
+					w="full"
 					templateColumns={{
 						md: "repeat(2, 20rem)",
 						lg: "repeat(3, 20rem)",

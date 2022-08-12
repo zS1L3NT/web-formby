@@ -13,7 +13,7 @@ const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 
 	return form ? (
 		<Flex
-			w={{ base: "max", md: "20rem" }}
+			w={{ base: "full", md: "20rem" }}
 			h="12rem"
 			p={4}
 			bg="card"
@@ -103,7 +103,7 @@ const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 		</Flex>
 	) : (
 		<Center
-			w={{ base: "max", md: "20rem" }}
+			w={{ base: "full", md: "20rem" }}
 			h="12rem"
 			bg="card"
 			rounded="lg"

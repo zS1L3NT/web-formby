@@ -123,7 +123,7 @@ const Login = () => {
 							onChange={e => setPassword(e.target.value)}
 							onKeyDown={handleKeyDown}
 						/>
-						<InputRightElement h="max">
+						<InputRightElement h="full">
 							<Button
 								variant="ghost"
 								onClick={() => setShowPassword(showPassword => !showPassword)}>

@@ -43,7 +43,7 @@ const TableEditor = ({ question, setQuestion }: EditorProps<iTableQuestion>) => 
 				py={4}>
 				<Box
 					px={{ md: 4 }}
-					w="max">
+					w="full">
 					<Text textAlign="left">Rows</Text>
 					<ListMaker
 						items={tableRows ?? []}
@@ -53,7 +53,7 @@ const TableEditor = ({ question, setQuestion }: EditorProps<iTableQuestion>) => 
 
 				<Box
 					px={{ md: 4 }}
-					w="max">
+					w="full">
 					<Text textAlign="left">Columns</Text>
 					<ListMaker
 						items={tableColumns ?? []}

@@ -15,7 +15,7 @@ const ColorInput = ({ answer, setAnswer }: InputProps<iColorQuestion, iColorAnsw
 			alignItems="center"
 			zIndex={1}>
 			<Box
-				w={{ base: "max", sm: 80 }}
+				w={{ base: "full", sm: 80 }}
 				h={48}>
 				<HexColorPicker
 					style={{
@@ -29,7 +29,7 @@ const ColorInput = ({ answer, setAnswer }: InputProps<iColorQuestion, iColorAnsw
 			</Box>
 
 			<Flex
-				w={{ base: "max", sm: 80 }}
+				w={{ base: "full", sm: 80 }}
 				h={12}
 				mt={2}>
 				<Box
@@ -40,8 +40,8 @@ const ColorInput = ({ answer, setAnswer }: InputProps<iColorQuestion, iColorAnsw
 					borderRadius="50%"
 				/>
 				<Input
-					w="max"
-					h="max"
+					w="full"
+					h="full"
 					ml={2}
 					flex={1}
 					value={answer.color}

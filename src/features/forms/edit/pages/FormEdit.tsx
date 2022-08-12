@@ -146,7 +146,7 @@ const FormEdit = () => {
 						</Droppable>
 					</DragDropContext>
 					<Box
-						w="max"
+						w="full"
 						h="calc(var(--chakra-sizes-max) - var(--chakra-sizes-16))"
 						pos="absolute"
 						top={0}

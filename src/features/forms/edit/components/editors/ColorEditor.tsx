@@ -14,7 +14,7 @@ const ColorEditor = ({}: EditorProps<iColorQuestion>) => {
 			alignItems="center"
 			zIndex={1}>
 			<Box
-				w={{ base: "max", sm: 80 }}
+				w={{ base: "full", sm: 80 }}
 				h={48}>
 				<HexColorPicker
 					color="#FFFFFF"
@@ -27,7 +27,7 @@ const ColorEditor = ({}: EditorProps<iColorQuestion>) => {
 			</Box>
 
 			<Flex
-				w={{ base: "max", sm: 80 }}
+				w={{ base: "full", sm: 80 }}
 				h={12}
 				mt={2}>
 				<Box
@@ -38,8 +38,8 @@ const ColorEditor = ({}: EditorProps<iColorQuestion>) => {
 					borderRadius="50%"
 				/>
 				<Input
-					w="max"
-					h="max"
+					w="full"
+					h="full"
 					ml={2}
 					flex={1}
 				/>

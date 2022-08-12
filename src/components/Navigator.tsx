@@ -260,7 +260,7 @@ const Navigator = () => {
 				display={{ md: "none" }}
 				pos="absolute"
 				top="56px"
-				w="max"
+				w="full"
 				zIndex={100}>
 				<Collapse
 					in={isOpen}

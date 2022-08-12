@@ -170,8 +170,8 @@ const QuestionEditor = ({
 								maxH={56}
 							/>
 							<Center
-								w="max"
-								h="max"
+								w="full"
+								h="full"
 								pos="absolute"
 								top={0}
 								left={0}
@@ -218,8 +218,8 @@ const QuestionEditor = ({
 					{isDeleting ? (
 						<Center
 							pos="absolute"
-							w="max"
-							h="max"
+							w="full"
+							h="full"
 							top={0}
 							left={0}
 							bg="black"

@@ -18,8 +18,8 @@ import Landing from "./features/landing/pages/Landing"
 const App = () => {
 	return (
 		<Flex
-			w="max"
-			h="max"
+			w="full"
+			h="full"
 			direction="column">
 			<Navigator />
 			<Flex
