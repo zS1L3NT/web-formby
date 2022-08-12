@@ -37,7 +37,7 @@ const Login = () => {
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
-			e.target.blur()
+			e.currentTarget.blur()
 			handleLogin()
 		}
 	}

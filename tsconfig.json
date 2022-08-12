@@ -28,6 +28,7 @@
 		"allowUnusedLabels": true,
 		"resolveJsonModule": true,
 		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": false,
 
 		/** Other */
 		"noEmit": true,
