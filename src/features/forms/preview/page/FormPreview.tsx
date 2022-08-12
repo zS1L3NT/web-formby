@@ -21,16 +21,12 @@ const FormPreview = () => {
 	const { data: form } = useGetFormQuery({ form_id, token })
 	const { data: questions } = useGetFormQuestionsQuery({ form_id, token })
 
-	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id">[] | null>(null)
+	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id" | "response_id">[] | null>(null)
 
 	useOnlyFormOwner(user, form)
 
 	useEffect(() => {
-		setAnswers(
-			_ =>
-				questions?.map<Omit<iAnswer, "id">>(question => getEmptyAnswer(user, question)) ??
-				null
-		)
+		setAnswers(_ => questions?.map<Omit<iAnswer, "id" | "response_id">>(getEmptyAnswer) ?? null)
 	}, [user, questions])
 
 	useEffect(() => {

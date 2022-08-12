@@ -9,8 +9,8 @@ import RenderInput from "./RenderInput"
 
 export type InputProps<iQ extends iQuestion, iA extends iAnswer> = {
 	question: iQ
-	answer: Omit<iA, "id">
-	setAnswer: (answer: Omit<iA, "id">) => void
+	answer: Omit<iA, "id" | "response_id">
+	setAnswer: (answer: Omit<iA, "id" | "response_id">) => void
 }
 
 const QuestionInput = ({
@@ -22,8 +22,8 @@ const QuestionInput = ({
 }: {
 	provided?: DraggableProvided
 	question: iQuestion
-	answer: Omit<iAnswer, "id">
-	setAnswer: (answer: Omit<iAnswer, "id">) => void
+	answer: Omit<iAnswer, "id" | "response_id">
+	setAnswer: (answer: Omit<iAnswer, "id" | "response_id">) => void
 	error: string | null
 }) => {
 	return (

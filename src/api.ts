@@ -160,7 +160,7 @@ const api = createApi({
 		}),
 		createFormResponse: builder.mutation<
 			ApiResponse,
-			{ form_id: string; answers: Omit<iAnswer, "id">[] } & OptionalToken
+			{ form_id: string; answers: Omit<iAnswer, "id" | "response_id">[] } & OptionalToken
 		>({
 			query: ({ token, form_id, answers }) => ({
 				url: `/forms/${form_id}/responses`,

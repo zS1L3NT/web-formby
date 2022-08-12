@@ -3,7 +3,6 @@ import {
 	iSwitchAnswer, iTableAnswer, iTextAnswer
 } from "../models/Answer"
 import { iQuestion } from "../models/Question"
-import { iUser } from "../models/User"
 
 /**
  * Gets an error message of whether an answer is valid
@@ -12,7 +11,7 @@ import { iUser } from "../models/User"
  * @param answer The answer to get the errors of
  * @returns Either an error or null
  */
-export const getAnswerError = (question: iQuestion, answer: Omit<iAnswer, "id">) => {
+export const getAnswerError = (question: iQuestion, answer: Omit<iAnswer, "id" | "response_id">) => {
 	switch (question.type) {
 		case "text":
 			if (question.required && isAnswerEmpty(question, answer)) {
@@ -50,29 +49,48 @@ export const getAnswerError = (question: iQuestion, answer: Omit<iAnswer, "id">)
 	}
 }
 
-export const getEmptyAnswer = (user: iUser | null, question: iQuestion): Omit<iAnswer, "id"> => {
-	const answer: Omit<iAnswer, "id"> = {
-		user_id: user?.id ?? null,
-		question_id: question.id
-	}
-
+export const getEmptyAnswer = (question: iQuestion): Omit<iAnswer, "id" | "response_id"> => {
 	switch (question.type) {
 		case "text":
-			return <Omit<iTextAnswer, "id">>{ ...answer, text: "" }
+			return <Omit<iTextAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				text: ""
+			}
 		case "paragraph":
-			return <Omit<iParagraphAnswer, "id">>{ ...answer, paragraph: "" }
+			return <Omit<iParagraphAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				paragraph: ""
+			}
 		case "color":
-			return <Omit<iColorAnswer, "id">>{ ...answer, color: "" }
+			return <Omit<iColorAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				color: ""
+			}
 		case "choice":
-			return <Omit<iChoiceAnswer, "id">>{ ...answer, choices: [] }
+			return <Omit<iChoiceAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				choices: <string[]>[]
+			}
 		case "switch":
-			return <Omit<iSwitchAnswer, "id">>{ ...answer, switch: false }
+			return <Omit<iSwitchAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				switch: false
+			}
 		case "slider":
-			return <Omit<iSliderAnswer, "id">>{ ...answer, slider: question.slider_min }
+			return <Omit<iSliderAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				slider: question.slider_min
+			}
 		case "datetime":
-			return <Omit<iDateTimeAnswer, "id">>{ ...answer, datetime: "" }
+			return <Omit<iDateTimeAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				datetime: ""
+			}
 		case "table":
-			return <Omit<iTableAnswer, "id">>{ ...answer, table: [] }
+			return <Omit<iTableAnswer, "id" | "response_id">>{
+				question_id: question.id,
+				table: []
+			}
 		default:
 			throw new Error("Unknown question type")
 	}
@@ -86,7 +104,7 @@ export const getEmptyAnswer = (user: iUser | null, question: iQuestion): Omit<iA
  * @param answer The answer to check if it is empty
  * @returns A boolean of whether the answer is empty
  */
-export const isAnswerEmpty = (question: iQuestion, answer: Omit<iAnswer, "id">) => {
+export const isAnswerEmpty = (question: iQuestion, answer: Omit<iAnswer, "id" | "response_id">) => {
 	switch (question.type) {
 		case "text":
 			return (<iTextAnswer>answer).text === ""

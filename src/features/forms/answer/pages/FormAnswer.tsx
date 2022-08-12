@@ -15,7 +15,7 @@ import FormHeader from "../components/FormHeader"
 import QuestionInput from "../components/QuestionInput"
 
 const FormAnswer = () => {
-	const { token, user } = useContext(AuthContext)
+	const { token } = useContext(AuthContext)
 	const toast = useToast()
 	const form_id = useParams().form_id!
 
@@ -25,18 +25,14 @@ const FormAnswer = () => {
 
 	const [isSubmitting, setIsSubmitting] = useBoolean()
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
-	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id">[] | null>(null)
+	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id" | "response_id">[] | null>(null)
 
 	useToastError(formError)
 	useToastError(questionsError)
 
 	useEffect(() => {
-		setAnswers(
-			_ =>
-				questions?.map<Omit<iAnswer, "id">>(question => getEmptyAnswer(user, question)) ??
-				null
-		)
-	}, [user, questions])
+		setAnswers(_ => questions?.map<Omit<iAnswer, "id" | "response_id">>(getEmptyAnswer) ?? null)
+	}, [questions])
 
 	const handleSubmit = async () => {
 		if (!form || !questions || !answers) return
