@@ -191,10 +191,7 @@ const api = createApi({
 			}),
 			providesTags: ["User"]
 		}),
-		updateUser: builder.mutation<
-			ApiResponse,
-			Omit<Partial<iUser>, "id"> & RequiredToken
-		>({
+		updateUser: builder.mutation<ApiResponse, Omit<Partial<iUser>, "id"> & RequiredToken>({
 			query: ({ token, ...user }) => ({
 				url: `/user`,
 				method: "PUT",
@@ -216,6 +213,14 @@ const api = createApi({
 				},
 				token
 			})
+		}),
+		deleteUser: builder.mutation<ApiResponse, RequiredToken>({
+			query: ({ token }) => ({
+				url: `/user`,
+				method: "DELETE",
+				token
+			}),
+			invalidatesTags: ["User"]
 		}),
 		register: builder.mutation<
 			ApiResponse & { token: string; user: WithTimestamps<iUser> },
@@ -254,6 +259,7 @@ export default api
 export const {
 	useDeleteFormMutation,
 	useDeleteFormQuestionMutation,
+	useDeleteUserMutation,
 	useGetFormQuery,
 	useGetFormQuestionQuery,
 	useGetFormQuestionsQuery,
