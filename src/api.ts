@@ -189,17 +189,16 @@ const api = createApi({
 				method: "GET",
 				token
 			}),
-			providesTags: result => (result ? [{ type: "User", id: result.id }] : [])
+			providesTags: ["User"]
 		}),
 		updateUser: builder.mutation<ApiResponse, Partial<iUser> & RequiredToken>({
 			query: ({ token, ...user }) => ({
-				url: `/users/${user.id}`,
+				url: `/user`,
 				method: "PUT",
 				body: user,
 				token
 			}),
-			invalidatesTags: (result, error, args) =>
-				result ? [{ type: "User", id: args.id }] : []
+			invalidatesTags: ["User"]
 		}),
 		register: builder.mutation<
 			ApiResponse & { token: string; user: WithTimestamps<iUser> },
@@ -210,7 +209,7 @@ const api = createApi({
 				method: "POST",
 				body: user
 			}),
-			invalidatesTags: result => (result ? [{ type: "User", id: result.user.id }] : [])
+			invalidatesTags: ["User"]
 		}),
 		login: builder.mutation<
 			ApiResponse & { token: string; user: WithTimestamps<iUser> },
@@ -221,7 +220,7 @@ const api = createApi({
 				method: "POST",
 				body: user
 			}),
-			invalidatesTags: result => (result ? [{ type: "User", id: result.user.id }] : [])
+			invalidatesTags: ["User"]
 		}),
 		logout: builder.mutation<ApiResponse, RequiredToken>({
 			query: ({ token }) => ({
@@ -229,7 +228,7 @@ const api = createApi({
 				method: "POST",
 				token
 			}),
-			invalidatesTags: result => (result ? [{ type: "User" }] : [])
+			invalidatesTags: ["User"]
 		})
 	})
 })

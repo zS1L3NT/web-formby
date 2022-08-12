@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { Flex } from "@chakra-ui/react"
 
 import Navigator from "./components/Navigator"
+import Account from "./features/authentication/pages/Account"
 import Login from "./features/authentication/pages/Login"
 import Logout from "./features/authentication/pages/Logout"
 import Register from "./features/authentication/pages/Register"
@@ -43,7 +44,10 @@ const App = () => {
 						path="logout"
 						element={<Logout />}
 					/>
-
+					<Route
+						path="account"
+						element={<Account />}
+					/>
 					<Route path="forms">
 						<Route
 							index

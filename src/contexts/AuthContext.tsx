@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useState } from "react"
 
-import { useLazyGetUserQuery } from "../api"
+import { useGetUserQuery } from "../api"
 import useAsyncEffect from "../hooks/useAsyncEffect"
 import { iUser } from "../models/User"
 
@@ -15,23 +15,15 @@ const AuthContext = createContext<{
 })
 
 export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
-	const [getUser] = useLazyGetUserQuery()
-
 	const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
-	const [user, setUser] = useState<iUser | null>(null)
+	const { data: user, error: userError } = useGetUserQuery({ token: token ?? "-" })
 
 	useAsyncEffect(async () => {
-		if (token) {
-			const result = await getUser({ token })
-
-			if ("data" in result) {
-				setUser(result.data!)
-			} else {
-				setToken(null)
-				localStorage.removeItem("token")
-			}
+		if (token && userError) {
+			localStorage.removeItem("token")
+			setToken(null)
 		}
-	}, [token])
+	}, [token, userError])
 
 	const setTokenAndLocalStorage = (token: string | null) => {
 		if (token) {
