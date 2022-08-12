@@ -94,16 +94,9 @@ class UserController extends Controller
 	 * Middleware:
 	 * - auth.jwt
 	 */
-	public function update(User $user)
+	public function update()
 	{
-		if (auth()->user()->id !== $user->id) {
-			return response([
-				"type" => "Unauthorized",
-				"message" => "You cannot edit details of another user"
-			], 400);
-		}
-
-		User::find($user->id)->update(request()->data);
+		User::find(auth()->user()->id)->update(request()->data);
 
 		return [
 			"message" => "User updated successfully!",

@@ -23,8 +23,8 @@ Route::controller(UserController::class)->group(function () {
 	Route::post("register", "register");
 	Route::post("logout", "logout");
 	Route::get("user", "current");
+	Route::put("user", "update");
 	Route::get("users/{user_id}", "show");
-	Route::put("users", "update");
 });
 
 Route::apiResource("forms", FormController::class);
