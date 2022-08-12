@@ -25,6 +25,7 @@ Route::controller(UserController::class)->group(function () {
 	Route::get("user", "current");
 	Route::put("user", "update");
 	Route::put("user/password", "updatePassword");
+	Route::delete("user", "destroy");
 	Route::get("users/{user_id}", "show");
 });
 

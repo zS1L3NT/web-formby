@@ -128,4 +128,17 @@ class UserController extends Controller
 			"message" => "Password updated successfully!"
 		];
 	}
+
+	/**
+	 * Middleware:
+	 * - auth.jwt
+	 */
+	public function destroy()
+	{
+		User::find(auth()->user()->id)->delete();
+		auth()->logout();
+		return [
+			"message" => "User deleted successfully!"
+		];
+	}
 }
