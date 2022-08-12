@@ -26,7 +26,6 @@ class FormController extends Controller
 
 		$this->middleware('form.user')->only(["show"]);
 		$this->middleware('form.owner')->only(["update", "destroy"]);
-		$this->middleware('form.live_restrict')->only(["update"]);
 	}
 
 	/**
@@ -70,7 +69,6 @@ class FormController extends Controller
 	 * Middleware:
 	 * - auth.jwt
 	 * - form.owner
-	 * - form.live_restrict
 	 */
 	public function update(Form $form)
 	{
