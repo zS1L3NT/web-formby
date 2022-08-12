@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import {
 	Box, Button, Center, Container, Divider, Flex, Modal, ModalBody, ModalCloseButton, ModalContent,
 	ModalFooter, ModalHeader, ModalOverlay, Spinner, Switch, Text, useDisclosure
 } from "@chakra-ui/react"
 
-import { useGetFormQuery, useUpdateFormMutation } from "../../../../api"
+import { useDeleteFormMutation, useGetFormQuery, useUpdateFormMutation } from "../../../../api"
 import Card from "../../../../components/Card"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"
@@ -13,11 +13,18 @@ import useToastError from "../../../../hooks/useToastError"
 
 const FormSettings = () => {
 	const { token, user } = useOnlyAuthenticated()
+	const navigate = useNavigate()
 	const form_id = useParams().form_id!
 
-	const { isOpen, onClose, onOpen } = useDisclosure()
+	const {
+		isOpen: formStateIsOpen,
+		onClose: formStateOnClose,
+		onOpen: formStateOnOpen
+	} = useDisclosure()
+	const { isOpen: deleteIsOpen, onClose: deleteOnClose, onOpen: deleteOnOpen } = useDisclosure()
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const [updateFormMutation] = useUpdateFormMutation()
+	const [deleteFormMutation] = useDeleteFormMutation()
 
 	useOnlyFormOwner(user, form)
 
@@ -121,11 +128,40 @@ const FormSettings = () => {
 							<Button
 								mx={4}
 								colorScheme="red"
-								onClick={onOpen}>
+								variant="ghost"
+								onClick={formStateOnOpen}>
 								{form.state === "draft" ? "Make Form Live" : "Close Form"}
 							</Button>
 						</Flex>
 					) : null}
+
+					<Flex
+						mt={4}
+						alignItems="center">
+						<Box flex={1}>
+							<Text
+								fontSize="2xl"
+								noOfLines={2}
+								textAlign="left"
+								color="text">
+								Delete Form
+							</Text>
+							<Text
+								mt={1}
+								fontSize="lg"
+								textAlign="left"
+								color="text">
+								Deleting a form also deletes responses to it
+							</Text>
+						</Box>
+
+						<Button
+							mx={4}
+							colorScheme="red"
+							onClick={deleteOnOpen}>
+							Delete Form
+						</Button>
+					</Flex>
 				</Card>
 			) : (
 				<Center mt={4}>
@@ -133,10 +169,47 @@ const FormSettings = () => {
 				</Center>
 			)}
 
+			<Modal
+				isOpen={deleteIsOpen}
+				onClose={deleteOnClose}
+				isCentered>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>Confirm Deleting Form</ModalHeader>
+					<ModalCloseButton />
+
+					<ModalBody>
+						<Text>
+							Are you sure you want to delete this form, and all of its responses?
+						</Text>
+					</ModalBody>
+
+					<ModalFooter>
+						<Button
+							mr={3}
+							variant="ghost"
+							onClick={deleteOnClose}>
+							Close
+						</Button>
+						<Button
+							colorScheme="red"
+							onClick={() => {
+								navigate("../..")
+								deleteFormMutation({
+									form_id,
+									token
+								})
+							}}>
+							Confirm
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+
 			{form && form.state !== "closed" ? (
 				<Modal
-					isOpen={isOpen}
-					onClose={onClose}
+					isOpen={formStateIsOpen}
+					onClose={formStateOnClose}
 					isCentered>
 					<ModalOverlay />
 					<ModalContent>
@@ -157,13 +230,13 @@ const FormSettings = () => {
 							<Button
 								mr={3}
 								variant="ghost"
-								onClick={onClose}>
+								onClick={formStateOnClose}>
 								Close
 							</Button>
 							<Button
 								colorScheme="red"
 								onClick={() => {
-									onClose()
+									formStateOnClose()
 									updateFormMutation({
 										form_id,
 										token,
