@@ -215,7 +215,7 @@ const Navigator = () => {
 										px={4}>
 										<Avatar
 											size="xl"
-											src={user?.photo}
+											src={user?.photo ?? undefined}
 										/>
 										<Text
 											wordBreak="break-all"

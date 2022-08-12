@@ -1,7 +1,8 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 
+import { CloseIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Flex, FormControl, FormLabel, Image, Input, InputGroup, Text, Textarea, useToast
+	Box, Button, Center, Flex, FormControl, FormLabel, Image, Input, InputGroup, Text, useToast
 } from "@chakra-ui/react"
 
 import { useUpdateUserMutation } from "../../../api"
@@ -13,11 +14,12 @@ import { setError } from "../../../slices/ErrorSlice"
 const ProfileCard = () => {
 	const { token, user } = useOnlyAuthenticated()
 	const dispatch = useAppDispatch()
+	const photoInputRef = useRef<HTMLInputElement>(null)
 	const toast = useToast()
 
 	const [updateUserMutation, { isLoading, error, data }] = useUpdateUserMutation()
 
-	const [photo, setPhoto] = useState("")
+	const [photo, setPhoto] = useState<string | null>(null)
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
 	const [photoError, setPhotoError] = useState("")
@@ -62,11 +64,43 @@ const ProfileCard = () => {
 		}
 	}, [error])
 
+	const handleFileChange = (file: File | null) => {
+		if (!file) {
+			setPhoto("")
+			return
+		}
+
+		if (!file.type.startsWith("image/")) {
+			toast({
+				title: "File is not an image",
+				status: "error",
+				isClosable: true
+			})
+			photoInputRef.current!.value = ""
+			return
+		}
+
+		if (file.size > 500000) {
+			toast({
+				title: "File size cannot be more than 500kB",
+				status: "error",
+				isClosable: true
+			})
+			photoInputRef.current!.value = ""
+			return
+		}
+
+		const reader = new FileReader()
+		reader.onload = () => {
+			setPhoto(reader.result as string)
+		}
+		reader.readAsDataURL(file)
+	}
+
 	return (
 		<Card mt={4}>
 			<Flex
-				direction={{ base: "column", md: "row" }}
-				h={{ base: 72, md: 32 }}
+				h={32}
 				alignItems="center">
 				<Box
 					h={32}
@@ -78,43 +112,65 @@ const ProfileCard = () => {
 					<Image
 						h="calc(var(--chakra-sizes-32) - 4px)"
 						w="calc(var(--chakra-sizes-32) - 4px)"
+						borderRadius="lg"
 						objectFit="contain"
-						src={photo}
+						src={photo ?? undefined}
 						alt="Profile Picture"
+						fallback={
+							<Center
+								h="calc(var(--chakra-sizes-32) - 4px)"
+								w="calc(var(--chakra-sizes-32) - 4px)">
+								<CloseIcon />
+							</Center>
+						}
 					/>
 				</Box>
 
 				<Flex
-					mt={{ base: 2, md: 0 }}
-					ml={{ base: 0, md: 4 }}
+					ml={4}
+					h={36}
+					flex={1}
 					direction="column"
-					h={{ base: 20, md: 32 }}
-					w={{ base: "full", md: "auto" }}
-					flex={1}>
-					<Text
-						mb={2}
-						fontSize="md">
-						Photo URL
-					</Text>
-					<Textarea
-						flex={1}
-						value={photo}
-						isInvalid={!!photoError}
-						isDisabled={isLoading}
-						placeholder="Profile "
-						onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-							setPhoto(e.target.value)
-							setPhotoError("")
-						}}
+					justifyContent="space-evenly"
+					alignItems="start">
+					<Input
+						hidden={true}
+						ref={photoInputRef}
+						type="file"
+						accept="image/*"
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							handleFileChange(e.target.files?.[0] ?? null)
+						}
 					/>
-					{photoError ? (
-						<Text
-							variant="inputError"
-							mt={1}>
-							{photoError}
-						</Text>
-					) : null}
+					<Button
+						colorScheme="blue"
+						onClick={() => photoInputRef.current?.click()}>
+						Select Photo
+					</Button>
+					<Button
+						colorScheme="red"
+						onClick={() => {
+							photoInputRef.current!.value = ""
+							setPhoto(user?.photo ?? null)
+						}}>
+						Reset Photo
+					</Button>
+					<Button
+						colorScheme="red"
+						onClick={() => {
+							photoInputRef.current!.value = ""
+							setPhoto(null)
+						}}>
+						Remove Photo
+					</Button>
 				</Flex>
+				{photoError ? (
+					<Text
+						variant="inputError"
+						mt={1}>
+						{photoError}
+					</Text>
+				) : null}
 			</Flex>
 
 			<FormControl
