@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Question;
-use Illuminate\Support\Facades\Log;
 
 class FormQuestionController extends Controller
 {
@@ -15,7 +14,7 @@ class FormQuestionController extends Controller
 		$when = fn ($type) => ["required_if:type,$type", "prohibited_unless:type,$type"];
 		$this->validate("store", [
 			"previous_question_id" => ["nullable", "uuid"],
-			"title" => ["required", "max:255", "string"],
+			"title" => ["required", "min:1", "max:255", "string"],
 			"description" => ["nullable", "max:255", "string"],
 			"photo" => ["nullable", "string"],
 			"required" => ["boolean"],
@@ -36,7 +35,7 @@ class FormQuestionController extends Controller
 
 		$this->validate("update", [
 			"previous_question_id" => ["nullable", "uuid"],
-			"title" => ["max:255", "string"],
+			"title" => ["max:255", "min:1", "string"],
 			"description" => ["nullable", "max:255", "string"],
 			"photo" => ["nullable", "string"],
 			"required" => ["boolean"],

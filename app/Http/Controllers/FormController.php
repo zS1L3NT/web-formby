@@ -11,15 +11,15 @@ class FormController extends Controller
 		$this->middleware('auth.jwt')->except(["show"]);
 
 		$this->validate("store", [
-			"name" => ["required", "max:255", "string"],
-			"description" => ["required", "max:255", "string"],
+			"name" => ["required", "min:1", "max:255", "string"],
+			"description" => ["min:1", "max:255", "string"],
 			"auth" => ["boolean"],
 			"state" => ["required", "in:draft,live,closed"]
 		]);
 
 		$this->validate("update", [
-			"name" => ["max:255", "string"],
-			"description" => ["max:255", "string"],
+			"name" => ["min:1", "max:255", "string"],
+			"description" => ["min:1", "max:255", "string"],
 			"auth" => ["boolean"],
 			"state" => ["required", "in:draft,live,closed"]
 		]);

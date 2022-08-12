@@ -55,8 +55,8 @@ class FormResponseController extends Controller
 			$when = fn ($type) => $question->type == $type ? ["required"] : ["prohibited"];
 			$validator = Validator::make($answer, [
 				"question_id" => ["required", "uuid", "exists:questions,id"],
-				"text" => [...$when("text"), "string", "max:255"],
-				"paragraph" => [...$when("paragraph"), "string", "max:255"],
+				"text" => [...$when("text"), "string", "min:1", "max:255"],
+				"paragraph" => [...$when("paragraph"), "string", "min:1", "max:255"],
 				"color" => [...$when("color"), "regex:$this->color_regex"],
 				"choices.*" => [...$when("choice"), "in:" . join(",", $question->choices ?? [])],
 				"choices" => [...$when("choice"), "array", "min:1"],
