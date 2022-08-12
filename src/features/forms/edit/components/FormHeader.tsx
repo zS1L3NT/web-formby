@@ -12,7 +12,7 @@ import EditableText from "./EditableText"
 const FormHeader = ({ form }: { form: iForm }) => {
 	const { token } = useContext(AuthContext)
 
-	const [updateFormMutation] = useUpdateFormMutation()
+	const [updateForm] = useUpdateFormMutation()
 
 	const [name, setName] = useState(form!.name)
 	const [description, setDescription] = useState(form!.description)
@@ -22,7 +22,7 @@ const FormHeader = ({ form }: { form: iForm }) => {
 		if (!token) return
 
 		if (form!.name !== name || form!.description !== description) {
-			await updateFormMutation({
+			await updateForm({
 				token,
 				form_id: form!.id,
 				name,

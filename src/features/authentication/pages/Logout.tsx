@@ -15,7 +15,7 @@ const Logout = () => {
 	const navigate = useNavigate()
 	const toast = useToast()
 
-	const [logoutMutation] = useLogoutMutation()
+	const [logout] = useLogoutMutation()
 
 	useAsyncEffect(async () => {
 		if (!token) {
@@ -25,7 +25,7 @@ const Logout = () => {
 		setToken(null)
 		navigate("/login")
 
-		const result = await logoutMutation({
+		const result = await logout({
 			token
 		})
 

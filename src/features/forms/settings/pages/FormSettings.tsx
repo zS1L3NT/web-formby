@@ -23,8 +23,8 @@ const FormSettings = () => {
 	} = useDisclosure()
 	const { isOpen: deleteIsOpen, onClose: deleteOnClose, onOpen: deleteOnOpen } = useDisclosure()
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
-	const [updateFormMutation] = useUpdateFormMutation()
-	const [deleteFormMutation] = useDeleteFormMutation()
+	const [updateForm] = useUpdateFormMutation()
+	const [deleteForm] = useDeleteFormMutation()
 
 	useOnlyFormOwner(user, form)
 
@@ -85,7 +85,7 @@ const FormSettings = () => {
 							size="lg"
 							isChecked={form.auth}
 							onChange={() => {
-								updateFormMutation({
+								updateForm({
 									form_id,
 									token,
 									auth: !form.auth,
@@ -195,7 +195,7 @@ const FormSettings = () => {
 							colorScheme="red"
 							onClick={() => {
 								navigate("../..")
-								deleteFormMutation({
+								deleteForm({
 									form_id,
 									token
 								})
@@ -237,7 +237,7 @@ const FormSettings = () => {
 								colorScheme="red"
 								onClick={() => {
 									formStateOnClose()
-									updateFormMutation({
+									updateForm({
 										form_id,
 										token,
 										auth: form.auth,

@@ -3,7 +3,7 @@ import { useContext } from "react"
 import { AddIcon } from "@chakra-ui/icons"
 import { IconButton, Spinner, useBoolean } from "@chakra-ui/react"
 
-import { useSetFormQuestionMutation } from "../../../../api"
+import { useCreateFormQuestionMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
 import { iQuestion, iTextQuestion } from "../../../../models/Question"
 
@@ -16,7 +16,7 @@ const AddQuestion = ({
 }) => {
 	const { token } = useContext(AuthContext)
 
-	const [setFormQuestionMutation] = useSetFormQuestionMutation()
+	const [createFormQuestion] = useCreateFormQuestionMutation()
 
 	const [isCreating, setIsCreating] = useBoolean()
 
@@ -33,7 +33,7 @@ const AddQuestion = ({
 		}
 
 		setIsCreating.on()
-		await setFormQuestionMutation({ form_id: formId, token, ...question })
+		await createFormQuestion({ form_id: formId, token, ...question })
 		setIsCreating.off()
 	}
 

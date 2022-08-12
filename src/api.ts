@@ -36,7 +36,7 @@ const api = createApi({
 			}),
 			providesTags: ["Form"]
 		}),
-		setForm: builder.mutation<
+		createForm: builder.mutation<
 			ApiResponse & { form: WithTimestamps<iForm> },
 			Omit<iForm, "id" | "user_id"> & RequiredToken
 		>({
@@ -87,7 +87,7 @@ const api = createApi({
 			}),
 			providesTags: ["Question"]
 		}),
-		setFormQuestion: builder.mutation<
+		createFormQuestion: builder.mutation<
 			ApiResponse & { question: WithTimestamps<iQuestion> },
 			Omit<iQuestion, "id" | "form_id"> & { form_id: string } & RequiredToken
 		>({
@@ -158,7 +158,7 @@ const api = createApi({
 			}),
 			providesTags: ["Response"]
 		}),
-		setFormResponse: builder.mutation<
+		createFormResponse: builder.mutation<
 			ApiResponse,
 			{ form_id: string; answers: Omit<iAnswer, "id">[] } & OptionalToken
 		>({
@@ -257,6 +257,9 @@ const api = createApi({
 
 export default api
 export const {
+	useCreateFormMutation,
+	useCreateFormQuestionMutation,
+	useCreateFormResponseMutation,
 	useDeleteFormMutation,
 	useDeleteFormQuestionMutation,
 	useDeleteUserMutation,
@@ -279,9 +282,6 @@ export const {
 	useLoginMutation,
 	useLogoutMutation,
 	useRegisterMutation,
-	useSetFormMutation,
-	useSetFormQuestionMutation,
-	useSetFormResponseMutation,
 	useUpdateFormMutation,
 	useUpdateFormQuestionMutation,
 	useUpdateUserMutation,

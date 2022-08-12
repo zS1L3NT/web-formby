@@ -17,7 +17,7 @@ const ProfileCard = () => {
 	const photoInputRef = useRef<HTMLInputElement>(null)
 	const toast = useToast()
 
-	const [updateUserMutation, { isLoading, error, data }] = useUpdateUserMutation()
+	const [updateUser, { isLoading, error, data }] = useUpdateUserMutation()
 
 	const [photo, setPhoto] = useState<string | null>(null)
 	const [name, setName] = useState("")
@@ -229,7 +229,7 @@ const ProfileCard = () => {
 				loadingText="Saving..."
 				isLoading={isLoading}
 				onClick={() => {
-					updateUserMutation({
+					updateUser({
 						token,
 						email: user!.email !== email ? email : undefined,
 						name,

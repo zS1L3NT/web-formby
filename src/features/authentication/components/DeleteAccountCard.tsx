@@ -16,7 +16,7 @@ const DeleteAccountCard = () => {
 	const { token } = useOnlyAuthenticated()
 	const navigate = useNavigate()
 
-	const [deleteUserMutation] = useDeleteUserMutation()
+	const [deleteUser] = useDeleteUserMutation()
 
 	const { isOpen, onClose, onOpen } = useDisclosure()
 
@@ -79,7 +79,7 @@ const DeleteAccountCard = () => {
 							onClick={() => {
 								navigate("..")
 								setToken(null)
-								deleteUserMutation({
+								deleteUser({
 									token
 								})
 							}}>

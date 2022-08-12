@@ -19,7 +19,7 @@ const Login = () => {
 	const navigate = useNavigate()
 	const toast = useToast()
 
-	const [loginMutation] = useLoginMutation()
+	const [login] = useLoginMutation()
 
 	const [loading, setLoading] = useBoolean()
 	const [email, setEmail] = useState("")
@@ -45,7 +45,7 @@ const Login = () => {
 	const handleLogin = async () => {
 		setLoading.on()
 
-		const result = await loginMutation({
+		const result = await login({
 			email,
 			password
 		})

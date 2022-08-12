@@ -7,7 +7,7 @@ import {
 	Spinner, useBoolean
 } from "@chakra-ui/react"
 
-import { useSetFormQuestionMutation } from "../../../../api"
+import { useCreateFormQuestionMutation } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
 import { iQuestion } from "../../../../models/Question"
 import { createDuplicate } from "../../../../utils/questionUtils"
@@ -25,7 +25,7 @@ const OptionsMenu = ({
 }) => {
 	const { token } = useContext(AuthContext)
 
-	const [setFormQuestion] = useSetFormQuestionMutation()
+	const [createFormQuestion] = useCreateFormQuestionMutation()
 
 	const [isDuplicating, setIsDuplicating] = useBoolean()
 
@@ -33,7 +33,7 @@ const OptionsMenu = ({
 		if (!token) return
 
 		setIsDuplicating.on()
-		await setFormQuestion({ token, ...createDuplicate(question) })
+		await createFormQuestion({ token, ...createDuplicate(question) })
 		setIsDuplicating.off()
 	}
 

@@ -23,14 +23,14 @@ const QuestionDeleteAlert = ({
 	const { token } = useContext(AuthContext)
 	const alertCancelRef = createRef<any>()
 
-	const [deleteFormQuestionMutation] = useDeleteFormQuestionMutation()
+	const [deleteFormQuestion] = useDeleteFormQuestionMutation()
 
 	const handleDeleteQuestion = async () => {
 		if (!token) return
 
 		onClose()
 		setIsDeleting()
-		await deleteFormQuestionMutation({
+		await deleteFormQuestion({
 			form_id: question.form_id,
 			question_id: question.id,
 			token

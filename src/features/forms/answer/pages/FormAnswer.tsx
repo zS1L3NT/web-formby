@@ -5,7 +5,7 @@ import { useImmer } from "use-immer"
 import { Box, Button, Center, Container, Spinner, useBoolean, useToast } from "@chakra-ui/react"
 
 import {
-	useGetFormQuery, useGetFormQuestionsQuery, useSetFormResponseMutation
+	useCreateFormResponseMutation, useGetFormQuery, useGetFormQuestionsQuery
 } from "../../../../api"
 import AuthContext from "../../../../contexts/AuthContext"
 import useToastError from "../../../../hooks/useToastError"
@@ -21,7 +21,7 @@ const FormAnswer = () => {
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
-	const [setFormResponseMutation] = useSetFormResponseMutation()
+	const [createFormResponse] = useCreateFormResponseMutation()
 
 	const [isSubmitting, setIsSubmitting] = useBoolean()
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
@@ -46,7 +46,7 @@ const FormAnswer = () => {
 		setErrors(errors)
 		if (errors.every(item => item === null)) {
 			setIsSubmitting.on()
-			await setFormResponseMutation({
+			await createFormResponse({
 				token,
 				form_id: form.id,
 				answers: answers.filter(

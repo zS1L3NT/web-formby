@@ -16,7 +16,7 @@ const PasswordCard = () => {
 	const dispatch = useAppDispatch()
 	const toast = useToast()
 
-	const [updateUserPasswordMutation, { isLoading, error, data }] = useUpdateUserPasswordMutation()
+	const [updateUserPassword, { isLoading, error, data }] = useUpdateUserPasswordMutation()
 
 	const [showOldPassword, setShowOldPassword] = useBoolean()
 	const [showNewPassword, setShowNewPassword] = useBoolean()
@@ -159,7 +159,7 @@ const PasswordCard = () => {
 					if (newPassword !== confirmPassword) {
 						setConfirmPasswordError("Passwords do not match")
 					} else {
-						updateUserPasswordMutation({
+						updateUserPassword({
 							token,
 							old_password: oldPassword,
 							new_password: newPassword

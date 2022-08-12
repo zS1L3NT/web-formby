@@ -26,7 +26,7 @@ const FormEdit = () => {
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
-	const [updateFormQuestionMutation] = useUpdateFormQuestionMutation()
+	const [updateFormQuestion] = useUpdateFormQuestionMutation()
 
 	const [optimisticQuestions, setOptimisticQuestions] = useImmer<iQuestion[] | undefined>(
 		undefined
@@ -88,7 +88,7 @@ const FormEdit = () => {
 			const _question = _questions.find(question => question.id === __question.id)!
 
 			if (__question.previous_question_id !== _question.previous_question_id) {
-				updateFormQuestionMutation({
+				updateFormQuestion({
 					form_id: form!.id,
 					question_id: _question.id,
 					token,

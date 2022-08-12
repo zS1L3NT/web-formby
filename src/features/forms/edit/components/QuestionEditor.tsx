@@ -37,7 +37,7 @@ const QuestionEditor = ({
 	const photoInputRef = createRef<HTMLInputElement>()
 	const menuRef = createRef<HTMLButtonElement>()
 
-	const [updateFormQuestionMutation] = useUpdateFormQuestionMutation()
+	const [updateFormQuestion] = useUpdateFormQuestionMutation()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [isDeleting, setIsDeleting] = useBoolean()
@@ -55,7 +55,7 @@ const QuestionEditor = ({
 
 		const difference = getQuestionDifference(__question, question)
 		if (Object.keys(difference).length > 0) {
-			await updateFormQuestionMutation({
+			await updateFormQuestion({
 				form_id: question.form_id,
 				question_id: question.id,
 				token,
