@@ -19,14 +19,14 @@ class UserController extends Controller
 
 		$this->validate("register", [
 			"name" => ["required", "min:1", "max:255", "string"],
-			"photo" => ["required", "max:255", "url"],
+			"photo" => ["nullable", "string"],
 			"email" => ["required", "max:255", "unique:users", "email"],
 			"password" => ["required", "max:255", "regex:$this->password_regex"]
 		]);
 
 		$this->validate("update", [
 			"name" => ["min:1", "max:255", "string"],
-			"photo" => ["max:255", "url"],
+			"photo" => ["nullable", "string"],
 			"email" => ["max:255", "unique:users", "email"],
 			"password" => ["max:255", "regex:$this->password_regex"]
 		]);
