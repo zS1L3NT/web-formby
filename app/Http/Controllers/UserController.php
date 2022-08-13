@@ -10,7 +10,7 @@ class UserController extends Controller
 
 	public function __construct()
 	{
-		$this->middleware("auth.jwt")->only(["logout", "current", "show", "update", "updatePassword"]);
+		$this->middleware("auth.jwt")->only(["logout", "current", "update", "updatePassword"]);
 
 		$this->validate("login", [
 			"email" => ["required", "email"],
@@ -86,10 +86,6 @@ class UserController extends Controller
 		return auth()->user();
 	}
 
-	/**
-	 * Middleware:
-	 * - auth.jwt
-	 */
 	public function show()
 	{
 		return User::query()->find(request()->user_id);
