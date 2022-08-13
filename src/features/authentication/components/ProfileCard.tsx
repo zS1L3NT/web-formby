@@ -114,10 +114,10 @@ const ProfileCard = () => {
 				<Box
 					h={32}
 					w={32}
-					bg="whiteAlpha.400"
+					bg="var(--chakra-colors-chakra-border-color)"
 					borderRadius="lg"
 					borderWidth={2}
-					borderColor="whiteAlpha.400">
+					borderColor="var(--chakra-colors-chakra-border-color)">
 					<Image
 						h="calc(var(--chakra-sizes-32) - 4px)"
 						w="calc(var(--chakra-sizes-32) - 4px)"
