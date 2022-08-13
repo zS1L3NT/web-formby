@@ -47,7 +47,7 @@ const DeleteAccountCard = () => {
 					mx={4}
 					colorScheme="red"
 					onClick={onOpen}>
-					Delete Form
+					Delete Account
 				</Button>
 			</Flex>
 

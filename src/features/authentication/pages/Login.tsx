@@ -47,16 +47,6 @@ const Login = () => {
 			password
 		})
 
-		if ("error" in result && result.error && "fields" in result.error && result.error.fields) {
-			const fields = result.error.fields
-			if ("email" in fields) {
-				setEmailError(fields.email!.join("\n"))
-			}
-			if ("password" in fields) {
-				setPasswordError(fields.password!.join("\n"))
-			}
-		}
-
 		if ("data" in result) {
 			setToken(result.data.token)
 			toast({
@@ -66,6 +56,16 @@ const Login = () => {
 			})
 		} else {
 			dispatch(setError(result.error))
+
+			if ("fields" in result.error && result.error.fields) {
+				const fields = result.error.fields
+				if ("email" in fields) {
+					setEmailError(fields.email!.join("\n"))
+				}
+				if ("password" in fields) {
+					setPasswordError(fields.password!.join("\n"))
+				}
+			}
 		}
 	}
 

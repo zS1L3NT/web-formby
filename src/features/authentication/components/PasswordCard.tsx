@@ -16,7 +16,7 @@ const PasswordCard = () => {
 	const dispatch = useAppDispatch()
 	const toast = useToast()
 
-	const [updateUserPassword, { isLoading, error, data }] = useUpdateUserPasswordMutation()
+	const [updateUserPassword, { isLoading }] = useUpdateUserPasswordMutation()
 
 	const [showOldPassword, setShowOldPassword] = useBoolean()
 	const [showNewPassword, setShowNewPassword] = useBoolean()
@@ -24,29 +24,42 @@ const PasswordCard = () => {
 	const [oldPassword, setOldPassword] = useState("")
 	const [newPassword, setNewPassword] = useState("")
 	const [confirmPassword, setConfirmPassword] = useState("")
-	const [oldPasswordError, setOldPasswordError] = useState("")
-	const [newPasswordError, setNewPasswordError] = useState("")
-	const [confirmPasswordError, setConfirmPasswordError] = useState("")
+	const [oldPasswordError, setOldPasswordError] = useState<string | null>(null)
+	const [newPasswordError, setNewPasswordError] = useState<string | null>(null)
+	const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null)
 
 	useEffect(() => {
-		if (data) {
+		setOldPasswordError(null)
+		setNewPasswordError(null)
+		setConfirmPasswordError(null)
+	}, [oldPassword, newPassword, confirmPassword])
+
+	const handleSave = async () => {
+		if (newPassword !== confirmPassword) {
+			setConfirmPasswordError("Passwords do not match")
+			return
+		}
+
+		const result = await updateUserPassword({
+			token,
+			old_password: oldPassword,
+			new_password: newPassword
+		})
+
+		if ("data" in result) {
 			setOldPassword("")
 			setNewPassword("")
 			setConfirmPassword("")
 			toast({
-				title: data.message,
+				title: result.data.message,
 				status: "success",
 				isClosable: true
 			})
-		}
-	}, [data])
+		} else {
+			dispatch(setError(result.error))
 
-	useEffect(() => {
-		if (error) {
-			dispatch(setError(error))
-
-			if ("fields" in error) {
-				const fields = error.fields!
+			if ("fields" in result.error) {
+				const fields = result.error.fields!
 
 				if ("old_password" in fields) {
 					setOldPasswordError(fields.old_password!.join("\n"))
@@ -56,7 +69,7 @@ const PasswordCard = () => {
 				}
 			}
 		}
-	}, [error])
+	}
 
 	return (
 		<Card mt={4}>
@@ -67,10 +80,7 @@ const PasswordCard = () => {
 						type={showOldPassword ? "text" : "password"}
 						isInvalid={!!oldPasswordError}
 						value={oldPassword}
-						onChange={e => {
-							setOldPassword(e.target.value)
-							setOldPasswordError("")
-						}}
+						onChange={e => setOldPassword(e.target.value)}
 					/>
 					<InputRightElement h="full">
 						<Button
@@ -97,10 +107,7 @@ const PasswordCard = () => {
 						type={showNewPassword ? "text" : "password"}
 						isInvalid={!!newPasswordError}
 						value={newPassword}
-						onChange={e => {
-							setNewPassword(e.target.value)
-							setNewPasswordError("")
-						}}
+						onChange={e => setNewPassword(e.target.value)}
 					/>
 					<InputRightElement h="full">
 						<Button
@@ -127,10 +134,7 @@ const PasswordCard = () => {
 						type={showConfirmPassword ? "text" : "password"}
 						isInvalid={!!confirmPasswordError}
 						value={confirmPassword}
-						onChange={e => {
-							setConfirmPassword(e.target.value)
-							setConfirmPasswordError("")
-						}}
+						onChange={e => setConfirmPassword(e.target.value)}
 					/>
 					<InputRightElement h="full">
 						<Button
@@ -155,17 +159,7 @@ const PasswordCard = () => {
 				isDisabled={!oldPassword}
 				loadingText="Saving..."
 				isLoading={isLoading}
-				onClick={() => {
-					if (newPassword !== confirmPassword) {
-						setConfirmPasswordError("Passwords do not match")
-					} else {
-						updateUserPassword({
-							token,
-							old_password: oldPassword,
-							new_password: newPassword
-						})
-					}
-				}}>
+				onClick={handleSave}>
 				Save
 			</Button>
 		</Card>

@@ -133,7 +133,7 @@ const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 			onClick={async () => {
 				if (isLoading) return
 
-				const response = await createForm({
+				const result = await createForm({
 					token,
 					name: "New Form",
 					description: `Created on ${DateTime.now().toFormat("dd LLL yyyy, HH:mm:ss")}`,
@@ -141,8 +141,8 @@ const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 					state: "draft"
 				})
 
-				if ("data" in response) {
-					navigate(`${response.data.form.id}/edit`)
+				if ("data" in result) {
+					navigate(`${result.data.form.id}/edit`)
 				}
 			}}>
 			{isLoading ? <Spinner /> : <AddIcon />}

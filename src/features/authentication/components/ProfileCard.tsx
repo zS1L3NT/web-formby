@@ -17,14 +17,14 @@ const ProfileCard = () => {
 	const photoInputRef = useRef<HTMLInputElement>(null)
 	const toast = useToast()
 
-	const [updateUser, { isLoading, error, data }] = useUpdateUserMutation()
+	const [updateUser, { isLoading }] = useUpdateUserMutation()
 
 	const [photo, setPhoto] = useState<string | null>(null)
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
-	const [photoError, setPhotoError] = useState("")
-	const [nameError, setNameError] = useState("")
-	const [emailError, setEmailError] = useState("")
+	const [photoError, setPhotoError] = useState<string | null>(null)
+	const [nameError, setNameError] = useState<string | null>(null)
+	const [emailError, setEmailError] = useState<string | null>(null)
 
 	useEffect(() => {
 		if (user) {
@@ -35,34 +35,10 @@ const ProfileCard = () => {
 	}, [user])
 
 	useEffect(() => {
-		if (data) {
-			toast({
-				title: data.message,
-				status: "success",
-				isClosable: true
-			})
-		}
-	}, [data])
-
-	useEffect(() => {
-		if (error) {
-			dispatch(setError(error))
-
-			if ("fields" in error) {
-				const fields = error.fields!
-
-				if ("photo" in fields) {
-					setPhotoError(fields.photo!.join("\n"))
-				}
-				if ("name" in fields) {
-					setNameError(fields.name!.join("\n"))
-				}
-				if ("email" in fields) {
-					setEmailError(fields.email!.join("\n"))
-				}
-			}
-		}
-	}, [error])
+		setPhotoError(null)
+		setNameError(null)
+		setEmailError(null)
+	}, [photo, name, email])
 
 	const handleFileChange = (file: File | null) => {
 		if (!file) {
@@ -95,6 +71,39 @@ const ProfileCard = () => {
 			setPhoto(reader.result as string)
 		}
 		reader.readAsDataURL(file)
+	}
+
+	const handleSave = async () => {
+		const result = await updateUser({
+			token,
+			email: user!.email !== email ? email : undefined,
+			name,
+			photo
+		})
+
+		if ("data" in result) {
+			toast({
+				title: result.data.message,
+				status: "success",
+				isClosable: true
+			})
+		} else {
+			dispatch(setError(result.error))
+
+			if ("fields" in result.error) {
+				const fields = result.error.fields!
+
+				if ("photo" in fields) {
+					setPhotoError(fields.photo!.join("\n"))
+				}
+				if ("name" in fields) {
+					setNameError(fields.name!.join("\n"))
+				}
+				if ("email" in fields) {
+					setEmailError(fields.email!.join("\n"))
+				}
+			}
+		}
 	}
 
 	return (
@@ -138,9 +147,7 @@ const ProfileCard = () => {
 						ref={photoInputRef}
 						type="file"
 						accept="image/*"
-						onChange={e =>
-							handleFileChange(e.target.files?.[0] ?? null)
-						}
+						onChange={e => handleFileChange(e.target.files?.[0] ?? null)}
 					/>
 					<Button
 						colorScheme="blue"
@@ -181,10 +188,7 @@ const ProfileCard = () => {
 					<Input
 						value={name}
 						isInvalid={!!nameError}
-						onChange={e => {
-							setName(e.target.value)
-							setNameError("")
-						}}
+						onChange={e => setName(e.target.value)}
 						isDisabled={isLoading}
 					/>
 				</InputGroup>
@@ -206,10 +210,7 @@ const ProfileCard = () => {
 						type="email"
 						value={email}
 						isInvalid={!!emailError}
-						onChange={e => {
-							setEmail(e.target.value)
-							setEmailError("")
-						}}
+						onChange={e => setEmail(e.target.value)}
 						isDisabled={isLoading}
 					/>
 				</InputGroup>
@@ -228,14 +229,7 @@ const ProfileCard = () => {
 				isDisabled={user?.photo === photo && user?.name === name && user?.email === email}
 				loadingText="Saving..."
 				isLoading={isLoading}
-				onClick={() => {
-					updateUser({
-						token,
-						email: user!.email !== email ? email : undefined,
-						name,
-						photo
-					})
-				}}>
+				onClick={handleSave}>
 				Save
 			</Button>
 		</Card>
