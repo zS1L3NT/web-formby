@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Response;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,13 @@ class FormUser
 				"type" => "Unauthorized",
 				"message" => "You need to be authorized to view this form"
 			], 403);
+		}
+
+		if ($user != NULL && $form->user_id != $user->id && Response::query()->where("form_id", $form->id)->where("user_id", $user->id)->exists()) {
+			return response([
+				"type" => "Response Already Submitted",
+				"message" => "You cannot resubmit another response!"
+			], 400);
 		}
 
 		return $next($request);
