@@ -27,8 +27,8 @@ const FormPreview = () => {
 
 	useOnlyFormOwner(user, form)
 
-	useToastError(formError)
-	useToastError(questionsError)
+	useToastError(formError, true)
+	useToastError(questionsError, true)
 
 	useEffect(() => {
 		setAnswers(_ => questions?.map<Omit<iAnswer, "id" | "response_id">>(getEmptyAnswer) ?? null)

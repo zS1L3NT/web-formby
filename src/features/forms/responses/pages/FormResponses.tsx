@@ -33,11 +33,11 @@ const FormResponses = () => {
 
 	useOnlyFormOwner(user, form)
 
-	useToastError(formError)
-	useToastError(questionsError)
-	useToastError(responsesError)
-	useToastError(responseAnswersError)
-	useToastError(userError)
+	useToastError(formError, true)
+	useToastError(questionsError, true)
+	useToastError(responsesError, true)
+	useToastError(responseAnswersError, true)
+	useToastError(userError, true)
 
 	useAsyncEffect(async () => {
 		if (!token || !responses) return

@@ -10,7 +10,7 @@ const FormsView = () => {
 
 	const { data: forms, error: formsError } = useGetFormsQuery({ token })
 
-	useToastError(formsError)
+	useToastError(formsError, true)
 
 	return (
 		<Container

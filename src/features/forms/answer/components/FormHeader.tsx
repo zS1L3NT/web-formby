@@ -6,6 +6,7 @@ import { Avatar, Box, Button, Divider, Flex, Spinner, Tag, TagLabel, Text } from
 import { useGetUserQuery } from "../../../../api"
 import Card from "../../../../components/Card"
 import AuthContext from "../../../../contexts/AuthContext"
+import useToastError from "../../../../hooks/useToastError"
 import { iForm } from "../../../../models/Form"
 
 const FormHeader = ({
@@ -19,7 +20,9 @@ const FormHeader = ({
 }) => {
 	const { token, user } = useContext(AuthContext)
 
-	const { data: formOwner } = useGetUserQuery({ user_id: form.user_id })
+	const { data: owner, error: ownerError } = useGetUserQuery({ user_id: form.user_id })
+
+	useToastError(ownerError)
 
 	return (
 		<Card
@@ -59,16 +62,16 @@ const FormHeader = ({
 					ml={2}
 					size="lg"
 					borderRadius="full">
-					{formOwner ? (
+					{owner ? (
 						<>
 							<Avatar
-								src={formOwner?.photo ?? ""}
+								src={owner?.photo ?? ""}
 								size="xs"
-								name={formOwner?.name}
+								name={owner?.name}
 								ml={-1}
 								mr={2}
 							/>
-							<TagLabel>{formOwner?.name}</TagLabel>
+							<TagLabel>{owner?.name}</TagLabel>
 						</>
 					) : (
 						<Spinner size="sm" />
@@ -84,7 +87,7 @@ const FormHeader = ({
 					ml={2}
 					size="lg"
 					borderRadius="full">
-					{token && user || !token && !user ? (
+					{(token && user) || (!token && !user) ? (
 						<>
 							<Avatar
 								src={anonymous ? undefined : user?.photo ?? undefined}

@@ -29,7 +29,7 @@ const FormSettings = () => {
 
 	useOnlyFormOwner(user, form)
 
-	useToastError(formError)
+	useToastError(formError, true)
 	useToastError(updateFormError)
 	useToastError(deleteFormError)
 

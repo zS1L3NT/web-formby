@@ -23,7 +23,7 @@ const useOnlyFormOwner = (user: iUser | null | undefined, form: iForm | null | u
 		if (form.user_id !== user.id) {
 			dispatch(
 				setError({
-					type: "Permission Denied",
+					type: "Unauthorized",
 					message: "You do not have permission to edit this form."
 				})
 			)

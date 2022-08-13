@@ -34,8 +34,8 @@ const FormEdit = () => {
 
 	useOnlyFormOwner(user, form)
 
-	useToastError(formError)
-	useToastError(questionsError)
+	useToastError(formError, true)
+	useToastError(questionsError, true)
 	useToastError(error)
 
 	useEffect(() => {

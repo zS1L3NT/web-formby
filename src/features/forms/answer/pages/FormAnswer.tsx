@@ -22,14 +22,15 @@ const FormAnswer = () => {
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
-	const [createFormResponse, { isLoading }] = useCreateFormResponseMutation()
+	const [createFormResponse, { isLoading, error }] = useCreateFormResponseMutation()
 
 	const [anonymous, setAnonymous] = useState(!token)
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
 	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id" | "response_id">[] | null>(null)
 
-	useToastError(formError)
-	useToastError(questionsError)
+	useToastError(formError, true)
+	useToastError(questionsError, true)
+	useToastError(error)
 
 	useEffect(() => {
 		setAnswers(_ => questions?.map<Omit<iAnswer, "id" | "response_id">>(getEmptyAnswer) ?? null)
