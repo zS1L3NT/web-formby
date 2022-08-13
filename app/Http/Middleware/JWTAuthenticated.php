@@ -26,7 +26,7 @@ class JWTAuthenticated
 		} else {
 			return response([
 				"type" => "Unauthorized",
-				"message" => "This route requires authetication"
+				"message" => "This route requires authentication"
 			], 403);
 		}
 	}
