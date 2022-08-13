@@ -6,20 +6,18 @@ import { iResponse } from "../../../../models/Response"
 
 const ResponsesOverview = ({ form, responses }: { form: iForm; responses: iResponse[] }) => {
 	return (
-		<Card my={4}>
+		<Card my={{ base: 2, md: 4 }}>
 			<Text
 				fontSize="4xl"
 				noOfLines={2}
 				textAlign="left"
-				color="text"
-				mb={form.description ? 0 : 8}>
+				color="text">
 				{form.name}
 			</Text>
 
 			{form.description ? (
 				<Text
 					mt={2}
-					mb={8}
 					fontSize="lg"
 					noOfLines={10}
 					textAlign="left"
@@ -29,8 +27,7 @@ const ResponsesOverview = ({ form, responses }: { form: iForm; responses: iRespo
 			) : null}
 
 			<Divider
-				mt={8}
-				mb={4}
+				my={4}
 				borderColor="gray.400"
 			/>
 

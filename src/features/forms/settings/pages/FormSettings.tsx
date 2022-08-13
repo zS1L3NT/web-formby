@@ -43,15 +43,13 @@ const FormSettings = () => {
 						fontSize="4xl"
 						noOfLines={2}
 						textAlign="left"
-						color="text"
-						mb={form.description ? 0 : 8}>
+						color="text">
 						{form.name}
 					</Text>
 
 					{form.description ? (
 						<Text
 							mt={2}
-							mb={8}
 							fontSize="lg"
 							noOfLines={10}
 							textAlign="left"
@@ -60,11 +58,12 @@ const FormSettings = () => {
 						</Text>
 					) : null}
 
-					<Divider borderColor="gray.400" />
+					<Divider
+						my={4}
+						borderColor="gray.400"
+					/>
 
-					<Flex
-						mt={4}
-						alignItems="center">
+					<Flex alignItems="center">
 						<Box flex={1}>
 							<Text
 								fontSize="2xl"

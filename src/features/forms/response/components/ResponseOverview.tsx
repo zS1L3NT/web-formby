@@ -6,7 +6,31 @@ import { iUser } from "../../../../models/User"
 
 const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null | undefined }) => {
 	return (
-		<Card my={4}>
+		<Card my={{ base: 2, md: 4 }}>
+			<Text
+				fontSize="4xl"
+				noOfLines={2}
+				textAlign="left"
+				color="text">
+				{form.name}
+			</Text>
+
+			{form.description ? (
+				<Text
+					mt={2}
+					fontSize="lg"
+					noOfLines={10}
+					textAlign="left"
+					color="text">
+					{form.description}
+				</Text>
+			) : null}
+
+			<Divider
+				my={4}
+				borderColor="gray.400"
+			/>
+
 			<Flex
 				direction={{ base: "column", md: "row" }}
 				justifyContent="space-evenly"
@@ -73,33 +97,6 @@ const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null | un
 					</Text>
 				</Flex>
 			</Flex>
-
-			<Divider
-				mt={8}
-				mb={4}
-				borderColor="gray.400"
-			/>
-
-			<Text
-				fontSize="4xl"
-				noOfLines={2}
-				textAlign="left"
-				color="text"
-				mb={form.description ? 0 : 8}>
-				{form.name}
-			</Text>
-
-			{form.description ? (
-				<Text
-					mt={2}
-					mb={8}
-					fontSize="lg"
-					noOfLines={10}
-					textAlign="left"
-					color="text">
-					{form.description}
-				</Text>
-			) : null}
 		</Card>
 	)
 }
