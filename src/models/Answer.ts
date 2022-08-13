@@ -1,47 +1,14 @@
-type iBaseAnswer = {
+import { iQuestionType } from "./"
+
+export type iAnswer<T extends iQuestionType> = {
 	id: string
 	response_id: string | null
 	question_id: string
-}
-
-export type iAnswer =
-	| iTextAnswer
-	| iParagraphAnswer
-	| iColorAnswer
-	| iChoiceAnswer
-	| iSwitchAnswer
-	| iSliderAnswer
-	| iDateTimeAnswer
-	| iTableAnswer
-
-export type iTextAnswer = iBaseAnswer & {
-	text: string
-}
-
-export type iParagraphAnswer = iBaseAnswer & {
-	paragraph: string
-}
-
-export type iColorAnswer = iBaseAnswer & {
-	color: string
-}
-
-export type iChoiceAnswer = iBaseAnswer & {
-	choices: string[]
-}
-
-export type iSwitchAnswer = iBaseAnswer & {
-	switch: boolean
-}
-
-export type iSliderAnswer = iBaseAnswer & {
-	slider: number
-}
-
-export type iDateTimeAnswer = iBaseAnswer & {
-	datetime: string
-}
-
-export type iTableAnswer = iBaseAnswer & {
-	table: [string, string][]
-}
+} & (T extends "text" ? { text: string } : {}) &
+	(T extends "paragraph" ? { paragraph: string } : {}) &
+	(T extends "color" ? { color: string } : {}) &
+	(T extends "choice" ? { choices: string[] } : {}) &
+	(T extends "switch" ? { switch: boolean } : {}) &
+	(T extends "slider" ? { slider: number } : {}) &
+	(T extends "datetime" ? { datetime: string } : {}) &
+	(T extends "table" ? { table: [string, string][] } : {})

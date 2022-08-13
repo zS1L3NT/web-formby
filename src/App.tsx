@@ -1,3 +1,5 @@
+import { Chart, registerables } from "chart.js"
+import { useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 
 import { Flex } from "@chakra-ui/react"
@@ -17,6 +19,10 @@ import FormsView from "./features/forms/view/pages/FormsView"
 import Landing from "./features/landing/pages/Landing"
 
 const App = () => {
+	useEffect(() => {
+		Chart.register(...registerables)
+	}, [])
+
 	return (
 		<Flex
 			w="full"

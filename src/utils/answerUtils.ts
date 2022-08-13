@@ -1,7 +1,4 @@
-import {
-	iAnswer, iChoiceAnswer, iColorAnswer, iDateTimeAnswer, iParagraphAnswer, iSliderAnswer,
-	iSwitchAnswer, iTableAnswer, iTextAnswer
-} from "../models/Answer"
+import { iAnswer } from "../models/Answer"
 import { iQuestion } from "../models/Question"
 
 /**
@@ -11,7 +8,10 @@ import { iQuestion } from "../models/Question"
  * @param answer The answer to get the errors of
  * @returns Either an error or null
  */
-export const getAnswerError = (question: iQuestion, answer: Omit<iAnswer, "id" | "response_id">) => {
+export const getAnswerError = (
+	question: iQuestion<any>,
+	answer: Omit<iAnswer<any>, "id" | "response_id">
+) => {
 	switch (question.type) {
 		case "text":
 			if (question.required && isAnswerEmpty(question, answer)) {
@@ -47,47 +47,51 @@ export const getAnswerError = (question: iQuestion, answer: Omit<iAnswer, "id" |
 			}
 			return null
 	}
+
+	throw new Error("Unknown question type")
 }
 
-export const getEmptyAnswer = (question: iQuestion): Omit<iAnswer, "id" | "response_id"> => {
+export const getEmptyAnswer = (
+	question: iQuestion<any>
+): Omit<iAnswer<any>, "id" | "response_id"> => {
 	switch (question.type) {
 		case "text":
-			return <Omit<iTextAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"text">, "id" | "response_id">>{
 				question_id: question.id,
 				text: ""
 			}
 		case "paragraph":
-			return <Omit<iParagraphAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"paragraph">, "id" | "response_id">>{
 				question_id: question.id,
 				paragraph: ""
 			}
 		case "color":
-			return <Omit<iColorAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"color">, "id" | "response_id">>{
 				question_id: question.id,
 				color: ""
 			}
 		case "choice":
-			return <Omit<iChoiceAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"choice">, "id" | "response_id">>{
 				question_id: question.id,
 				choices: <string[]>[]
 			}
 		case "switch":
-			return <Omit<iSwitchAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"switch">, "id" | "response_id">>{
 				question_id: question.id,
 				switch: false
 			}
 		case "slider":
-			return <Omit<iSliderAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"slider">, "id" | "response_id">>{
 				question_id: question.id,
-				slider: question.slider_min
+				slider: (<iQuestion<"slider">>question).slider_min
 			}
 		case "datetime":
-			return <Omit<iDateTimeAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"datetime">, "id" | "response_id">>{
 				question_id: question.id,
 				datetime: ""
 			}
 		case "table":
-			return <Omit<iTableAnswer, "id" | "response_id">>{
+			return <Omit<iAnswer<"table">, "id" | "response_id">>{
 				question_id: question.id,
 				table: []
 			}
@@ -104,26 +108,32 @@ export const getEmptyAnswer = (question: iQuestion): Omit<iAnswer, "id" | "respo
  * @param answer The answer to check if it is empty
  * @returns A boolean of whether the answer is empty
  */
-export const isAnswerEmpty = (question: iQuestion, answer: Omit<iAnswer, "id" | "response_id">) => {
+export const isAnswerEmpty = (
+	question: iQuestion<any>,
+	answer: Omit<iAnswer<any>, "id" | "response_id">
+) => {
 	switch (question.type) {
 		case "text":
-			return (<iTextAnswer>answer).text === ""
+			return (<iAnswer<"text">>answer).text === ""
 		case "paragraph":
-			return (<iParagraphAnswer>answer).paragraph === ""
+			return (<iAnswer<"paragraph">>answer).paragraph === ""
 		case "color":
-			return (<iColorAnswer>answer).color === ""
+			return (<iAnswer<"color">>answer).color === ""
 		case "choice":
-			return (<iChoiceAnswer>answer).choices.length === 0
+			return (<iAnswer<"choice">>answer).choices.length === 0
 		case "switch":
 		case "slider":
 			return false
 		case "datetime":
-			return (<iDateTimeAnswer>answer).datetime === ""
+			return (<iAnswer<"datetime">>answer).datetime === ""
 		case "table":
-			return question.table_rows
+			return (<iQuestion<"table">>question).table_rows
 				.map<boolean>(
-					tableRow => !!(<iTableAnswer>answer).table.find(item => item[0] === tableRow)
+					tableRow =>
+						!!(<iAnswer<"table">>answer).table.find(item => item[0] === tableRow)
 				)
 				.some(item => item === false)
 	}
+
+	throw new Error("Unknown question type")
 }

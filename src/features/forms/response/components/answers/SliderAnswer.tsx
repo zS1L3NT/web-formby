@@ -1,10 +1,8 @@
 import { Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack } from "@chakra-ui/react"
 
-import { iSliderAnswer } from "../../../../../models/Answer"
-import { iSliderQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const SliderAnswer = ({ question, answer }: AnswerProps<iSliderQuestion, iSliderAnswer>) => {
+const SliderAnswer = ({ question, answer }: AnswerProps<"slider">) => {
 	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = question
 
 	return (

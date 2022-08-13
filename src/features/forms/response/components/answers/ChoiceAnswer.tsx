@@ -1,11 +1,9 @@
 import { Box, Checkbox, CheckboxGroup, Flex, Radio, RadioGroup, Text } from "@chakra-ui/react"
 
 import Dropdown from "../../../../../components/Dropdown"
-import { iChoiceAnswer } from "../../../../../models/Answer"
-import { iChoiceQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const ChoiceAnswer = ({ question, answer }: AnswerProps<iChoiceQuestion, iChoiceAnswer>) => {
+const ChoiceAnswer = ({ question, answer }: AnswerProps<"choice">) => {
 	const { choices, choice_type: choiceType } = question
 
 	const listMaker = choices.map((choice, i) =>

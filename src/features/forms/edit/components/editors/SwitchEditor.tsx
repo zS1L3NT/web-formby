@@ -1,9 +1,8 @@
 import { Flex, Switch, Text } from "@chakra-ui/react"
 
-import { iSwitchQuestion } from "../../../../../models/Question"
 import { EditorProps } from "../QuestionEditor"
 
-const SwitchEditor = ({}: EditorProps<iSwitchQuestion>) => {
+const SwitchEditor = ({}: EditorProps<"switch">) => {
 	return (
 		<Flex
 			alignItems="center"

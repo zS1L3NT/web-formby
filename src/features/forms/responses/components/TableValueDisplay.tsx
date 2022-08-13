@@ -3,23 +3,23 @@ import { useNavigate } from "react-router-dom"
 
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react"
 
-import { WithTimestamps } from "../../../../models"
+import { iQuestionType, WithTimestamps } from "../../../../models"
 import { iAnswer } from "../../../../models/Answer"
 import { iResponse } from "../../../../models/Response"
 import { iUser } from "../../../../models/User"
 
-const TableValueDisplay = <iA extends iAnswer>({
+const TableValueDisplay = <T extends iQuestionType>({
 	answers,
 	responses,
 	users,
 	columnHeader,
 	getDataColumn
 }: {
-	answers: WithTimestamps<iA>[]
+	answers: WithTimestamps<iAnswer<T>>[]
 	responses: WithTimestamps<iResponse>[]
 	users: WithTimestamps<iUser>[]
 	columnHeader: string
-	getDataColumn: (answer: WithTimestamps<iA>) => JSX.Element
+	getDataColumn: (answer: WithTimestamps<iAnswer<T>>) => JSX.Element
 }) => {
 	const navigate = useNavigate()
 

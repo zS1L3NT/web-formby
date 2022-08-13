@@ -2,11 +2,9 @@ import { DateTime } from "luxon"
 
 import { Input } from "@chakra-ui/react"
 
-import { iDateTimeAnswer } from "../../../../../models/Answer"
-import { iDateTimeQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const DateTimeAnswer = ({ answer }: AnswerProps<iDateTimeQuestion, iDateTimeAnswer>) => {
+const DateTimeAnswer = ({ answer }: AnswerProps<"datetime">) => {
 	return (
 		<Input
 			defaultValue={

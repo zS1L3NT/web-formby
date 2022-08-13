@@ -1,11 +1,8 @@
-
 import { Textarea } from "@chakra-ui/react"
 
-import { iParagraphAnswer } from "../../../../../models/Answer"
-import { iParagraphQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const ParagraphAnswer = ({ answer }: AnswerProps<iParagraphQuestion, iParagraphAnswer>) => {
+const ParagraphAnswer = ({ answer }: AnswerProps<"paragraph">) => {
 	return (
 		<Textarea
 			defaultValue={answer?.paragraph}

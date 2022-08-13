@@ -1,9 +1,8 @@
 import { Textarea } from "@chakra-ui/react"
 
-import { iParagraphQuestion } from "../../../../../models/Question"
 import { EditorProps } from "../QuestionEditor"
 
-const ParagraphEditor = ({}: EditorProps<iParagraphQuestion>) => {
+const ParagraphEditor = ({}: EditorProps<"paragraph">) => {
 	return (
 		<Textarea
 			disabled={true}

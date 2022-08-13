@@ -1,9 +1,7 @@
-import { iTextAnswer } from "../../../../../models/Answer"
-import { iTextQuestion } from "../../../../../models/Question"
 import { AnswersProps } from "../QuestionAnswers"
 import TableValueDisplay from "../TableValueDisplay"
 
-const TextAnswers = ({ answers, responses, users }: AnswersProps<iTextQuestion, iTextAnswer>) => {
+const TextAnswers = ({ answers, responses, users }: AnswersProps<"text">) => {
 	return (
 		<TableValueDisplay
 			answers={answers}

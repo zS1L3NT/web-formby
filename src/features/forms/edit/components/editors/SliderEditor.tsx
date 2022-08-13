@@ -6,10 +6,9 @@ import {
 	SliderMark, SliderThumb, SliderTrack, Text
 } from "@chakra-ui/react"
 
-import { iSliderQuestion } from "../../../../../models/Question"
 import { EditorProps } from "../QuestionEditor"
 
-const SliderEditor = ({ question, setQuestion }: EditorProps<iSliderQuestion>) => {
+const SliderEditor = ({ question, setQuestion }: EditorProps<"slider">) => {
 	const [sliderMin, setSliderMin] = useState(question.slider_min)
 	const [sliderStep, setSliderStep] = useState(question.slider_step)
 	const [sliderMax, setSliderMax] = useState(question.slider_max)

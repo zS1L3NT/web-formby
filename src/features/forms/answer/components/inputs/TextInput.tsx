@@ -1,10 +1,8 @@
 import { Input } from "@chakra-ui/react"
 
-import { iTextAnswer } from "../../../../../models/Answer"
-import { iTextQuestion } from "../../../../../models/Question"
 import { InputProps } from "../QuestionInput"
 
-const TextInput = ({ answer, setAnswer }: InputProps<iTextQuestion, iTextAnswer>) => {
+const TextInput = ({ answer, setAnswer }: InputProps<"text">) => {
 	return (
 		<Input
 			value={answer.text}

@@ -2,15 +2,9 @@ import {
 	Box, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack
 } from "@chakra-ui/react"
 
-import { iSliderAnswer } from "../../../../../models/Answer"
-import { iSliderQuestion } from "../../../../../models/Question"
 import { InputProps } from "../QuestionInput"
 
-const SliderInput = ({
-	question,
-	answer,
-	setAnswer
-}: InputProps<iSliderQuestion, iSliderAnswer>) => {
+const SliderInput = ({ question, answer, setAnswer }: InputProps<"slider">) => {
 	const { slider_min: sliderMin, slider_step: sliderStep, slider_max: sliderMax } = question
 
 	return (

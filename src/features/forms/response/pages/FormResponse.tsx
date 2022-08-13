@@ -33,7 +33,7 @@ const FormResponse = () => {
 		useLazyGetFormResponseAnswersQuery()
 	const [getUser, { error: userError }] = useLazyGetUserQuery()
 
-	const [answers, setAnswers] = useState<WithTimestamps<iAnswer>[]>()
+	const [answers, setAnswers] = useState<WithTimestamps<iAnswer<any>>[]>()
 	const [_user, setUser] = useState<WithTimestamps<iUser> | null>()
 
 	useOnlyFormOwner(user, form)

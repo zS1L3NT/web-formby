@@ -1,7 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react"
 
-import { iColorAnswer } from "../../../../../models/Answer"
-import { iColorQuestion } from "../../../../../models/Question"
 import { AnswersProps } from "../QuestionAnswers"
 import TableValueDisplay from "../TableValueDisplay"
 
@@ -9,7 +7,7 @@ const ColorAnswers = ({
 	answers,
 	responses,
 	users
-}: AnswersProps<iColorQuestion, iColorAnswer>) => {
+}: AnswersProps<"color">) => {
 	return (
 		<TableValueDisplay
 			answers={answers}

@@ -3,14 +3,15 @@ import { DraggableProvided } from "react-beautiful-dnd"
 import { Alert, AlertIcon, AlertTitle, Box, Collapse, Image, Text } from "@chakra-ui/react"
 
 import Card from "../../../../components/Card"
+import { iQuestionType } from "../../../../models"
 import { iAnswer } from "../../../../models/Answer"
 import { iQuestion } from "../../../../models/Question"
 import RenderInput from "./RenderInput"
 
-export type InputProps<iQ extends iQuestion, iA extends iAnswer> = {
-	question: iQ
-	answer: Omit<iA, "id" | "response_id">
-	setAnswer: (answer: Omit<iA, "id" | "response_id">) => void
+export type InputProps<T extends iQuestionType> = {
+	question: iQuestion<T>
+	answer: Omit<iAnswer<T>, "id" | "response_id">
+	setAnswer: (answer: Omit<iAnswer<T>, "id" | "response_id">) => void
 }
 
 const QuestionInput = ({
@@ -21,9 +22,9 @@ const QuestionInput = ({
 	error
 }: {
 	provided?: DraggableProvided
-	question: iQuestion
-	answer: Omit<iAnswer, "id" | "response_id">
-	setAnswer: (answer: Omit<iAnswer, "id" | "response_id">) => void
+	question: iQuestion<any>
+	answer: Omit<iAnswer<any>, "id" | "response_id">
+	setAnswer: (answer: Omit<iAnswer<any>, "id" | "response_id">) => void
 	error: string | null
 }) => {
 	return (

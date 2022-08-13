@@ -1,15 +1,9 @@
 import { DateTime } from "luxon"
 
-import { iDateTimeAnswer } from "../../../../../models/Answer"
-import { iDateTimeQuestion } from "../../../../../models/Question"
 import { AnswersProps } from "../QuestionAnswers"
 import TableValueDisplay from "../TableValueDisplay"
 
-const DateTimeAnswers = ({
-	answers,
-	responses,
-	users
-}: AnswersProps<iDateTimeQuestion, iDateTimeAnswer>) => {
+const DateTimeAnswers = ({ answers, responses, users }: AnswersProps<"datetime">) => {
 	return (
 		<TableValueDisplay
 			answers={answers}

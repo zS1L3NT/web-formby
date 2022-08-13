@@ -2,11 +2,9 @@ import { HexColorPicker } from "react-colorful"
 
 import { Box, Flex, Input } from "@chakra-ui/react"
 
-import { iColorAnswer } from "../../../../../models/Answer"
-import { iColorQuestion } from "../../../../../models/Question"
 import { InputProps } from "../QuestionInput"
 
-const ColorInput = ({ answer, setAnswer }: InputProps<iColorQuestion, iColorAnswer>) => {
+const ColorInput = ({ answer, setAnswer }: InputProps<"color">) => {
 	return (
 		<Flex
 			pos="relative"

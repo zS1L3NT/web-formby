@@ -1,9 +1,8 @@
 import { Input } from "@chakra-ui/react"
 
-import { iTextQuestion } from "../../../../../models/Question"
 import { EditorProps } from "../QuestionEditor"
 
-const TextEditor = ({}: EditorProps<iTextQuestion>) => {
+const TextEditor = ({}: EditorProps<"text">) => {
 	return (
 		<Input
 			disabled={true}

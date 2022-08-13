@@ -1,18 +1,7 @@
-import { Chart, registerables } from "chart.js"
-
-import { iChoiceAnswer } from "../../../../../models/Answer"
-import { iChoiceQuestion } from "../../../../../models/Question"
 import ChartValueDisplay from "../ChartValueDisplay"
 import { AnswersProps } from "../QuestionAnswers"
 
-Chart.register(...registerables)
-
-const ChoiceAnswers = ({
-	question,
-	answers,
-	responses,
-	users
-}: AnswersProps<iChoiceQuestion, iChoiceAnswer>) => {
+const ChoiceAnswers = ({ question, answers, responses, users }: AnswersProps<"choice">) => {
 	return (
 		<ChartValueDisplay
 			id={question.id}

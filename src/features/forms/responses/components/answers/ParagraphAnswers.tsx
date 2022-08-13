@@ -1,13 +1,7 @@
-import { iParagraphAnswer } from "../../../../../models/Answer"
-import { iParagraphQuestion } from "../../../../../models/Question"
 import { AnswersProps } from "../QuestionAnswers"
 import TableValueDisplay from "../TableValueDisplay"
 
-const ParagraphAnswers = ({
-	answers,
-	responses,
-	users
-}: AnswersProps<iParagraphQuestion, iParagraphAnswer>) => {
+const ParagraphAnswers = ({ answers, responses, users }: AnswersProps<"paragraph">) => {
 	return (
 		<TableValueDisplay
 			answers={answers}

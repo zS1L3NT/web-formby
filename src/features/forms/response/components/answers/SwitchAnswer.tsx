@@ -1,10 +1,8 @@
 import { Flex, Switch, Text } from "@chakra-ui/react"
 
-import { iSwitchAnswer } from "../../../../../models/Answer"
-import { iSwitchQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const SwitchAnswer = ({ answer }: AnswerProps<iSwitchQuestion, iSwitchAnswer>) => {
+const SwitchAnswer = ({ answer }: AnswerProps<"switch">) => {
 	return (
 		<Flex
 			alignItems="center"

@@ -1,26 +1,21 @@
 import { Box, Image, Text } from "@chakra-ui/react"
 
 import Card from "../../../../components/Card"
-import { WithTimestamps } from "../../../../models"
+import { iQuestionType, WithTimestamps } from "../../../../models"
 import { iAnswer } from "../../../../models/Answer"
 import { iQuestion } from "../../../../models/Question"
 import { iResponse } from "../../../../models/Response"
 import { iUser } from "../../../../models/User"
 import RenderAnswers from "./RenderAnswers"
 
-export type AnswersProps<iQ extends iQuestion, iA extends iAnswer> = {
-	question: WithTimestamps<iQ>
-	answers: WithTimestamps<iA>[]
+export type AnswersProps<T extends iQuestionType> = {
+	question: WithTimestamps<iQuestion<T>>
+	answers: WithTimestamps<iAnswer<T>>[]
 	responses: WithTimestamps<iResponse>[]
 	users: WithTimestamps<iUser>[]
 }
 
-const QuestionAnswers = ({
-	question,
-	responses,
-	answers,
-	users
-}: AnswersProps<iQuestion, iAnswer>) => {
+const QuestionAnswers = ({ question, responses, answers, users }: AnswersProps<any>) => {
 	return (
 		<Card mb={4}>
 			<Text

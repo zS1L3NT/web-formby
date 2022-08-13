@@ -28,7 +28,7 @@ const FormEdit = () => {
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 	const [updateFormQuestion, { error }] = useUpdateFormQuestionMutation()
 
-	const [optimisticQuestions, setOptimisticQuestions] = useImmer<iQuestion[] | undefined>(
+	const [optimisticQuestions, setOptimisticQuestions] = useImmer<iQuestion<any>[] | undefined>(
 		undefined
 	)
 
@@ -68,8 +68,8 @@ const FormEdit = () => {
 			return
 		}
 
-		const _questions = JSON.parse(JSON.stringify(questions)) as WithTimestamps<iQuestion>[]
-		const __questions = JSON.parse(JSON.stringify(questions)) as WithTimestamps<iQuestion>[]
+		const _questions = JSON.parse(JSON.stringify(questions)) as WithTimestamps<iQuestion<any>>[]
+		const __questions = JSON.parse(JSON.stringify(questions)) as WithTimestamps<iQuestion<any>>[]
 
 		_questions.splice(newIndex, 0, _questions.splice(oldIndex, 1)[0]!)
 
