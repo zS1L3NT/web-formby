@@ -24,6 +24,7 @@ const FormAnswer = () => {
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 	const [createFormResponse, { isLoading }] = useCreateFormResponseMutation()
 
+	const [anonymous, setAnonymous] = useState(!token)
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
 	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id" | "response_id">[] | null>(null)
 
@@ -50,7 +51,7 @@ const FormAnswer = () => {
 		setErrors(errors)
 		if (errors.every(item => item === null)) {
 			await createFormResponse({
-				token,
+				token: form.auth ? token : anonymous ? null : token,
 				form_id: form.id,
 				answers: answers.filter(
 					(answer, i) => questions[i]!.required || !isAnswerEmpty(questions[i]!, answer)
@@ -74,7 +75,11 @@ const FormAnswer = () => {
 			maxW="4xl">
 			{form ? (
 				<>
-					<FormHeader form={form} />
+					<FormHeader
+						form={form}
+						anonymous={anonymous}
+						setAnonymous={form.auth || !token ? null : setAnonymous}
+					/>
 					{questions && answers ? (
 						questions!.map((question, i) => (
 							<QuestionInput

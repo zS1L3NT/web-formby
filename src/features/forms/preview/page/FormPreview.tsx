@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useImmer } from "use-immer"
 
@@ -22,6 +22,7 @@ const FormPreview = () => {
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 
+	const [anonymous, setAnonymous] = useState(!token)
 	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id" | "response_id">[] | null>(null)
 
 	useOnlyFormOwner(user, form)
@@ -52,7 +53,11 @@ const FormPreview = () => {
 			maxW="4xl">
 			{form ? (
 				<>
-					<FormHeader form={form} />
+					<FormHeader
+						form={form}
+						anonymous={anonymous}
+						setAnonymous={form.auth || !token ? null : setAnonymous}
+					/>
 					{questions && answers ? (
 						questions!.map((question, i) => (
 							<QuestionInput
