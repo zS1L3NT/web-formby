@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 import { useToast } from "@chakra-ui/react"
 
@@ -9,15 +9,20 @@ import useAppSelector from "../hooks/useAppSelector"
 const ErrorHandler = () => {
 	const { setToken } = useContext(AuthContext)
 	const error = useAppSelector(state => state.error)
+	const location = useLocation()
 	const navigate = useNavigate()
 	const toast = useToast()
 
 	useEffect(() => {
 		if (!error) return
 
-		if (error.type === "Unauthorized") {
+		if (
+			error.type === "Unauthorized" &&
+			(error.message === "This route requires authentication" ||
+				error.message === "Invalid authorization token")
+		) {
 			setToken(null)
-			navigate("/login")
+			navigate("/login?continue=" + encodeURIComponent(location.pathname))
 		}
 
 		if (!toast.isActive(error.type + error.message)) {

@@ -1,5 +1,5 @@
 import { KeyboardEvent, useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import {
@@ -17,6 +17,7 @@ const Login = () => {
 	const { setToken } = useContext(AuthContext)
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
+	const [params] = useSearchParams()
 	const toast = useToast()
 
 	const [login, { isLoading }] = useLoginMutation()
@@ -27,7 +28,7 @@ const Login = () => {
 	const [emailError, setEmailError] = useState<string | null>(null)
 	const [passwordError, setPasswordError] = useState<string | null>(null)
 
-	useOnlyUnauthenticated()
+	useOnlyUnauthenticated(params.get("continue") ?? "/forms")
 
 	useEffect(() => {
 		setEmailError(null)
