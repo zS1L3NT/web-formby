@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import {
@@ -67,7 +67,7 @@ const PasswordCard = () => {
 						type={showOldPassword ? "text" : "password"}
 						isInvalid={!!oldPasswordError}
 						value={oldPassword}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+						onChange={e => {
 							setOldPassword(e.target.value)
 							setOldPasswordError("")
 						}}
@@ -97,7 +97,7 @@ const PasswordCard = () => {
 						type={showNewPassword ? "text" : "password"}
 						isInvalid={!!newPasswordError}
 						value={newPassword}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+						onChange={e => {
 							setNewPassword(e.target.value)
 							setNewPasswordError("")
 						}}
@@ -127,7 +127,7 @@ const PasswordCard = () => {
 						type={showConfirmPassword ? "text" : "password"}
 						isInvalid={!!confirmPasswordError}
 						value={confirmPassword}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+						onChange={e => {
 							setConfirmPassword(e.target.value)
 							setConfirmPasswordError("")
 						}}

@@ -1,4 +1,3 @@
-import { FocusEvent } from "react"
 
 import { Input } from "@chakra-ui/react"
 
@@ -12,7 +11,7 @@ const TextAnswer = ({ answer }: AnswerProps<iTextQuestion, iTextAnswer>) => {
 			defaultValue={answer?.text}
 			placeholder="Text answer"
 			borderColor="whiteAlpha.300"
-			onFocus={(e: FocusEvent<HTMLInputElement>) => e.target.blur()}
+			onFocus={e => e.target.blur()}
 			cursor="not-allowed"
 		/>
 	)

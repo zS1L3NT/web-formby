@@ -1,5 +1,4 @@
 import { DateTime } from "luxon"
-import { FocusEvent } from "react"
 
 import { Input } from "@chakra-ui/react"
 
@@ -18,7 +17,7 @@ const DateTimeAnswer = ({ answer }: AnswerProps<iDateTimeQuestion, iDateTimeAnsw
 					: undefined
 			}
 			borderColor="whiteAlpha.300"
-			onFocus={(e: FocusEvent<HTMLInputElement>) => e.target.blur()}
+			onFocus={e => e.target.blur()}
 			cursor="not-allowed"
 		/>
 	)

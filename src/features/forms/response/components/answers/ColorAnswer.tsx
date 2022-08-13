@@ -1,4 +1,3 @@
-import { FocusEvent } from "react"
 
 import { Box, Flex, Input } from "@chakra-ui/react"
 
@@ -26,7 +25,7 @@ const ColorAnswer = ({ answer }: AnswerProps<iColorQuestion, iColorAnswer>) => {
 				ml={2}
 				flex={1}
 				defaultValue={answer?.color}
-				onFocus={(e: FocusEvent<HTMLInputElement>) => e.target.blur()}
+				onFocus={e => e.target.blur()}
 				cursor="not-allowed"
 			/>
 		</Flex>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { CloseIcon } from "@chakra-ui/icons"
 import {
@@ -138,7 +138,7 @@ const ProfileCard = () => {
 						ref={photoInputRef}
 						type="file"
 						accept="image/*"
-						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+						onChange={e =>
 							handleFileChange(e.target.files?.[0] ?? null)
 						}
 					/>
@@ -181,7 +181,7 @@ const ProfileCard = () => {
 					<Input
 						value={name}
 						isInvalid={!!nameError}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+						onChange={e => {
 							setName(e.target.value)
 							setNameError("")
 						}}
@@ -206,7 +206,7 @@ const ProfileCard = () => {
 						type="email"
 						value={email}
 						isInvalid={!!emailError}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+						onChange={e => {
 							setEmail(e.target.value)
 							setEmailError("")
 						}}

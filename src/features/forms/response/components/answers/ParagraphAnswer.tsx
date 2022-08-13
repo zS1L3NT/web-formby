@@ -1,4 +1,3 @@
-import { FocusEvent } from "react"
 
 import { Textarea } from "@chakra-ui/react"
 
@@ -12,7 +11,7 @@ const ParagraphAnswer = ({ answer }: AnswerProps<iParagraphQuestion, iParagraphA
 			defaultValue={answer?.paragraph}
 			placeholder="Paragraph answer"
 			borderColor="whiteAlpha.300"
-			onFocus={(e: FocusEvent<HTMLTextAreaElement>) => e.target.blur()}
+			onFocus={e => e.target.blur()}
 			cursor="not-allowed"
 		/>
 	)
