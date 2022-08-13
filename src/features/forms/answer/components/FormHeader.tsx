@@ -67,7 +67,6 @@ const FormHeader = ({
 							<Avatar
 								src={owner?.photo ?? ""}
 								size="xs"
-								name={owner?.name}
 								ml={-1}
 								mr={2}
 							/>
