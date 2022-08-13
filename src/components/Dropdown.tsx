@@ -30,7 +30,8 @@ const Dropdown = <T extends string>({
 					...provided,
 					cursor: "pointer",
 					background: "var(--chakra-colors-card)",
-					borderWidth: "2px",
+					borderWidth: "1px",
+					borderColor: "var(--chakra-colors-chakra-border-color)",
 					transition: "border-color 0.3s ease, border-width 0.3s ease",
 					":hover": {
 						borderColor: "var(--chakra-colors-primary)"

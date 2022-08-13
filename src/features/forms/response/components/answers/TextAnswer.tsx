@@ -10,7 +10,7 @@ const TextAnswer = ({ answer }: AnswerProps<iTextQuestion, iTextAnswer>) => {
 		<Input
 			defaultValue={answer?.text}
 			placeholder="Text answer"
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 			onFocus={e => e.target.blur()}
 			cursor="not-allowed"
 		/>

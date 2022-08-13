@@ -8,7 +8,7 @@ const TextEditor = ({}: EditorProps<iTextQuestion>) => {
 		<Input
 			disabled={true}
 			placeholder="Text answer"
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 		/>
 	)
 }

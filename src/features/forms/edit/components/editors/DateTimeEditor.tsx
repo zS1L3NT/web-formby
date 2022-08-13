@@ -11,7 +11,7 @@ const DateTimeEditor = ({}: EditorProps<iDateTimeQuestion>) => {
 			disabled={true}
 			type="datetime-local"
 			value={DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd'T'HH:mm''")}
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 		/>
 	)
 }

@@ -13,7 +13,7 @@ const ParagraphInput = ({
 			value={answer.paragraph}
 			onChange={e => setAnswer({ ...answer, paragraph: e.target.value })}
 			placeholder="Paragraph answer"
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 		/>
 	)
 }

@@ -10,7 +10,7 @@ const ParagraphAnswer = ({ answer }: AnswerProps<iParagraphQuestion, iParagraphA
 		<Textarea
 			defaultValue={answer?.paragraph}
 			placeholder="Paragraph answer"
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 			onFocus={e => e.target.blur()}
 			cursor="not-allowed"
 		/>

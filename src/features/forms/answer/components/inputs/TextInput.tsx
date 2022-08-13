@@ -10,7 +10,7 @@ const TextInput = ({ answer, setAnswer }: InputProps<iTextQuestion, iTextAnswer>
 			value={answer.text}
 			onChange={e => setAnswer({ ...answer, text: e.target.value })}
 			placeholder="Text answer"
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 		/>
 	)
 }

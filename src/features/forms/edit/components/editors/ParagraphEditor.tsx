@@ -8,7 +8,7 @@ const ParagraphEditor = ({}: EditorProps<iParagraphQuestion>) => {
 		<Textarea
 			disabled={true}
 			placeholder="Paragraph answer"
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 		/>
 	)
 }

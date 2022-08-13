@@ -16,7 +16,7 @@ const DateTimeAnswer = ({ answer }: AnswerProps<iDateTimeQuestion, iDateTimeAnsw
 					  )
 					: undefined
 			}
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 			onFocus={e => e.target.blur()}
 			cursor="not-allowed"
 		/>

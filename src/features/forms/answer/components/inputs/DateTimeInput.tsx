@@ -6,10 +6,7 @@ import { iDateTimeAnswer } from "../../../../../models/Answer"
 import { iDateTimeQuestion } from "../../../../../models/Question"
 import { InputProps } from "../QuestionInput"
 
-const DateTimeInput = ({
-	answer,
-	setAnswer
-}: InputProps<iDateTimeQuestion, iDateTimeAnswer>) => {
+const DateTimeInput = ({ answer, setAnswer }: InputProps<iDateTimeQuestion, iDateTimeAnswer>) => {
 	return (
 		<Input
 			type="datetime-local"
@@ -17,7 +14,7 @@ const DateTimeInput = ({
 			onChange={e =>
 				setAnswer({ ...answer, datetime: new Date(e.target.value).toISOString() })
 			}
-			borderColor="whiteAlpha.300"
+			borderColor="var(--chakra-colors-chakra-border-color)"
 		/>
 	)
 }
