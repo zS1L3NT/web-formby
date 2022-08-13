@@ -46,7 +46,8 @@ const OptionsMenu = ({
 				minW={6}
 			/>
 			<MenuList
-				bg="hsl(220, 26%, 18%)"
+				bg="card"
+				borderWidth="0"
 				zIndex={10}>
 				<MenuOptionGroup
 					defaultValue={question.type}
