@@ -25,13 +25,10 @@ const api = createApi({
 	tagTypes: ["User", "Form", "Question", "Response", "Answer"],
 	baseQuery: axiosBaseQuery,
 	endpoints: builder => ({
-		getForms: builder.query<WithTimestamps<iForm>[], { page?: number } & RequiredToken>({
-			query: ({ token, page }) => ({
+		getForms: builder.query<WithTimestamps<iForm>[], RequiredToken>({
+			query: ({ token }) => ({
 				url: "/forms",
 				method: "GET",
-				params: {
-					page
-				},
 				token
 			}),
 			providesTags: ["Form"]
