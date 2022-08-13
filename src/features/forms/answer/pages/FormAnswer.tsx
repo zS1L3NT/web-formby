@@ -13,6 +13,7 @@ import { iAnswer } from "../../../../models/Answer"
 import { getAnswerError, getEmptyAnswer, isAnswerEmpty } from "../../../../utils/answerUtils"
 import FormHeader from "../components/FormHeader"
 import QuestionInput from "../components/QuestionInput"
+import SubmittedCard from "../components/SubmittedCard"
 
 const FormAnswer = () => {
 	const { token } = useContext(AuthContext)
@@ -22,7 +23,7 @@ const FormAnswer = () => {
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
-	const [createFormResponse, { isLoading, error }] = useCreateFormResponseMutation()
+	const [createFormResponse, { isLoading, isSuccess, error }] = useCreateFormResponseMutation()
 
 	const [anonymous, setAnonymous] = useState(!token)
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
@@ -76,7 +77,9 @@ const FormAnswer = () => {
 		<Container
 			mt={4}
 			maxW="4xl">
-			{form ? (
+			{isSuccess ? (
+				<SubmittedCard />
+			) : form ? (
 				<>
 					<FormHeader
 						form={form}
