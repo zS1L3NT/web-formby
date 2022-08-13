@@ -1,14 +1,7 @@
-import { iSliderAnswer } from "../../../../../models/Answer"
-import { iSliderQuestion } from "../../../../../models/Question"
 import ChartValueDisplay from "../ChartValueDisplay"
 import { AnswersProps } from "../QuestionAnswers"
 
-const SliderAnswers = ({
-	question,
-	answers,
-	responses,
-	users
-}: AnswersProps<iSliderQuestion, iSliderAnswer>) => {
+const SliderAnswers = ({ question, answers, responses, users }: AnswersProps<"slider">) => {
 	const sliderSteps = (question.slider_max - question.slider_min) / question.slider_step + 1
 
 	return (

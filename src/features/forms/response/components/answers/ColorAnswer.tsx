@@ -1,11 +1,8 @@
-
 import { Box, Flex, Input } from "@chakra-ui/react"
 
-import { iColorAnswer } from "../../../../../models/Answer"
-import { iColorQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const ColorAnswer = ({ answer }: AnswerProps<iColorQuestion, iColorAnswer>) => {
+const ColorAnswer = ({ answer }: AnswerProps<"color">) => {
 	return (
 		<Flex
 			w={{ base: "full", sm: 80 }}

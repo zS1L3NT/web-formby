@@ -18,7 +18,7 @@ const QuestionDeleteAlert = ({
 }: {
 	isOpen: boolean
 	onClose: () => void
-	question: iQuestion
+	question: iQuestion<any>
 	setIsDeleting: () => void
 }) => {
 	const { token } = useOnlyAuthenticated()

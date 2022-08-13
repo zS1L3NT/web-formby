@@ -11,7 +11,7 @@ const AddQuestion = ({
 	previousQuestion
 }: {
 	formId: string
-	previousQuestion: iQuestion | null
+	previousQuestion: iQuestion<any> | null
 }) => {
 	const { token } = useOnlyAuthenticated()
 

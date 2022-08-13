@@ -4,11 +4,10 @@ import {
 } from "@chakra-ui/react"
 
 import Dropdown from "../../../../../components/Dropdown"
-import { iTableQuestion } from "../../../../../models/Question"
 import ListMaker from "../ListMaker"
 import { EditorProps } from "../QuestionEditor"
 
-const TableEditor = ({ question, setQuestion }: EditorProps<iTableQuestion>) => {
+const TableEditor = ({ question, setQuestion }: EditorProps<"table">) => {
 	const { table_rows: tableRows, table_columns: tableColumns, table_type: tableType } = question
 
 	return (

@@ -3,17 +3,10 @@ import { useState } from "react"
 import { Box, Flex, Text } from "@chakra-ui/react"
 
 import Dropdown from "../../../../../components/Dropdown"
-import { iTableAnswer } from "../../../../../models/Answer"
-import { iTableQuestion } from "../../../../../models/Question"
 import ChartValueDisplay from "../ChartValueDisplay"
 import { AnswersProps } from "../QuestionAnswers"
 
-const TableAnswers = ({
-	question,
-	answers,
-	responses,
-	users
-}: AnswersProps<iTableQuestion, iTableAnswer>) => {
+const TableAnswers = ({ question, answers, responses, users }: AnswersProps<"table">) => {
 	const [selectedRow, setSelectedRow] = useState<string | null>(null)
 
 	return (

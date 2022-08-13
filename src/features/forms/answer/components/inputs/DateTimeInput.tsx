@@ -2,11 +2,9 @@ import { DateTime } from "luxon"
 
 import { Input } from "@chakra-ui/react"
 
-import { iDateTimeAnswer } from "../../../../../models/Answer"
-import { iDateTimeQuestion } from "../../../../../models/Question"
 import { InputProps } from "../QuestionInput"
 
-const DateTimeInput = ({ answer, setAnswer }: InputProps<iDateTimeQuestion, iDateTimeAnswer>) => {
+const DateTimeInput = ({ answer, setAnswer }: InputProps<"datetime">) => {
 	return (
 		<Input
 			type="datetime-local"

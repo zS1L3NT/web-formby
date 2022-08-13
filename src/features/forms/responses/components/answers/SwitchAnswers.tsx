@@ -1,14 +1,7 @@
-import { iSwitchAnswer } from "../../../../../models/Answer"
-import { iSwitchQuestion } from "../../../../../models/Question"
 import ChartValueDisplay from "../ChartValueDisplay"
 import { AnswersProps } from "../QuestionAnswers"
 
-const SwitchAnswers = ({
-	question,
-	answers,
-	responses,
-	users
-}: AnswersProps<iSwitchQuestion, iSwitchAnswer>) => {
+const SwitchAnswers = ({ question, answers, responses, users }: AnswersProps<"switch">) => {
 	return (
 		<ChartValueDisplay
 			id={question.id}

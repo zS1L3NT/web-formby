@@ -1,6 +1,7 @@
 import { diff } from "deep-object-diff"
 
-import { iChoiceQuestion, iQuestion, iSliderQuestion, iTableQuestion } from "../models/Question"
+import { iQuestionType } from "../models"
+import { iQuestion } from "../models/Question"
 
 /**
  * Get the difference between two questions before updating the server.
@@ -9,7 +10,10 @@ import { iChoiceQuestion, iQuestion, iSliderQuestion, iTableQuestion } from "../
  * @param new_ New Question
  * @returns An object containing the difference between both questions
  */
-export const getQuestionDifference = (old: iQuestion, new_: iQuestion) => {
+export const getQuestionDifference = <T extends iQuestionType>(
+	old: iQuestion<T>,
+	new_: iQuestion<T>
+) => {
 	const difference = <Record<string, any>>{}
 
 	if (new_.title !== old.title) {
@@ -33,61 +37,70 @@ export const getQuestionDifference = (old: iQuestion, new_: iQuestion) => {
 
 		switch (new_.type) {
 			case "choice":
-				difference.choices = new_.choices ?? ["Choice 1"]
-				difference.choice_type = new_.choice_type ?? "radio"
+				const cnew = <iQuestion<"choice">>(<unknown>new_)
+
+				difference.choices = cnew.choices ?? ["Choice 1"]
+				difference.choice_type = cnew.choice_type ?? "radio"
 				break
 			case "slider":
-				difference.slider_min = new_.slider_min ?? 0
-				difference.slider_step = new_.slider_step ?? 10
-				difference.slider_max = new_.slider_max ?? 100
+				const snew = <iQuestion<"slider">>(<unknown>new_)
+
+				difference.slider_min = snew.slider_min ?? 0
+				difference.slider_step = snew.slider_step ?? 10
+				difference.slider_max = snew.slider_max ?? 100
 				break
 			case "table":
-				difference.table_columns = new_.table_columns ?? ["Column 1"]
-				difference.table_rows = new_.table_rows ?? ["Row 1"]
-				difference.table_type = new_.table_type ?? "radio"
+				const tnew = <iQuestion<"table">>(<unknown>new_)
+
+				difference.table_columns = tnew.table_columns ?? ["Column 1"]
+				difference.table_rows = tnew.table_rows ?? ["Row 1"]
+				difference.table_type = tnew.table_type ?? "radio"
 				break
 		}
 	} else {
 		switch (new_.type) {
 			case "choice":
-				const cold = <iChoiceQuestion>old
+				const cold = <iQuestion<"choice">>(<unknown>old)
+				const cnew = <iQuestion<"choice">>(<unknown>new_)
 
-				if (Object.keys(diff(new_.choices ?? {}, cold.choices ?? {})).length) {
-					difference.choices = new_.choices
+				if (Object.keys(diff(cnew.choices ?? {}, cold.choices ?? {})).length) {
+					difference.choices = cnew.choices
 				}
 
-				if (new_.choice_type !== cold.choice_type) {
-					difference.choice_type = new_.choice_type
+				if (cnew.choice_type !== cold.choice_type) {
+					difference.choice_type = cnew.choice_type
 				}
 				break
 			case "slider":
-				const sold = <iSliderQuestion>old
+				const sold = <iQuestion<"slider">>(<unknown>old)
+				const snew = <iQuestion<"slider">>(<unknown>new_)
 
-				if (new_.slider_min !== sold.slider_min) {
-					difference.slider_min = new_.slider_min
+				if (snew.slider_min !== sold.slider_min) {
+					difference.slider_min = snew.slider_min
 				}
 
-				if (new_.slider_step !== sold.slider_step) {
-					difference.slider_step = new_.slider_step
+				if (snew.slider_step !== sold.slider_step) {
+					difference.slider_step = snew.slider_step
 				}
 
-				if (new_.slider_max !== sold.slider_max) {
-					difference.slider_max = new_.slider_max
+				if (snew.slider_max !== sold.slider_max) {
+					difference.slider_max = snew.slider_max
 				}
 				break
 			case "table":
-				const told = <iTableQuestion>old
+				const told = <iQuestion<"table">>(<unknown>old)
+				const tnew = <iQuestion<"table">>(<unknown>new_)
 
-				if (Object.keys(diff(new_.table_columns ?? {}, told.table_columns ?? {})).length) {
-					difference.table_columns = new_.table_columns
+				if (Object.keys(diff(tnew.table_columns ?? {}, told.table_columns ?? {})).length) {
+					difference.table_columns = tnew.table_columns
 				}
 
-				if (Object.keys(diff(new_.table_rows ?? {}, told.table_rows ?? {})).length) {
-					difference.table_rows = new_.table_rows
+				if (Object.keys(diff(tnew.table_rows ?? {}, told.table_rows ?? {})).length) {
+					difference.table_rows = tnew.table_rows
 				}
 
-				if (new_.table_type !== told.table_type) {
-					difference.table_type = new_.table_type
+				if (tnew.table_type !== told.table_type) {
+					difference.table_type = tnew.table_type
 				}
 				break
 		}
@@ -102,7 +115,7 @@ export const getQuestionDifference = (old: iQuestion, new_: iQuestion) => {
  * @throws Error if the questions are not linked like a linked list
  * @param questions Questions to check if they are a linked list
  */
-export const assertLinkedQuestions = (questions: iQuestion[]) => {
+export const assertLinkedQuestions = (questions: iQuestion<any>[]) => {
 	for (let i = 0; i < questions.length; i++) {
 		const previousQuestionId = questions[i - 1]?.id ?? null
 		if (!questions.find(question => question.previous_question_id === previousQuestionId)) {
@@ -119,8 +132,8 @@ export const assertLinkedQuestions = (questions: iQuestion[]) => {
  * @param question Question to create a duplicate of
  * @returns Duplicate of the quetion
  */
-export const createDuplicate = (question: iQuestion) => {
-	const duplicateQuestion = <Omit<iQuestion, "id">>{
+export const createDuplicate = <T extends iQuestionType>(question: iQuestion<T>) => {
+	const dq = <Omit<iQuestion<T>, "id">>{
 		form_id: question.form_id,
 		previous_question_id: question.id,
 		title: question.title,
@@ -131,24 +144,30 @@ export const createDuplicate = (question: iQuestion) => {
 	}
 
 	if (question.type === "choice") {
-		const duplicateChoiceQuestion = <Omit<iChoiceQuestion, "id">>duplicateQuestion
-		duplicateChoiceQuestion.choices = [...question.choices]
-		duplicateChoiceQuestion.choice_type = question.choice_type
+		const dcq = <Omit<iQuestion<"choice">, "id">>(<unknown>dq)
+		const cq = <iQuestion<"choice">>(<unknown>question)
+
+		dcq.choices = [...cq.choices]
+		dcq.choice_type = cq.choice_type
 	}
 
 	if (question.type === "slider") {
-		const duplicateSliderQuestion = <Omit<iSliderQuestion, "id">>duplicateQuestion
-		duplicateSliderQuestion.slider_min = question.slider_min
-		duplicateSliderQuestion.slider_step = question.slider_step
-		duplicateSliderQuestion.slider_max = question.slider_max
+		const dsq = <Omit<iQuestion<"slider">, "id">>(<unknown>dq)
+		const sq = <iQuestion<"slider">>(<unknown>question)
+
+		dsq.slider_min = sq.slider_min
+		dsq.slider_step = sq.slider_step
+		dsq.slider_max = sq.slider_max
 	}
 
 	if (question.type === "table") {
-		const duplicateTableQuestion = <Omit<iTableQuestion, "id">>duplicateQuestion
-		duplicateTableQuestion.table_columns = [...question.table_columns]
-		duplicateTableQuestion.table_rows = [...question.table_rows]
-		duplicateTableQuestion.table_type = question.table_type
+		const dtq = <Omit<iQuestion<"table">, "id">>(<unknown>dq)
+		const tq = <iQuestion<"table">>(<unknown>question)
+
+		dtq.table_columns = [...tq.table_columns]
+		dtq.table_rows = [...tq.table_rows]
+		dtq.table_type = tq.table_type
 	}
 
-	return duplicateQuestion
+	return dq
 }

@@ -2,10 +2,9 @@ import { DateTime } from "luxon"
 
 import { Input } from "@chakra-ui/react"
 
-import { iDateTimeQuestion } from "../../../../../models/Question"
 import { EditorProps } from "../QuestionEditor"
 
-const DateTimeEditor = ({}: EditorProps<iDateTimeQuestion>) => {
+const DateTimeEditor = ({}: EditorProps<"datetime">) => {
 	return (
 		<Input
 			disabled={true}

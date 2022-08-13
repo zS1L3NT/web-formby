@@ -21,8 +21,8 @@ const OptionsMenu = ({
 }: {
 	menuRef: RefObject<HTMLButtonElement>
 	onDelete: () => void
-	question: iQuestion
-	setQuestion: Updater<iQuestion>
+	question: iQuestion<any>
+	setQuestion: Updater<iQuestion<any>>
 }) => {
 	const { token } = useOnlyAuthenticated()
 

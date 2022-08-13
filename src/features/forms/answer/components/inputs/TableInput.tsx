@@ -2,15 +2,9 @@ import {
 	Checkbox, CheckboxGroup, Radio, RadioGroup, Table, TableContainer, Tbody, Th, Thead, Tr
 } from "@chakra-ui/react"
 
-import { iTableAnswer } from "../../../../../models/Answer"
-import { iTableQuestion } from "../../../../../models/Question"
 import { InputProps } from "../QuestionInput"
 
-const TableInput = ({
-	question,
-	answer,
-	setAnswer
-}: InputProps<iTableQuestion, iTableAnswer>) => {
+const TableInput = ({ question, answer, setAnswer }: InputProps<"table">) => {
 	const { table_rows: tableRows, table_columns: tableColumns, table_type: tableType } = question
 
 	return (
@@ -37,9 +31,7 @@ const TableInput = ({
 											setAnswer({
 												...answer,
 												table: [
-													...answer.table.filter(
-														item => item[0] !== row
-													),
+													...answer.table.filter(item => item[0] !== row),
 													...choices.map<[string, string]>(choice => [
 														row,
 														choice as string

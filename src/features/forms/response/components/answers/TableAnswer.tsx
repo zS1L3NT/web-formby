@@ -2,11 +2,9 @@ import {
 	Checkbox, CheckboxGroup, Radio, RadioGroup, Table, TableContainer, Tbody, Th, Thead, Tr
 } from "@chakra-ui/react"
 
-import { iTableAnswer } from "../../../../../models/Answer"
-import { iTableQuestion } from "../../../../../models/Question"
 import { AnswerProps } from "../QuestionAnswer"
 
-const TableAnswer = ({ question, answer }: AnswerProps<iTableQuestion, iTableAnswer>) => {
+const TableAnswer = ({ question, answer }: AnswerProps<"table">) => {
 	const { table_rows: tableRows, table_columns: tableColumns, table_type: tableType } = question
 
 	return (

@@ -13,6 +13,7 @@ import Card from "../../../../components/Card"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
+import { iQuestionType } from "../../../../models"
 import { iQuestion } from "../../../../models/Question"
 import { getQuestionDifference } from "../../../../utils/questionUtils"
 import AddQuestion from "./AddQuestion"
@@ -21,9 +22,9 @@ import OptionsMenu from "./OptionsMenu"
 import QuestionDeleteAlert from "./QuestionDeleteAlert"
 import RenderEditor from "./RenderEditor"
 
-export type EditorProps<iQ extends iQuestion> = {
-	question: iQ
-	setQuestion: Updater<iQ>
+export type EditorProps<T extends iQuestionType> = {
+	question: iQuestion<T>
+	setQuestion: Updater<iQuestion<T>>
 }
 
 const QuestionEditor = ({
@@ -31,7 +32,7 @@ const QuestionEditor = ({
 	parentQuestion
 }: {
 	provided?: DraggableProvided
-	parentQuestion: iQuestion
+	parentQuestion: iQuestion<any>
 }) => {
 	const { token } = useOnlyAuthenticated()
 	const toast = useToast()

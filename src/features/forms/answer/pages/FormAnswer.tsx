@@ -26,14 +26,16 @@ const FormAnswer = () => {
 
 	const [anonymous, setAnonymous] = useState(!token)
 	const [errors, setErrors] = useState<(string | null)[] | null>(null)
-	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id" | "response_id">[] | null>(null)
+	const [answers, setAnswers] = useImmer<Omit<iAnswer<any>, "id" | "response_id">[] | null>(null)
 
 	useToastError(formError, true)
 	useToastError(questionsError, true)
 	useToastError(error)
 
 	useEffect(() => {
-		setAnswers(_ => questions?.map<Omit<iAnswer, "id" | "response_id">>(getEmptyAnswer) ?? null)
+		setAnswers(
+			_ => questions?.map<Omit<iAnswer<any>, "id" | "response_id">>(getEmptyAnswer) ?? null
+		)
 	}, [questions])
 
 	useEffect(() => {

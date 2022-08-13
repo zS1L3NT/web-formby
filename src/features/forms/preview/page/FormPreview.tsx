@@ -23,7 +23,7 @@ const FormPreview = () => {
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 
 	const [anonymous, setAnonymous] = useState(!token)
-	const [answers, setAnswers] = useImmer<Omit<iAnswer, "id" | "response_id">[] | null>(null)
+	const [answers, setAnswers] = useImmer<Omit<iAnswer<any>, "id" | "response_id">[] | null>(null)
 
 	useOnlyFormOwner(user, form)
 
@@ -31,7 +31,9 @@ const FormPreview = () => {
 	useToastError(questionsError, true)
 
 	useEffect(() => {
-		setAnswers(_ => questions?.map<Omit<iAnswer, "id" | "response_id">>(getEmptyAnswer) ?? null)
+		setAnswers(
+			_ => questions?.map<Omit<iAnswer<any>, "id" | "response_id">>(getEmptyAnswer) ?? null
+		)
 	}, [user, questions])
 
 	useEffect(() => {

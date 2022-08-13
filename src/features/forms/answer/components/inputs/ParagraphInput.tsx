@@ -1,13 +1,8 @@
 import { Textarea } from "@chakra-ui/react"
 
-import { iParagraphAnswer } from "../../../../../models/Answer"
-import { iParagraphQuestion } from "../../../../../models/Question"
 import { InputProps } from "../QuestionInput"
 
-const ParagraphInput = ({
-	answer,
-	setAnswer
-}: InputProps<iParagraphQuestion, iParagraphAnswer>) => {
+const ParagraphInput = ({ answer, setAnswer }: InputProps<"paragraph">) => {
 	return (
 		<Textarea
 			value={answer.paragraph}

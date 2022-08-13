@@ -77,7 +77,7 @@ const api = createApi({
 			invalidatesTags: ["Form"]
 		}),
 		getFormQuestions: builder.query<
-			WithTimestamps<iQuestion>[],
+			WithTimestamps<iQuestion<any>>[],
 			{ form_id: string } & OptionalToken
 		>({
 			query: ({ token, form_id }) => ({
@@ -88,8 +88,8 @@ const api = createApi({
 			providesTags: ["Question"]
 		}),
 		createFormQuestion: builder.mutation<
-			ApiResponse & { question: WithTimestamps<iQuestion> },
-			Omit<iQuestion, "id" | "form_id"> & { form_id: string } & RequiredToken
+			ApiResponse & { question: WithTimestamps<iQuestion<any>> },
+			Omit<iQuestion<any>, "id" | "form_id"> & { form_id: string } & RequiredToken
 		>({
 			query: ({ token, form_id, ...question }) => ({
 				url: `/forms/${form_id}/questions`,
@@ -100,7 +100,7 @@ const api = createApi({
 			invalidatesTags: ["Question"]
 		}),
 		getFormQuestion: builder.query<
-			WithTimestamps<iQuestion>,
+			WithTimestamps<iQuestion<any>>,
 			{ form_id: string; question_id: string } & OptionalToken
 		>({
 			query: ({ token, form_id, question_id }) => ({
@@ -111,8 +111,8 @@ const api = createApi({
 			providesTags: ["Question"]
 		}),
 		updateFormQuestion: builder.mutation<
-			ApiResponse & { question: WithTimestamps<iQuestion> },
-			Partial<Omit<iQuestion, "id" | "form_id">> & {
+			ApiResponse & { question: WithTimestamps<iQuestion<any>> },
+			Partial<Omit<iQuestion<any>, "id" | "form_id">> & {
 				form_id: string
 				question_id: string
 			} & RequiredToken
@@ -137,7 +137,7 @@ const api = createApi({
 			invalidatesTags: ["Question"]
 		}),
 		getFormResponseAnswers: builder.query<
-			WithTimestamps<iAnswer>[],
+			WithTimestamps<iAnswer<any>>[],
 			{ form_id: string; response_id: string } & RequiredToken
 		>({
 			query: ({ token, form_id, response_id }) => ({
@@ -160,7 +160,7 @@ const api = createApi({
 		}),
 		createFormResponse: builder.mutation<
 			ApiResponse,
-			{ form_id: string; answers: Omit<iAnswer, "id" | "response_id">[] } & OptionalToken
+			{ form_id: string; answers: Omit<iAnswer<any>, "id" | "response_id">[] } & OptionalToken
 		>({
 			query: ({ token, form_id, answers }) => ({
 				url: `/forms/${form_id}/responses`,
