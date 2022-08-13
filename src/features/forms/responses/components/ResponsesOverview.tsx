@@ -57,8 +57,7 @@ const ResponsesOverview = ({ form, responses }: { form: iForm; responses: iRespo
 						color="primary"
 						fontSize="5xl"
 						fontWeight="bold"
-						textAlign="center"
-						lineHeight={1.2}>
+						textAlign="center">
 						{responses.length}
 					</Text>
 					<Text

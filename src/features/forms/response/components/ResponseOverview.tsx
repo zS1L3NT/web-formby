@@ -68,8 +68,7 @@ const ResponseOverview = ({ form, user }: { form: iForm; user: iUser | null | un
 							color="primary"
 							fontSize="5xl"
 							fontWeight="bold"
-							textAlign="center"
-							lineHeight={1.2}>
+							textAlign="center">
 							{user?.name ?? "Anonymous User"}
 						</Text>
 					)}
