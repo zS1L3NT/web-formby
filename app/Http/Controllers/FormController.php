@@ -34,12 +34,7 @@ class FormController extends Controller
 	 */
 	public function index()
 	{
-		$page = request()->query("page") ?? 1;
-		return Form::query()
-			->where("user_id", auth()->user()->id)
-			->skip(($page - 1) * 20)
-			->limit(20)
-			->get();
+		return Form::query()->where("user_id", auth()->user()->id)->get();
 	}
 
 	/**

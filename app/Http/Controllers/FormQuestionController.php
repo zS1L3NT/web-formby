@@ -65,10 +65,10 @@ class FormQuestionController extends Controller
 	 */
 	public function index(Form $form)
 	{
-		$last_question_id = request("last_question_id");
+		$last_question_id = NULL;
 
 		$questions = [];
-		for ($i = 0; $i < 10; $i++) {
+		while (true) {
 			$question = Question::query()
 				->where("form_id", $form->id)
 				->where("previous_question_id", $last_question_id)
