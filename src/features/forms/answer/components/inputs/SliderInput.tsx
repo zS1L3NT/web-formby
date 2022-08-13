@@ -23,6 +23,7 @@ const SliderInput = ({ question, answer, setAnswer }: InputProps<"slider">) => {
 					? Array.from(Array((sliderMax - sliderMin) / sliderStep + 1)).map((_, i) => (
 							<SliderMark
 								key={i}
+								transform="translateX(-50%)"
 								value={sliderMin + sliderStep * i}>
 								{sliderMin + sliderStep * i}
 							</SliderMark>
