@@ -1,4 +1,4 @@
-import { createRef, useContext, useEffect } from "react"
+import { createRef, useEffect } from "react"
 import { DraggableProvided } from "react-beautiful-dnd"
 import { Updater, useImmer } from "use-immer"
 
@@ -10,8 +10,9 @@ import {
 
 import { useUpdateFormQuestionMutation } from "../../../../api"
 import Card from "../../../../components/Card"
-import AuthContext from "../../../../contexts/AuthContext"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../../hooks/useToastError"
 import { iQuestion } from "../../../../models/Question"
 import { getQuestionDifference } from "../../../../utils/questionUtils"
 import AddQuestion from "./AddQuestion"
@@ -32,12 +33,12 @@ const QuestionEditor = ({
 	provided?: DraggableProvided
 	parentQuestion: iQuestion
 }) => {
-	const { token } = useContext(AuthContext)
+	const { token } = useOnlyAuthenticated()
 	const toast = useToast()
 	const photoInputRef = createRef<HTMLInputElement>()
 	const menuRef = createRef<HTMLButtonElement>()
 
-	const [updateFormQuestion] = useUpdateFormQuestionMutation()
+	const [updateFormQuestion, { error }] = useUpdateFormQuestionMutation()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [isDeleting, setIsDeleting] = useBoolean()
@@ -63,6 +64,8 @@ const QuestionEditor = ({
 			})
 		}
 	}, [question, token])
+
+	useToastError(error)
 
 	const handleFileChange = (file: File | null) => {
 		if (!file) {

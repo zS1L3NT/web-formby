@@ -7,18 +7,18 @@ import { AddIcon, EditIcon, LockIcon } from "@chakra-ui/icons"
 import { Box, Center, chakra, Flex, HStack, Spinner, Text } from "@chakra-ui/react"
 
 import { useCreateFormMutation } from "../../../../api"
-import useAppDispatch from "../../../../hooks/useAppDispatch"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../../hooks/useToastError"
 import { WithTimestamps } from "../../../../models"
 import { iForm } from "../../../../models/Form"
-import { setError } from "../../../../slices/ErrorSlice"
 
 const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 	const { token } = useOnlyAuthenticated()
-	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
-	const [createForm, { isLoading }] = useCreateFormMutation()
+	const [createForm, { isLoading, error }] = useCreateFormMutation()
+
+	useToastError(error)
 
 	return form ? (
 		<Flex
@@ -41,9 +41,9 @@ const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 			}}
 			onClick={() => {
 				if (form.state === "draft") {
-					navigate(`/forms/${form.id}/edit`)
+					navigate(`${form.id}/edit`)
 				} else {
-					navigate(`/forms/${form.id}/responses`)
+					navigate(`${form.id}/responses`)
 				}
 			}}>
 			<Box>
@@ -141,10 +141,8 @@ const FormItem = ({ form }: { form: WithTimestamps<iForm> | null }) => {
 					state: "draft"
 				})
 
-				if ("error" in response) {
-					dispatch(setError(response.error))
-				} else {
-					navigate(`/forms/${response.data.form.id}/edit`)
+				if ("data" in response) {
+					navigate(`${response.data.form.id}/edit`)
 				}
 			}}>
 			{isLoading ? <Spinner /> : <AddIcon />}

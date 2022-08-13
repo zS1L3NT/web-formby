@@ -1,11 +1,10 @@
-import { useContext } from "react"
-
 import { AddIcon } from "@chakra-ui/icons"
-import { IconButton, Spinner, useBoolean } from "@chakra-ui/react"
+import { IconButton, Spinner } from "@chakra-ui/react"
 
 import { useCreateFormQuestionMutation } from "../../../../api"
-import AuthContext from "../../../../contexts/AuthContext"
-import { iQuestion, iTextQuestion } from "../../../../models/Question"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../../hooks/useToastError"
+import { iQuestion } from "../../../../models/Question"
 
 const AddQuestion = ({
 	formId,
@@ -14,28 +13,11 @@ const AddQuestion = ({
 	formId: string
 	previousQuestion: iQuestion | null
 }) => {
-	const { token } = useContext(AuthContext)
+	const { token } = useOnlyAuthenticated()
 
-	const [createFormQuestion] = useCreateFormQuestionMutation()
+	const [createFormQuestion, { isLoading, error }] = useCreateFormQuestionMutation()
 
-	const [isCreating, setIsCreating] = useBoolean()
-
-	const handleCreate = async () => {
-		if (token === null) return
-
-		const question: Omit<iTextQuestion, "id" | "form_id"> = {
-			previous_question_id: previousQuestion?.id ?? null,
-			title: "New Question",
-			description: null,
-			photo: null,
-			type: "text",
-			required: false
-		}
-
-		setIsCreating.on()
-		await createFormQuestion({ form_id: formId, token, ...question })
-		setIsCreating.off()
-	}
+	useToastError(error)
 
 	return (
 		<IconButton
@@ -45,10 +27,21 @@ const AddQuestion = ({
 			bg="bg"
 			_hover={{ bg: "card" }}
 			aria-label="Add Question"
-			isDisabled={isCreating}
-			onClick={handleCreate}
+			isDisabled={isLoading}
+			onClick={() =>
+				createFormQuestion({
+					form_id: formId,
+					token,
+					previous_question_id: previousQuestion?.id ?? null,
+					title: "New Question",
+					description: null,
+					photo: null,
+					type: "text",
+					required: false
+				})
+			}
 			icon={
-				isCreating ? (
+				isLoading ? (
 					<Spinner
 						w={3}
 						h={3}

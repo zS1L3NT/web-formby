@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import {
 	Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Link,
-	Stack, Text, useBoolean, useToast
+	Stack, Text, useToast
 } from "@chakra-ui/react"
 
 import { useLoginMutation } from "../../../api"
@@ -19,14 +19,13 @@ const Login = () => {
 	const navigate = useNavigate()
 	const toast = useToast()
 
-	const [login] = useLoginMutation()
+	const [login, { isLoading }] = useLoginMutation()
 
-	const [loading, setLoading] = useBoolean()
-	const [email, setEmail] = useState("")
-	const [emailError, setEmailError] = useState<string | null>(null)
-	const [password, setPassword] = useState("")
-	const [passwordError, setPasswordError] = useState<string | null>(null)
 	const [showPassword, setShowPassword] = useState(false)
+	const [email, setEmail] = useState("")
+	const [password, setPassword] = useState("")
+	const [emailError, setEmailError] = useState<string | null>(null)
+	const [passwordError, setPasswordError] = useState<string | null>(null)
 
 	useOnlyUnauthenticated()
 
@@ -43,8 +42,6 @@ const Login = () => {
 	}
 
 	const handleLogin = async () => {
-		setLoading.on()
-
 		const result = await login({
 			email,
 			password
@@ -70,8 +67,6 @@ const Login = () => {
 		} else {
 			dispatch(setError(result.error))
 		}
-
-		setLoading.off()
 	}
 
 	return (
@@ -147,7 +142,7 @@ const Login = () => {
 					<Button
 						size="lg"
 						variant="primary"
-						isLoading={loading}
+						isLoading={isLoading}
 						loadingText="Logging in..."
 						onClick={handleLogin}>
 						Login
@@ -164,8 +159,8 @@ const Login = () => {
 						Don't have an account yet?{" "}
 						<Link
 							color="primary"
-							onClick={() => navigate("/login")}>
-							Login
+							onClick={() => navigate("/register")}>
+							Register
 						</Link>
 					</Text>
 				</Stack>

@@ -26,7 +26,7 @@ const FormEdit = () => {
 
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
-	const [updateFormQuestion] = useUpdateFormQuestionMutation()
+	const [updateFormQuestion, { error }] = useUpdateFormQuestionMutation()
 
 	const [optimisticQuestions, setOptimisticQuestions] = useImmer<iQuestion[] | undefined>(
 		undefined
@@ -36,6 +36,7 @@ const FormEdit = () => {
 
 	useToastError(formError)
 	useToastError(questionsError)
+	useToastError(error)
 
 	useEffect(() => {
 		if (!questions) return

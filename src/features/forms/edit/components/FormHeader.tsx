@@ -1,30 +1,31 @@
-import { useContext, useState } from "react"
+import { useState } from "react"
 
 import { Box } from "@chakra-ui/react"
 
 import { useUpdateFormMutation } from "../../../../api"
 import Card from "../../../../components/Card"
-import AuthContext from "../../../../contexts/AuthContext"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../../hooks/useToastError"
 import { iForm } from "../../../../models/Form"
 import EditableText from "./EditableText"
 
 const FormHeader = ({ form }: { form: iForm }) => {
-	const { token } = useContext(AuthContext)
+	const { token } = useOnlyAuthenticated()
 
-	const [updateForm] = useUpdateFormMutation()
+	const [updateForm, { error }] = useUpdateFormMutation()
 
-	const [name, setName] = useState(form!.name)
-	const [description, setDescription] = useState(form!.description)
+	const [name, setName] = useState(form.name)
+	const [description, setDescription] = useState(form.description)
+
+	useToastError(error)
 
 	// Update the form on the server when the name or description changes
 	useAsyncEffect(async () => {
-		if (!token) return
-
-		if (form!.name !== name || form!.description !== description) {
+		if (form.name !== name || form.description !== description) {
 			await updateForm({
 				token,
-				form_id: form!.id,
+				form_id: form.id,
 				name,
 				description,
 				auth: form.auth,
@@ -56,7 +57,7 @@ const FormHeader = ({ form }: { form: iForm }) => {
 					setText={setDescription}
 					fontSize="lg"
 					noOfLines={10}>
-					{form!.description}
+					{form.description}
 				</EditableText>
 			</Box>
 		</Card>

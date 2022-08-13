@@ -16,19 +16,22 @@ const FormSettings = () => {
 	const navigate = useNavigate()
 	const form_id = useParams().form_id!
 
+	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
+	const [updateForm, { error: updateFormError }] = useUpdateFormMutation()
+	const [deleteForm, { error: deleteFormError }] = useDeleteFormMutation()
+
 	const {
 		isOpen: formStateIsOpen,
 		onClose: formStateOnClose,
 		onOpen: formStateOnOpen
 	} = useDisclosure()
 	const { isOpen: deleteIsOpen, onClose: deleteOnClose, onOpen: deleteOnOpen } = useDisclosure()
-	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
-	const [updateForm] = useUpdateFormMutation()
-	const [deleteForm] = useDeleteFormMutation()
 
 	useOnlyFormOwner(user, form)
 
 	useToastError(formError)
+	useToastError(updateFormError)
+	useToastError(deleteFormError)
 
 	return (
 		<Container

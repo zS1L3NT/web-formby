@@ -24,8 +24,9 @@ const FormResponses = () => {
 	const { data: form, error: formError } = useGetFormQuery({ form_id, token })
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 	const { data: responses, error: responsesError } = useGetFormResponsesQuery({ form_id, token })
-	const [getResponseAnswers] = useLazyGetFormResponseAnswersQuery()
-	const [getUser] = useLazyGetUserQuery()
+	const [getResponseAnswers, { error: responseAnswersError }] =
+		useLazyGetFormResponseAnswersQuery()
+	const [getUser, { error: userError }] = useLazyGetUserQuery()
 
 	const [answers, setAnswers] = useState<WithTimestamps<iAnswer>[]>()
 	const [users, setUsers] = useState<WithTimestamps<iUser>[]>()
@@ -35,6 +36,8 @@ const FormResponses = () => {
 	useToastError(formError)
 	useToastError(questionsError)
 	useToastError(responsesError)
+	useToastError(responseAnswersError)
+	useToastError(userError)
 
 	useAsyncEffect(async () => {
 		if (!token || !responses) return
@@ -71,13 +74,13 @@ const FormResponses = () => {
 		<Container
 			mt={4}
 			maxW="4xl">
-			{form && questions && responses ? (
+			{form && responses ? (
 				<>
 					<ResponsesOverview
 						form={form}
 						responses={responses}
 					/>
-					{answers && users ? (
+					{questions && answers && users ? (
 						questions.map(question => (
 							<QuestionAnswers
 								key={question.id}

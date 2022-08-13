@@ -1,4 +1,4 @@
-import { createRef, useContext } from "react"
+import { createRef } from "react"
 
 import {
 	AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter,
@@ -6,7 +6,8 @@ import {
 } from "@chakra-ui/react"
 
 import { useDeleteFormQuestionMutation } from "../../../../api"
-import AuthContext from "../../../../contexts/AuthContext"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../../hooks/useToastError"
 import { iQuestion } from "../../../../models/Question"
 
 const QuestionDeleteAlert = ({
@@ -20,14 +21,14 @@ const QuestionDeleteAlert = ({
 	question: iQuestion
 	setIsDeleting: () => void
 }) => {
-	const { token } = useContext(AuthContext)
+	const { token } = useOnlyAuthenticated()
 	const alertCancelRef = createRef<any>()
 
-	const [deleteFormQuestion] = useDeleteFormQuestionMutation()
+	const [deleteFormQuestion, { error }] = useDeleteFormQuestionMutation()
+
+	useToastError(error)
 
 	const handleDeleteQuestion = async () => {
-		if (!token) return
-
 		onClose()
 		setIsDeleting()
 		await deleteFormQuestion({

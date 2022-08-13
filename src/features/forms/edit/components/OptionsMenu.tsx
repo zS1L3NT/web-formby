@@ -1,14 +1,15 @@
-import { RefObject, useContext } from "react"
+import { RefObject } from "react"
 import { Updater } from "use-immer"
 
 import { CopyIcon, DeleteIcon } from "@chakra-ui/icons"
 import {
 	IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuItemOption, MenuList, MenuOptionGroup,
-	Spinner, useBoolean
+	Spinner
 } from "@chakra-ui/react"
 
 import { useCreateFormQuestionMutation } from "../../../../api"
-import AuthContext from "../../../../contexts/AuthContext"
+import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
+import useToastError from "../../../../hooks/useToastError"
 import { iQuestion } from "../../../../models/Question"
 import { createDuplicate } from "../../../../utils/questionUtils"
 
@@ -23,18 +24,14 @@ const OptionsMenu = ({
 	question: iQuestion
 	setQuestion: Updater<iQuestion>
 }) => {
-	const { token } = useContext(AuthContext)
+	const { token } = useOnlyAuthenticated()
 
-	const [createFormQuestion] = useCreateFormQuestionMutation()
+	const [createFormQuestion, { isLoading, error }] = useCreateFormQuestionMutation()
 
-	const [isDuplicating, setIsDuplicating] = useBoolean()
+	useToastError(error)
 
 	const handleDuplicateQuestion = async () => {
-		if (!token) return
-
-		setIsDuplicating.on()
 		await createFormQuestion({ token, ...createDuplicate(question) })
-		setIsDuplicating.off()
 	}
 
 	return (
@@ -84,9 +81,9 @@ const OptionsMenu = ({
 					<MenuItemOption value="required">Required</MenuItemOption>
 				</MenuOptionGroup>
 				<MenuItem
-					isDisabled={isDuplicating}
+					isDisabled={isLoading}
 					icon={
-						isDuplicating ? (
+						isLoading ? (
 							<Spinner
 								w={3}
 								h={3}
