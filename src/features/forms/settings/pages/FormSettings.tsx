@@ -5,7 +5,9 @@ import {
 	ModalFooter, ModalHeader, ModalOverlay, Spinner, Switch, Text, useDisclosure
 } from "@chakra-ui/react"
 
-import { useDeleteFormMutation, useGetFormQuery, useUpdateFormMutation } from "../../../../api"
+import {
+	useDeleteFormMutation, useGetFormQuery, useUpdateFormMutation
+} from "../../../../api/forms"
 import Card from "../../../../components/Card"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"

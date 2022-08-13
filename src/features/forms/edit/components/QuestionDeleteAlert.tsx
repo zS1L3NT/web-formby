@@ -5,7 +5,7 @@ import {
 	AlertDialogHeader, AlertDialogOverlay, Button
 } from "@chakra-ui/react"
 
-import { useDeleteFormQuestionMutation } from "../../../../api"
+import { useDeleteFormQuestionMutation } from "../../../../api/questions"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
 import { iQuestion } from "../../../../models/Question"

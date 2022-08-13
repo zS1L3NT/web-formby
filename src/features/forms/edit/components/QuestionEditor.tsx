@@ -8,7 +8,7 @@ import {
 	usePrevious, useToast
 } from "@chakra-ui/react"
 
-import { useUpdateFormQuestionMutation } from "../../../../api"
+import { useUpdateFormQuestionMutation } from "../../../../api/questions"
 import Card from "../../../../components/Card"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"

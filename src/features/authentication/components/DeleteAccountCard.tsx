@@ -6,7 +6,7 @@ import {
 	ModalOverlay, Text, useDisclosure
 } from "@chakra-ui/react"
 
-import { useDeleteUserMutation } from "../../../api"
+import { useDeleteUserMutation } from "../../../api/auth"
 import Card from "../../../components/Card"
 import AuthContext from "../../../contexts/AuthContext"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"

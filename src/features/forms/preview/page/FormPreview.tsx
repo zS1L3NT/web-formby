@@ -4,7 +4,8 @@ import { useImmer } from "use-immer"
 
 import { Box, Center, Container, Spinner, useToast } from "@chakra-ui/react"
 
-import { useGetFormQuery, useGetFormQuestionsQuery } from "../../../../api"
+import { useGetFormQuery } from "../../../../api/forms"
+import { useGetFormQuestionsQuery } from "../../../../api/questions"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"
 import useToastError from "../../../../hooks/useToastError"

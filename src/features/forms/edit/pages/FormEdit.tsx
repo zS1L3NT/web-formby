@@ -5,9 +5,8 @@ import { useImmer } from "use-immer"
 
 import { Box, Center, Container, Spinner, useToast } from "@chakra-ui/react"
 
-import {
-	useGetFormQuery, useGetFormQuestionsQuery, useUpdateFormQuestionMutation
-} from "../../../../api"
+import { useGetFormQuery } from "../../../../api/forms"
+import { useGetFormQuestionsQuery, useUpdateFormQuestionMutation } from "../../../../api/questions"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"
 import useToastError from "../../../../hooks/useToastError"
@@ -69,7 +68,9 @@ const FormEdit = () => {
 		}
 
 		const _questions = JSON.parse(JSON.stringify(questions)) as WithTimestamps<iQuestion<any>>[]
-		const __questions = JSON.parse(JSON.stringify(questions)) as WithTimestamps<iQuestion<any>>[]
+		const __questions = JSON.parse(JSON.stringify(questions)) as WithTimestamps<
+			iQuestion<any>
+		>[]
 
 		_questions.splice(newIndex, 0, _questions.splice(oldIndex, 1)[0]!)
 

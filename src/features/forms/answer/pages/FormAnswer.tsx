@@ -4,9 +4,9 @@ import { useImmer } from "use-immer"
 
 import { Box, Button, Center, Container, Spinner, useToast } from "@chakra-ui/react"
 
-import {
-	useCreateFormResponseMutation, useGetFormQuery, useGetFormQuestionsQuery
-} from "../../../../api"
+import { useGetFormQuery } from "../../../../api/forms"
+import { useGetFormQuestionsQuery } from "../../../../api/questions"
+import { useCreateFormResponseMutation } from "../../../../api/responses"
 import AuthContext from "../../../../contexts/AuthContext"
 import useToastError from "../../../../hooks/useToastError"
 import { iAnswer } from "../../../../models/Answer"

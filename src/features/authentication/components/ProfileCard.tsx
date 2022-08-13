@@ -5,7 +5,7 @@ import {
 	Box, Button, Center, Flex, FormControl, FormLabel, Image, Input, InputGroup, Text, useToast
 } from "@chakra-ui/react"
 
-import { useUpdateUserMutation } from "../../../api"
+import { useUpdateUserMutation } from "../../../api/auth"
 import Card from "../../../components/Card"
 import useAppDispatch from "../../../hooks/useAppDispatch"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"

@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useState } from "react"
 
-import { useGetUserQuery } from "../api"
+import { useGetUserQuery } from "../api/auth"
 import useAsyncEffect from "../hooks/useAsyncEffect"
 import { iUser } from "../models/User"
 

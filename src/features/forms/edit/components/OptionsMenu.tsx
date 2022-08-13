@@ -7,7 +7,7 @@ import {
 	Spinner
 } from "@chakra-ui/react"
 
-import { useCreateFormQuestionMutation } from "../../../../api"
+import { useCreateFormQuestionMutation } from "../../../../api/questions"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
 import { iQuestion } from "../../../../models/Question"

@@ -7,7 +7,7 @@ import {
 	Stack, Text, useToast
 } from "@chakra-ui/react"
 
-import { useLoginMutation } from "../../../api"
+import { useLoginMutation } from "../../../api/auth"
 import AuthContext from "../../../contexts/AuthContext"
 import useAppDispatch from "../../../hooks/useAppDispatch"
 import useOnlyUnauthenticated from "../../../hooks/useOnlyUnautheticated"

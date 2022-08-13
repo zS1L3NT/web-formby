@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { AddIcon, EditIcon, LockIcon } from "@chakra-ui/icons"
 import { Box, Center, chakra, Flex, HStack, Spinner, Text } from "@chakra-ui/react"
 
-import { useCreateFormMutation } from "../../../../api"
+import { useCreateFormMutation } from "../../../../api/forms"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
 import { WithTimestamps } from "../../../../models"
