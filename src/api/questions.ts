@@ -1,6 +1,6 @@
 import { WithTimestamps } from "../models"
 import { iQuestion } from "../models/Question"
-import api, { ApiResponse, OptionalToken, RequireToken } from "./api"
+import api, { ApiResponse, optimistic, OptionalToken, RequireToken } from "./api"
 
 const questions = api.injectEndpoints({
 	overrideExisting: false,
@@ -41,6 +41,24 @@ const questions = api.injectEndpoints({
 				body: question,
 				token
 			}),
+			onQueryStarted: async ({ token, form_id, question_id, ...question }, mutators) => {
+				await optimistic(
+					mutators,
+					questions.util.updateQueryData(
+						"getFormQuestions",
+						{ token, form_id },
+						_questions => {
+							const index = _questions.findIndex(q => q.id === question_id)
+							if (index === -1) return
+
+							_questions[index] = {
+								..._questions[index]!,
+								...question
+							}
+						}
+					)
+				)
+			},
 			invalidatesTags: ["Question"]
 		}),
 		deleteFormQuestion: builder.mutation<
@@ -52,6 +70,25 @@ const questions = api.injectEndpoints({
 				method: "DELETE",
 				token
 			}),
+			onQueryStarted: async ({ token, form_id, question_id }, mutators) => {
+				await optimistic(
+					mutators,
+					questions.util.updateQueryData(
+						"getFormQuestions",
+						{ token, form_id },
+						_questions => {
+							const question = _questions.find(q => q.id === question_id)
+							if (!question) return
+							
+							_questions.splice(_questions.indexOf(question), 1)
+							const previousQuestion = _questions.find(q => q.previous_question_id === question_id)
+							if (!previousQuestion) return
+
+							previousQuestion.previous_question_id = question.previous_question_id
+						}
+					)
+				)
+			},
 			invalidatesTags: ["Question"]
 		})
 	})
@@ -60,9 +97,7 @@ const questions = api.injectEndpoints({
 export const {
 	useCreateFormQuestionMutation,
 	useDeleteFormQuestionMutation,
-	useGetFormQuestionQuery,
 	useGetFormQuestionsQuery,
 	useLazyGetFormQuestionsQuery,
-	useLazyGetFormQuestionQuery,
 	useUpdateFormQuestionMutation
 } = questions

@@ -1,6 +1,6 @@
 import { WithTimestamps } from "../models"
 import { iUser } from "../models/User"
-import api, { ApiResponse, RequireToken } from "./api"
+import api, { ApiResponse, optimistic, RequireToken } from "./api"
 
 const auth = api.injectEndpoints({
 	overrideExisting: false,
@@ -20,6 +20,15 @@ const auth = api.injectEndpoints({
 				body: user,
 				token
 			}),
+			onQueryStarted: async ({ token, ...user }, mutators) => {
+				await optimistic(
+					mutators,
+					auth.util.updateQueryData("getUser", { token }, _user => ({
+						..._user,
+						...user
+					}))
+				)
+			},
 			invalidatesTags: ["User"]
 		}),
 		updateUserPassword: builder.mutation<

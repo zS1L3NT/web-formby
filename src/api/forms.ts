@@ -1,6 +1,6 @@
 import { WithTimestamps } from "../models"
 import { iForm } from "../models/Form"
-import api, { ApiResponse, OptionalToken, RequireToken } from "./api"
+import api, { ApiResponse, optimistic, OptionalToken, RequireToken } from "./api"
 
 const forms = api.injectEndpoints({
 	overrideExisting: false,
@@ -43,6 +43,24 @@ const forms = api.injectEndpoints({
 				body: form,
 				token
 			}),
+			onQueryStarted: async ({ token, form_id, ...form }, mutators) => {
+				await optimistic(
+					mutators,
+					forms.util.updateQueryData("getForms", { token }, _forms => {
+						const index = _forms.findIndex(form => form.id === form_id)
+						if (index === -1) return
+
+						_forms[index] = {
+							..._forms[index]!,
+							...form
+						}
+					}),
+					forms.util.updateQueryData("getForm", { token, form_id }, _form => ({
+						..._form,
+						...form
+					}))
+				)
+			},
 			invalidatesTags: ["Form"]
 		}),
 		deleteForm: builder.mutation<ApiResponse, { form_id: string } & RequireToken>({
@@ -51,6 +69,17 @@ const forms = api.injectEndpoints({
 				method: "DELETE",
 				token
 			}),
+			onQueryStarted: async ({ token, form_id }, mutators) => {
+				await optimistic(
+					mutators,
+					forms.util.updateQueryData("getForms", { token }, _forms => {
+						const form = _forms.find(form => form.id === form_id)
+						if (!form) return
+
+						_forms.splice(_forms.indexOf(form), 1)
+					})
+				)
+			},
 			invalidatesTags: ["Form"]
 		})
 	})
