@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import { Box } from "@chakra-ui/react"
 
-import { useUpdateFormMutation } from "../../../../api"
+import { useUpdateFormMutation } from "../../../../api/forms"
 import Card from "../../../../components/Card"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"

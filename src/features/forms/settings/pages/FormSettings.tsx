@@ -5,7 +5,9 @@ import {
 	ModalFooter, ModalHeader, ModalOverlay, Spinner, Switch, Text, useDisclosure
 } from "@chakra-ui/react"
 
-import { useDeleteFormMutation, useGetFormQuery, useUpdateFormMutation } from "../../../../api"
+import {
+	useDeleteFormMutation, useGetFormQuery, useUpdateFormMutation
+} from "../../../../api/forms"
 import Card from "../../../../components/Card"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"
@@ -100,7 +102,8 @@ const FormSettings = () => {
 					{form.state !== "closed" ? (
 						<Flex
 							mt={4}
-							alignItems="center">
+							direction={{ base: "column", md: "row" }}
+							alignItems={{ base: "normal", md: "center" }}>
 							<Box flex={1}>
 								<Text
 									fontSize="2xl"
@@ -128,7 +131,8 @@ const FormSettings = () => {
 							</Box>
 
 							<Button
-								mx={4}
+								mt={{ base: 2, md: 0 }}
+								mx={{ md: 4 }}
 								colorScheme="red"
 								variant="ghost"
 								onClick={formStateOnOpen}>
@@ -139,7 +143,8 @@ const FormSettings = () => {
 
 					<Flex
 						mt={4}
-						alignItems="center">
+						direction={{ base: "column", md: "row" }}
+						alignItems={{ base: "normal", md: "center" }}>
 						<Box flex={1}>
 							<Text
 								fontSize="2xl"
@@ -158,7 +163,8 @@ const FormSettings = () => {
 						</Box>
 
 						<Button
-							mx={4}
+							mt={{ base: 2, md: 0 }}
+							mx={{ md: 4 }}
 							colorScheme="red"
 							onClick={deleteOnOpen}>
 							Delete Form

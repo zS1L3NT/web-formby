@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useToast } from "@chakra-ui/react"
 
-import { useLogoutMutation } from "../../../api"
+import { useLogoutMutation } from "../../../api/auth"
 import AuthContext from "../../../contexts/AuthContext"
 import useAsyncEffect from "../../../hooks/useAsyncEffect"
 import useToastError from "../../../hooks/useToastError"

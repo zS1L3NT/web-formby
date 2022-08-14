@@ -5,7 +5,7 @@ import {
 	Box, Button, Center, Flex, FormControl, FormLabel, Image, Input, InputGroup, Text, useToast
 } from "@chakra-ui/react"
 
-import { useUpdateUserMutation } from "../../../api"
+import { useUpdateUserMutation } from "../../../api/auth"
 import Card from "../../../components/Card"
 import useAppDispatch from "../../../hooks/useAppDispatch"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
@@ -114,10 +114,10 @@ const ProfileCard = () => {
 				<Box
 					h={32}
 					w={32}
-					bg="whiteAlpha.400"
+					bg="var(--chakra-colors-chakra-border-color)"
 					borderRadius="lg"
 					borderWidth={2}
-					borderColor="whiteAlpha.400">
+					borderColor="var(--chakra-colors-chakra-border-color)">
 					<Image
 						h="calc(var(--chakra-sizes-32) - 4px)"
 						w="calc(var(--chakra-sizes-32) - 4px)"

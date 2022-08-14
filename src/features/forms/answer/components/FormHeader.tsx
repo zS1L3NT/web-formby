@@ -3,7 +3,7 @@ import { useContext } from "react"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { Avatar, Box, Button, Divider, Flex, Spinner, Tag, TagLabel, Text } from "@chakra-ui/react"
 
-import { useGetUserQuery } from "../../../../api"
+import { useGetUserQuery } from "../../../../api/auth"
 import Card from "../../../../components/Card"
 import AuthContext from "../../../../contexts/AuthContext"
 import useToastError from "../../../../hooks/useToastError"

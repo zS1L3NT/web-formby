@@ -4,11 +4,11 @@ import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Center, IconButton, Image, Input, Spinner, Text, useBoolean, useDisclosure,
+	Box, Button, Center, IconButton, Image, Input, Spinner, Text, useDisclosure,
 	usePrevious, useToast
 } from "@chakra-ui/react"
 
-import { useUpdateFormQuestionMutation } from "../../../../api"
+import { useUpdateFormQuestionMutation } from "../../../../api/questions"
 import Card from "../../../../components/Card"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
@@ -42,7 +42,6 @@ const QuestionEditor = ({
 	const [updateFormQuestion, { error }] = useUpdateFormQuestionMutation()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
-	const [isDeleting, setIsDeleting] = useBoolean()
 	const [question, setQuestion] = useImmer(parentQuestion)
 	const __question = usePrevious(question)
 
@@ -219,7 +218,7 @@ const QuestionEditor = ({
 						setQuestion={setQuestion}
 					/>
 
-					{isDeleting ? (
+					{question.id === "?" ? (
 						<Center
 							pos="absolute"
 							w="full"
@@ -245,7 +244,6 @@ const QuestionEditor = ({
 				isOpen={isOpen}
 				onClose={onClose}
 				question={question}
-				setIsDeleting={() => setIsDeleting.on()}
 			/>
 		</>
 	)

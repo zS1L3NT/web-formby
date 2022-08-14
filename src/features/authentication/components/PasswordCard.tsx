@@ -5,7 +5,7 @@ import {
 	Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Text, useBoolean, useToast
 } from "@chakra-ui/react"
 
-import { useUpdateUserPasswordMutation } from "../../../api"
+import { useUpdateUserPasswordMutation } from "../../../api/auth"
 import Card from "../../../components/Card"
 import useAppDispatch from "../../../hooks/useAppDispatch"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"

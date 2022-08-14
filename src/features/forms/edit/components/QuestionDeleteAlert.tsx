@@ -5,7 +5,7 @@ import {
 	AlertDialogHeader, AlertDialogOverlay, Button
 } from "@chakra-ui/react"
 
-import { useDeleteFormQuestionMutation } from "../../../../api"
+import { useDeleteFormQuestionMutation } from "../../../../api/questions"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
 import { iQuestion } from "../../../../models/Question"
@@ -13,13 +13,11 @@ import { iQuestion } from "../../../../models/Question"
 const QuestionDeleteAlert = ({
 	isOpen,
 	onClose,
-	question,
-	setIsDeleting
+	question
 }: {
 	isOpen: boolean
 	onClose: () => void
 	question: iQuestion<any>
-	setIsDeleting: () => void
 }) => {
 	const { token } = useOnlyAuthenticated()
 	const alertCancelRef = createRef<any>()
@@ -28,10 +26,9 @@ const QuestionDeleteAlert = ({
 
 	useToastError(error)
 
-	const handleDeleteQuestion = async () => {
+	const handleDeleteQuestion = () => {
 		onClose()
-		setIsDeleting()
-		await deleteFormQuestion({
+		deleteFormQuestion({
 			form_id: question.form_id,
 			question_id: question.id,
 			token

@@ -1,6 +1,6 @@
 import { Center, Container, Grid, Heading, Spinner } from "@chakra-ui/react"
 
-import { useGetFormsQuery } from "../../../../api"
+import { useGetFormsQuery } from "../../../../api/forms"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
 import FormItem from "../components/FormItem"

@@ -1,3 +1,4 @@
+import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 
 import {
@@ -5,8 +6,7 @@ import {
 	ModalOverlay, Text, useDisclosure
 } from "@chakra-ui/react"
 
-import { useContext } from "react"
-import { useDeleteUserMutation } from "../../../api"
+import { useDeleteUserMutation } from "../../../api/auth"
 import Card from "../../../components/Card"
 import AuthContext from "../../../contexts/AuthContext"
 import useOnlyAuthenticated from "../../../hooks/useOnlyAuthenticated"
@@ -23,8 +23,8 @@ const DeleteAccountCard = () => {
 	return (
 		<Card mt={4}>
 			<Flex
-				mt={4}
-				alignItems="center">
+				direction={{ base: "column", md: "row" }}
+				alignItems={{ base: "normal", md: "center" }}>
 				<Box flex={1}>
 					<Text
 						fontSize="2xl"
@@ -44,7 +44,8 @@ const DeleteAccountCard = () => {
 				</Box>
 
 				<Button
-					mx={4}
+					mt={{ base: 4, md: 0 }}
+					mx={{ md: 4 }}
 					colorScheme="red"
 					onClick={onOpen}>
 					Delete Account

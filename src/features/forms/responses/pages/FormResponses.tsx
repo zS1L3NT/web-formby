@@ -3,10 +3,11 @@ import { useParams } from "react-router-dom"
 
 import { Box, Center, Container, Spinner } from "@chakra-ui/react"
 
-import {
-	useGetFormQuery, useGetFormQuestionsQuery, useGetFormResponsesQuery,
-	useLazyGetFormResponseAnswersQuery, useLazyGetUserQuery
-} from "../../../../api"
+import { useLazyGetFormResponseAnswersQuery } from "../../../../api/answers"
+import { useLazyGetUserQuery } from "../../../../api/auth"
+import { useGetFormQuery } from "../../../../api/forms"
+import { useGetFormQuestionsQuery } from "../../../../api/questions"
+import { useGetFormResponsesQuery } from "../../../../api/responses"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useOnlyFormOwner from "../../../../hooks/useOnlyFormOwner"

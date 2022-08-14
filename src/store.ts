@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 
-import api from "./api"
+import api from "./api/api"
 import ErrorSlice from "./slices/ErrorSlice"
 
 const store = configureStore({
