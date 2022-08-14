@@ -1,5 +1,5 @@
 import { Fragment, useContext } from "react"
-import { FaUser } from "react-icons/fa"
+import { FaShareAlt, FaUser } from "react-icons/fa"
 import { MdQuestionAnswer } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router-dom"
 
@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react"
 
 import AuthContext from "../contexts/AuthContext"
+import ShareModal from "../features/forms/settings/components/ShareModal"
 import useAppSelector from "../hooks/useAppSelector"
 import { iForm } from "../models/Form"
 
@@ -33,7 +34,12 @@ const Navigator = () => {
 	// prettier-ignore
 	const form = useAppSelector(state => state.api.queries)[`getForm({"form_id":"${location.pathname.match(/\/forms\/([a-zA-Z0-9-]+)\/?/)?.[1]}","token":"${token}"})`]?.data as iForm | undefined
 
-	const { isOpen, onToggle } = useDisclosure()
+	const {
+		isOpen: shareModalIsOpen,
+		onOpen: onOpenShareModal,
+		onClose: onCloseShareModal
+	} = useDisclosure()
+	const { isOpen, onToggle, onClose } = useDisclosure()
 
 	const sideMargins = { base: 2, md: 16, lg: 32 }
 
@@ -77,6 +83,15 @@ const Navigator = () => {
 				!!token &&
 				!!location.pathname.match("^/forms/[a-zA-Z0-9-]+/(?!edit)\\w+") &&
 				form?.state === "draft"
+		},
+		{
+			title: "Share",
+			icon: <FaShareAlt />,
+			onClick: () => onOpenShareModal(),
+			render:
+				!!token &&
+				!!location.pathname.match("^/forms/[a-zA-Z0-9-]+/\\w+") &&
+				form?.state === "live"
 		},
 		{
 			title: "Responses",
@@ -185,13 +200,12 @@ const Navigator = () => {
 											<IconButton
 												aria-label={item.title!}
 												icon={item.icon!}
-												onClick={
-													item.onClick ??
-													(() =>
-														item.navigate
-															? navigate(item.navigate)
-															: null)
-												}
+												onClick={() => {
+													item?.onClick?.()
+													if (item.navigate) {
+														navigate(item.navigate)
+													}
+												}}
 											/>
 										</Tooltip>
 									)}
@@ -280,8 +294,11 @@ const Navigator = () => {
 										textDecoration: "none"
 									}}
 									onClick={() => {
-										navigate(item.navigate!)
-										onToggle()
+										onClose()
+										item?.onClick?.()
+										if (item.navigate) {
+											navigate(item.navigate)
+										}
 									}}>
 									<Text
 										fontWeight={600}
@@ -293,6 +310,12 @@ const Navigator = () => {
 					</Stack>
 				</Collapse>
 			</Box>
+
+			<ShareModal
+				form={form}
+				isOpen={shareModalIsOpen}
+				onClose={onCloseShareModal}
+			/>
 		</>
 	)
 }
