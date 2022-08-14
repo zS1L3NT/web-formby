@@ -10,6 +10,7 @@ import {
 import { useCreateFormQuestionMutation } from "../../../../api/questions"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
+import { WithTimestamps } from "../../../../models"
 import { iQuestion } from "../../../../models/Question"
 import { createDuplicate } from "../../../../utils/questionUtils"
 
@@ -21,8 +22,8 @@ const OptionsMenu = ({
 }: {
 	menuRef: RefObject<HTMLButtonElement>
 	onDelete: () => void
-	question: iQuestion<any>
-	setQuestion: Updater<iQuestion<any>>
+	question: WithTimestamps<iQuestion<any>>
+	setQuestion: Updater<WithTimestamps<iQuestion<any>>>
 }) => {
 	const { token } = useOnlyAuthenticated()
 

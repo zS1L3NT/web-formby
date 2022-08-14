@@ -35,7 +35,7 @@ const ListMaker = ({
 		<Box ref={parentRef}>
 			{items.map((item, i) => (
 				<Flex
-					key={i}
+					key={item}
 					my={4}>
 					{leading ? leading(item, i) : null}
 					<Input

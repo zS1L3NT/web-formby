@@ -4,8 +4,8 @@ import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Center, IconButton, Image, Input, Spinner, Text, useDisclosure,
-	usePrevious, useToast
+	Box, Button, Center, IconButton, Image, Input, Spinner, Text, useDisclosure, usePrevious,
+	useToast
 } from "@chakra-ui/react"
 
 import { useUpdateFormQuestionMutation } from "../../../../api/questions"
@@ -13,7 +13,7 @@ import Card from "../../../../components/Card"
 import useAsyncEffect from "../../../../hooks/useAsyncEffect"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
 import useToastError from "../../../../hooks/useToastError"
-import { iQuestionType } from "../../../../models"
+import { iQuestionType, WithTimestamps } from "../../../../models"
 import { iQuestion } from "../../../../models/Question"
 import { getQuestionDifference } from "../../../../utils/questionUtils"
 import AddQuestion from "./AddQuestion"
@@ -23,8 +23,8 @@ import QuestionDeleteAlert from "./QuestionDeleteAlert"
 import RenderEditor from "./RenderEditor"
 
 export type EditorProps<T extends iQuestionType> = {
-	question: iQuestion<T>
-	setQuestion: Updater<iQuestion<T>>
+	question: WithTimestamps<iQuestion<T>>
+	setQuestion: Updater<WithTimestamps<iQuestion<T>>>
 }
 
 const QuestionEditor = ({
@@ -32,7 +32,7 @@ const QuestionEditor = ({
 	parentQuestion
 }: {
 	provided?: DraggableProvided
-	parentQuestion: iQuestion<any>
+	parentQuestion: WithTimestamps<iQuestion<any>>
 }) => {
 	const { token } = useOnlyAuthenticated()
 	const toast = useToast()

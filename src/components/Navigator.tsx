@@ -194,7 +194,7 @@ const Navigator = () => {
 						{items
 							.filter(item => item.render)
 							.map((item, i) => (
-								<Fragment key={i}>
+								<Fragment key={item.title}>
 									{item.element ?? (
 										<Tooltip label={item.title!}>
 											<IconButton
@@ -287,7 +287,7 @@ const Navigator = () => {
 							.filter(item => item.render)
 							.map((item, i) => (
 								<Flex
-									key={i}
+									key={item.title}
 									py={2}
 									as={Link}
 									_hover={{
