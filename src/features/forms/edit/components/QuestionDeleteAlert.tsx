@@ -13,13 +13,11 @@ import { iQuestion } from "../../../../models/Question"
 const QuestionDeleteAlert = ({
 	isOpen,
 	onClose,
-	question,
-	setIsDeleting
+	question
 }: {
 	isOpen: boolean
 	onClose: () => void
 	question: iQuestion<any>
-	setIsDeleting: () => void
 }) => {
 	const { token } = useOnlyAuthenticated()
 	const alertCancelRef = createRef<any>()
@@ -28,10 +26,9 @@ const QuestionDeleteAlert = ({
 
 	useToastError(error)
 
-	const handleDeleteQuestion = async () => {
+	const handleDeleteQuestion = () => {
 		onClose()
-		setIsDeleting()
-		await deleteFormQuestion({
+		deleteFormQuestion({
 			form_id: question.form_id,
 			question_id: question.id,
 			token

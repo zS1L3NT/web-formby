@@ -4,7 +4,7 @@ import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Center, IconButton, Image, Input, Spinner, Text, useBoolean, useDisclosure,
+	Box, Button, Center, IconButton, Image, Input, Text, useDisclosure,
 	usePrevious, useToast
 } from "@chakra-ui/react"
 
@@ -42,7 +42,6 @@ const QuestionEditor = ({
 	const [updateFormQuestion, { error }] = useUpdateFormQuestionMutation()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
-	const [isDeleting, setIsDeleting] = useBoolean()
 	const [question, setQuestion] = useImmer(parentQuestion)
 	const __question = usePrevious(question)
 
@@ -218,21 +217,6 @@ const QuestionEditor = ({
 						question={question}
 						setQuestion={setQuestion}
 					/>
-
-					{isDeleting ? (
-						<Center
-							pos="absolute"
-							w="full"
-							h="full"
-							top={0}
-							left={0}
-							bg="black"
-							borderRadius="lg"
-							opacity={0.5}
-							zIndex={5}>
-							<Spinner />
-						</Center>
-					) : null}
 				</Card>
 
 				<AddQuestion
@@ -245,7 +229,6 @@ const QuestionEditor = ({
 				isOpen={isOpen}
 				onClose={onClose}
 				question={question}
-				setIsDeleting={() => setIsDeleting.on()}
 			/>
 		</>
 	)
