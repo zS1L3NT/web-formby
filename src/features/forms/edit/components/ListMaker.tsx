@@ -1,7 +1,7 @@
-import { createRef, RefObject, useState } from "react"
+import { useRef } from "react"
 
 import { CloseIcon } from "@chakra-ui/icons"
-import { Flex, IconButton, Input } from "@chakra-ui/react"
+import { Box, Flex, IconButton, Input } from "@chakra-ui/react"
 
 const ListMaker = ({
 	items,
@@ -12,7 +12,11 @@ const ListMaker = ({
 	setItems: (items: string[]) => void
 	leading?: (item: string | null, i: number | null) => JSX.Element | null
 }) => {
-	const [refs, setRefs] = useState(items.map<RefObject<HTMLInputElement>>(createRef))
+	const parentRef = useRef<HTMLDivElement>(null)
+
+	const getInputs = () => {
+		return parentRef.current?.getElementsByTagName("input")
+	}
 
 	const generateName = () => {
 		let i = 1
@@ -28,14 +32,13 @@ const ListMaker = ({
 	}
 
 	return (
-		<>
+		<Box ref={parentRef}>
 			{items.map((item, i) => (
 				<Flex
 					key={i}
 					my={4}>
 					{leading ? leading(item, i) : null}
 					<Input
-						ref={refs[i]}
 						flex={1}
 						mr={items.length === 1 ? 12 : 0}
 						defaultValue={item}
@@ -59,16 +62,10 @@ const ListMaker = ({
 							my="auto"
 							w={4}
 							onClick={() => {
-								const newItems = items.filter((_, j) => i !== j)
-								const newRefs = refs.filter((_, j) => i !== j)
-
-								//  Since the inputs are not controlled inputs, we need to set it again
-								for (let i = 0; i < newRefs.length; i++) {
-									newRefs[i]!.current!.value = newItems[i]!
-								}
-
+								const inputs = getInputs()!
+								const input = inputs.item(inputs.length - 1)!
+								input.focus()
 								setItems(items.filter((_, j) => i !== j))
-								setRefs(newRefs)
 							}}>
 							<CloseIcon color="gray.300" />
 						</IconButton>
@@ -82,17 +79,17 @@ const ListMaker = ({
 					flex={1}
 					mr={{ base: 10, md: 12 }}
 					onFocus={() => {
-						const ref = createRef<HTMLInputElement>()
 						setItems([...items, generateName()])
-						setRefs([...refs, ref])
 						setTimeout(() => {
-							ref.current!.focus()
-							ref.current!.setSelectionRange(0, -1)
+							const inputs = getInputs()!
+							const input = inputs.item(inputs.length - 2)!
+							input.focus()
+							input.setSelectionRange(0, -1)
 						}, 0)
 					}}
 				/>
 			</Flex>
-		</>
+		</Box>
 	)
 }
 
