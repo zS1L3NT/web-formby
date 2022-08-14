@@ -27,6 +27,38 @@ const questions = api.injectEndpoints({
 				body: question,
 				token
 			}),
+			onQueryStarted: async ({ token, form_id, ...question }, mutators) => {
+				await optimistic(
+					mutators,
+					questions.util.updateQueryData(
+						"getFormQuestions",
+						{ token, form_id },
+						_questions => {
+							const questions = <WithTimestamps<iQuestion<any>>[]>[
+								...JSON.parse(JSON.stringify(_questions)),
+								{
+									id: "?",
+									form_id,
+									...question,
+									created_at: new Date().toISOString(),
+									updated_at: new Date().toISOString()
+								}
+							]
+
+							const nextQuestion = questions.find(
+								q =>
+									q.previous_question_id === question.previous_question_id &&
+									q.id !== questions.at(-1)!.id
+							)
+							if (nextQuestion) {
+								nextQuestion.previous_question_id = "?"
+							}
+
+							return sortQuestions(questions)
+						}
+					)
+				)
+			},
 			invalidatesTags: ["Question"]
 		}),
 		updateFormQuestion: builder.mutation<

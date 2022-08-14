@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons"
-import { IconButton, Spinner } from "@chakra-ui/react"
+import { IconButton } from "@chakra-ui/react"
 
 import { useCreateFormQuestionMutation } from "../../../../api/questions"
 import useOnlyAuthenticated from "../../../../hooks/useOnlyAuthenticated"
@@ -15,7 +15,7 @@ const AddQuestion = ({
 }) => {
 	const { token } = useOnlyAuthenticated()
 
-	const [createFormQuestion, { isLoading, error }] = useCreateFormQuestionMutation()
+	const [createFormQuestion, { error }] = useCreateFormQuestionMutation()
 
 	useToastError(error)
 
@@ -27,7 +27,6 @@ const AddQuestion = ({
 			bg="bg"
 			_hover={{ bg: "card" }}
 			aria-label="Add Question"
-			isDisabled={isLoading}
 			onClick={() =>
 				createFormQuestion({
 					form_id: formId,
@@ -41,17 +40,10 @@ const AddQuestion = ({
 				})
 			}
 			icon={
-				isLoading ? (
-					<Spinner
-						w={3}
-						h={3}
-					/>
-				) : (
-					<AddIcon
-						w={3}
-						h={3}
-					/>
-				)
+				<AddIcon
+					w={3}
+					h={3}
+				/>
 			}
 		/>
 	)

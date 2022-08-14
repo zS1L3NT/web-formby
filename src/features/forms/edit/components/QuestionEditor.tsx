@@ -4,7 +4,7 @@ import { Updater, useImmer } from "use-immer"
 
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons"
 import {
-	Box, Button, Center, IconButton, Image, Input, Text, useDisclosure,
+	Box, Button, Center, IconButton, Image, Input, Spinner, Text, useDisclosure,
 	usePrevious, useToast
 } from "@chakra-ui/react"
 
@@ -217,6 +217,21 @@ const QuestionEditor = ({
 						question={question}
 						setQuestion={setQuestion}
 					/>
+
+					{question.id === "?" ? (
+						<Center
+							pos="absolute"
+							w="full"
+							h="full"
+							top={0}
+							left={0}
+							bg="black"
+							borderRadius="lg"
+							opacity={0.5}
+							zIndex={5}>
+							<Spinner />
+						</Center>
+					) : null}
 				</Card>
 
 				<AddQuestion
