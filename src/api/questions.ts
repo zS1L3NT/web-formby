@@ -28,17 +28,6 @@ const questions = api.injectEndpoints({
 			}),
 			invalidatesTags: ["Question"]
 		}),
-		getFormQuestion: builder.query<
-			WithTimestamps<iQuestion<any>>,
-			{ form_id: string; question_id: string } & OptionalToken
-		>({
-			query: ({ token, form_id, question_id }) => ({
-				url: `/forms/${form_id}/questions/${question_id}`,
-				method: "GET",
-				token
-			}),
-			providesTags: ["Question"]
-		}),
 		updateFormQuestion: builder.mutation<
 			ApiResponse & { question: WithTimestamps<iQuestion<any>> },
 			Partial<Omit<iQuestion<any>, "id" | "form_id">> & {
