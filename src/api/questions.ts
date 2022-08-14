@@ -1,5 +1,6 @@
 import { WithTimestamps } from "../models"
 import { iQuestion } from "../models/Question"
+import sortQuestions from "../utils/sortQuestions"
 import api, { ApiResponse, optimistic, OptionalToken, RequireToken } from "./api"
 
 const questions = api.injectEndpoints({
@@ -48,13 +49,18 @@ const questions = api.injectEndpoints({
 						"getFormQuestions",
 						{ token, form_id },
 						_questions => {
-							const index = _questions.findIndex(q => q.id === question_id)
+							const questions = <WithTimestamps<iQuestion<any>>[]>(
+								JSON.parse(JSON.stringify(_questions))
+							)
+							const index = questions.findIndex(q => q.id === question_id)
 							if (index === -1) return
 
-							_questions[index] = {
-								..._questions[index]!,
+							questions[index] = {
+								...questions[index]!,
 								...question
 							}
+
+							return sortQuestions(questions)
 						}
 					)
 				)
@@ -79,9 +85,11 @@ const questions = api.injectEndpoints({
 						_questions => {
 							const question = _questions.find(q => q.id === question_id)
 							if (!question) return
-							
+
 							_questions.splice(_questions.indexOf(question), 1)
-							const previousQuestion = _questions.find(q => q.previous_question_id === question_id)
+							const previousQuestion = _questions.find(
+								q => q.previous_question_id === question_id
+							)
 							if (!previousQuestion) return
 
 							previousQuestion.previous_question_id = question.previous_question_id

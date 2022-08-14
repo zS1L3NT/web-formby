@@ -1,9 +1,8 @@
 import { useEffect } from "react"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { useNavigate, useParams } from "react-router-dom"
-import { useImmer } from "use-immer"
 
-import { Box, Center, Container, Spinner, useToast } from "@chakra-ui/react"
+import { Box, Center, Container, Spinner, useBoolean, useToast } from "@chakra-ui/react"
 
 import { useGetFormQuery } from "../../../../api/forms"
 import { useGetFormQuestionsQuery, useUpdateFormQuestionMutation } from "../../../../api/questions"
@@ -27,9 +26,7 @@ const FormEdit = () => {
 	const { data: questions, error: questionsError } = useGetFormQuestionsQuery({ form_id, token })
 	const [updateFormQuestion, { error }] = useUpdateFormQuestionMutation()
 
-	const [optimisticQuestions, setOptimisticQuestions] = useImmer<iQuestion<any>[] | undefined>(
-		undefined
-	)
+	const [allowLinkBreaking, setAllowLinkBreaking] = useBoolean()
 
 	useOnlyFormOwner(user, form)
 
@@ -38,11 +35,10 @@ const FormEdit = () => {
 	useToastError(error)
 
 	useEffect(() => {
-		if (!questions) return
+		if (!questions || allowLinkBreaking) return
 
 		assertLinkedQuestions(questions)
-		setOptimisticQuestions(questions)
-	}, [questions])
+	}, [questions, allowLinkBreaking])
 
 	useEffect(() => {
 		if (!form) return
@@ -84,8 +80,7 @@ const FormEdit = () => {
 			_questions.at(newIndex + 1)!.previous_question_id = _questions.at(newIndex)!.id
 		}
 
-		setOptimisticQuestions(_questions)
-
+		setAllowLinkBreaking.on()
 		for (const __question of __questions) {
 			const _question = _questions.find(question => question.id === __question.id)!
 
@@ -98,6 +93,7 @@ const FormEdit = () => {
 				})
 			}
 		}
+		setAllowLinkBreaking.off()
 	}
 
 	return (
@@ -122,8 +118,8 @@ const FormEdit = () => {
 										previousQuestion={null}
 									/>
 
-									{optimisticQuestions ? (
-										optimisticQuestions.map((question, i) => (
+									{questions ? (
+										questions.map((question, i) => (
 											<Draggable
 												key={question.id}
 												index={i}
