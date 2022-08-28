@@ -23,13 +23,13 @@ return new class extends Migration
 			$table->boolean('required')->default(false);
 			$table->enum('type', ["text", "paragraph", "color", "choice", "switch", "slider", "datetime", "table"]);
 
-			$table->json('choices')->default('["Choice 1"]');
+			$table->string('choices', 65000)->default('["Choice 1"]');
 			$table->enum('choice_type', ['radio', 'checkbox', 'dropdown'])->default('radio');
 			$table->integer('slider_min')->default(0);
 			$table->integer('slider_max')->default(100);
 			$table->integer('slider_step')->default(10);
-			$table->json('table_columns')->default('["Column 1"]');
-			$table->json('table_rows')->default('["Row 1"]');
+			$table->string('table_columns', 65000)->default('["Column 1"]');
+			$table->string('table_rows', 65000)->default('["Row 1"]');
 			$table->enum('table_type', ['radio', 'checkbox'])->default('radio');
 
 			$table->foreign('form_id')->references('id')->on('forms')->cascadeOnDelete();
