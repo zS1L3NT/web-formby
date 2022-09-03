@@ -21,7 +21,7 @@ const TableAnswer = ({ question, answer }: AnswerProps<"table">) => {
 				<Tbody>
 					{[
 						tableRows?.map(row =>
-							tableType === "radio" ? (
+							tableType === "checkbox" ? (
 								<Tr key={row}>
 									<CheckboxGroup
 										value={
